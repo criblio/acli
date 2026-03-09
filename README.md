@@ -109,7 +109,7 @@ Profiles are stored in `~/.config/acli/config.json` (created automatically by `c
 
 ### Auth Mode
 
-ACLI authenticates using Basic Auth (`email:api_token`) with personal API tokens. The same credentials are used for Jira, Confluence, and Bitbucket.
+ACLI authenticates using Basic Auth (`email:api_token`) with personal API tokens. Use different profiles to configure separate credentials for each product (e.g., one profile for Jira/Confluence and another for Bitbucket).
 
 ## Usage
 

@@ -41,6 +41,12 @@ func (c *Client) ListSnippets(workspace string) ([]Snippet, error) {
 	}
 	var snippets []Snippet
 	if err := json.Unmarshal(page.Values, &snippets); err != nil {
+		// The API may return a string array (e.g. plan limitation messages)
+		// instead of snippet objects — surface the message as an error.
+		var msgs []string
+		if json.Unmarshal(page.Values, &msgs) == nil && len(msgs) > 0 {
+			return nil, fmt.Errorf("%s", msgs[0])
+		}
 		return nil, fmt.Errorf("parsing snippets: %w", err)
 	}
 	return snippets, nil

@@ -5,7 +5,6 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"github.com/chinmaymk/acli/internal/bitbucket"
 	"github.com/spf13/cobra"
 )
 
@@ -24,7 +23,7 @@ func init() {
 		Aliases: []string{"ls"},
 		Args:    cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -50,7 +49,7 @@ func init() {
 		Short: "Delete a download artifact",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}

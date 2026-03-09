@@ -24,7 +24,7 @@ func init() {
 		Aliases: []string{"ls"},
 		Args:    cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -56,7 +56,7 @@ func init() {
 		Short: "Get pull request details",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -95,7 +95,7 @@ func init() {
 		Short: "Create a pull request",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -139,7 +139,7 @@ func init() {
 		Short: "Approve a pull request",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -161,7 +161,7 @@ func init() {
 		Short: "Remove approval from a pull request",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -183,7 +183,7 @@ func init() {
 		Short: "Decline a pull request",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -205,7 +205,7 @@ func init() {
 		Short: "Merge a pull request",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -245,7 +245,7 @@ func init() {
 		Short: "Request changes on a pull request",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -267,7 +267,7 @@ func init() {
 		Short: "List comments on a pull request",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -298,7 +298,7 @@ func init() {
 		Short: "Add a comment to a pull request",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -329,7 +329,7 @@ func init() {
 		Short: "Get the diff of a pull request",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}

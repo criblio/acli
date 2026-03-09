@@ -30,7 +30,7 @@ func init() {
 		Aliases: []string{"ls"},
 		Args:    cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -63,7 +63,7 @@ func init() {
 		Short: "Get branch details",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -88,7 +88,7 @@ func init() {
 		Short: "Create a branch",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -122,7 +122,7 @@ func init() {
 		Short: "Delete a branch",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -141,7 +141,7 @@ func init() {
 		Aliases: []string{"ls"},
 		Args:    cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -178,7 +178,7 @@ func init() {
 		Short: "Get tag details",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -204,7 +204,7 @@ func init() {
 		Short: "Create a tag",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -241,7 +241,7 @@ func init() {
 		Short: "Delete a tag",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}

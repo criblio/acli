@@ -15,7 +15,8 @@ type Profile struct {
 }
 
 type Config struct {
-	Profiles map[string]Profile `json:"profiles"`
+	DefaultProfile string             `json:"default_profile,omitempty"`
+	Profiles       map[string]Profile `json:"profiles"`
 }
 
 func ConfigDir() (string, error) {
@@ -67,9 +68,28 @@ func (c *Config) Save() error {
 }
 
 func (c *Config) GetProfile(name string) (Profile, error) {
-	p, ok := c.Profiles[name]
-	if !ok {
-		return Profile{}, fmt.Errorf("profile %q not found, run 'acli config setup' to create one", name)
+	// Explicit profile name — look it up directly.
+	if name != "" {
+		p, ok := c.Profiles[name]
+		if !ok {
+			return Profile{}, fmt.Errorf("profile %q not found", name)
+		}
+		return p, nil
 	}
-	return p, nil
+	// No profile specified — use the configured default.
+	if c.DefaultProfile != "" {
+		if p, ok := c.Profiles[c.DefaultProfile]; ok {
+			return p, nil
+		}
+	}
+	// Fall back to the sole profile if there's exactly one.
+	if len(c.Profiles) == 1 {
+		for _, p := range c.Profiles {
+			return p, nil
+		}
+	}
+	if len(c.Profiles) == 0 {
+		return Profile{}, fmt.Errorf("no profiles configured, run 'acli config setup' to create one")
+	}
+	return Profile{}, fmt.Errorf("multiple profiles configured, specify one with -p or set a default with 'acli config set-default <name>'")
 }

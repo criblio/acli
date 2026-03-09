@@ -23,14 +23,20 @@ type Client struct {
 }
 
 // NewClient creates a new Jira client from a config profile.
-func NewClient(profile config.Profile) *Client {
+func NewClient(profile config.Profile) (*Client, error) {
+	if profile.AtlassianURL == "" {
+		return nil, fmt.Errorf("no Atlassian URL configured: run 'acli config setup' to set one")
+	}
+	if profile.APIToken == "" {
+		return nil, fmt.Errorf("no API token configured: run 'acli config setup' to set one")
+	}
 	baseURL := strings.TrimRight(profile.AtlassianURL, "/")
 	return &Client{
 		BaseURL:    baseURL,
 		Email:      profile.Email,
 		APIToken:   profile.APIToken,
 		HTTPClient: &http.Client{},
-	}
+	}, nil
 }
 
 // APIError represents a Jira API error response.
@@ -51,6 +57,16 @@ func (e *APIError) Error() string {
 	return fmt.Sprintf("Jira API error (HTTP %d): %s", e.StatusCode, strings.Join(parts, "; "))
 }
 
+func (c *Client) setAuth(req *http.Request) {
+	if c.Email != "" {
+		// Basic Auth: email + API token (personal API tokens)
+		req.SetBasicAuth(c.Email, c.APIToken)
+	} else {
+		// Bearer Auth: OAuth 2.0 / scoped tokens
+		req.Header.Set("Authorization", "Bearer "+c.APIToken)
+	}
+}
+
 func (c *Client) newRequest(method, path string, body interface{}) (*http.Request, error) {
 	u := c.BaseURL + path
 
@@ -68,7 +84,7 @@ func (c *Client) newRequest(method, path string, body interface{}) (*http.Reques
 		return nil, err
 	}
 
-	req.SetBasicAuth(c.Email, c.APIToken)
+	c.setAuth(req)
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
 	}
@@ -178,7 +194,7 @@ func (c *Client) UploadFile(path string, fieldName string, filePath string, v in
 		return err
 	}
 
-	req.SetBasicAuth(c.Email, c.APIToken)
+	c.setAuth(req)
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("X-Atlassian-Token", "no-check")

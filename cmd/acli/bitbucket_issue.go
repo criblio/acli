@@ -25,7 +25,7 @@ func init() {
 		Aliases: []string{"ls"},
 		Args:    cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -64,7 +64,7 @@ func init() {
 		Short: "Get issue details",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -111,7 +111,7 @@ func init() {
 		Short: "Create an issue",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -158,7 +158,7 @@ func init() {
 		Short: "Update an issue",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -201,7 +201,7 @@ func init() {
 		Short: "Delete an issue",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -223,7 +223,7 @@ func init() {
 		Short: "List comments on an issue",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -251,7 +251,7 @@ func init() {
 		Short: "Add a comment to an issue",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}

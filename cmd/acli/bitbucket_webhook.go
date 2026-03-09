@@ -25,7 +25,7 @@ func init() {
 		Aliases: []string{"ls"},
 		Args:    cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -51,7 +51,7 @@ func init() {
 		Short: "Get webhook details",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -76,7 +76,7 @@ func init() {
 		Short: "Create a webhook for a repository",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -117,7 +117,7 @@ func init() {
 		Short: "Delete a webhook",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -135,7 +135,7 @@ func init() {
 		Short: "List webhooks for a workspace",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -161,7 +161,7 @@ func init() {
 		Short: "Create a webhook for a workspace",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}
@@ -201,7 +201,7 @@ func init() {
 		Short: "Delete a workspace webhook",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}

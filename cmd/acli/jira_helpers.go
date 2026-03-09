@@ -6,22 +6,35 @@ import (
 	"os"
 	"text/tabwriter"
 
+	"github.com/chinmaymk/acli/internal/bitbucket"
 	"github.com/chinmaymk/acli/internal/config"
 	"github.com/chinmaymk/acli/internal/jira"
 	"github.com/spf13/cobra"
 )
 
-func getJiraClient(cmd *cobra.Command) (*jira.Client, error) {
+func getProfile(cmd *cobra.Command) (config.Profile, error) {
 	profileName, _ := cmd.Flags().GetString("profile")
 	cfg, err := config.Load()
 	if err != nil {
-		return nil, fmt.Errorf("loading config: %w", err)
+		return config.Profile{}, fmt.Errorf("loading config: %w", err)
 	}
-	profile, err := cfg.GetProfile(profileName)
+	return cfg.GetProfile(profileName)
+}
+
+func getJiraClient(cmd *cobra.Command) (*jira.Client, error) {
+	profile, err := getProfile(cmd)
 	if err != nil {
 		return nil, err
 	}
-	return jira.NewClient(profile), nil
+	return jira.NewClient(profile)
+}
+
+func getBitbucketClient(cmd *cobra.Command) (*bitbucket.Client, error) {
+	profile, err := getProfile(cmd)
+	if err != nil {
+		return nil, err
+	}
+	return bitbucket.NewClient(profile)
 }
 
 func newTabWriter() *tabwriter.Writer {

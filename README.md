@@ -25,7 +25,57 @@ Download the latest release from [GitHub Releases](https://github.com/chinmaymk/
 
 ## Configuration
 
-ACLI reads configuration from `~/.config/acli/config.json`. Create it with the following structure:
+### Quick Start
+
+The easiest way to get set up is the interactive setup command:
+
+```bash
+acli config setup
+```
+
+This will walk you through creating a `default` profile. To create a named profile:
+
+```bash
+acli config setup work
+```
+
+### Getting Your Credentials
+
+**Jira & Confluence** use email + API token (Basic Auth):
+
+1. Go to [Atlassian API Tokens](https://id.atlassian.com/manage-profile/security/api-tokens)
+2. Click **Create API token**, give it a label, and copy the token
+3. Your Atlassian URL looks like `https://your-instance.atlassian.net`
+
+**Bitbucket** uses app passwords or access tokens:
+
+1. Go to [Bitbucket App Passwords](https://bitbucket.org/account/settings/app-passwords/)
+2. Click **Create app password**, select the permissions you need, and copy the password
+3. You'll also need your Bitbucket username (shown at the top of your account settings)
+
+Alternatively, Bitbucket can use workspace/repository access tokens (Bearer auth) — in that case, leave the username blank.
+
+### Profile Management
+
+```bash
+acli config setup [name]    # Create or update a profile interactively
+acli config list             # List all profiles
+acli config show [name]      # Show profile details (tokens masked)
+acli config delete <name>    # Delete a profile
+```
+
+### Using Profiles
+
+Use `--profile` or `-p` to select a profile (defaults to `default`):
+
+```bash
+acli -p work jira issue list
+acli -p personal bb repo list
+```
+
+### Config File
+
+Profiles are stored in `~/.config/acli/config.json` (created automatically by `config setup`):
 
 ```json
 {
@@ -40,13 +90,14 @@ ACLI reads configuration from `~/.config/acli/config.json`. Create it with the f
 }
 ```
 
-You can generate an API token from your [Atlassian account settings](https://id.atlassian.com/manage-profile/security/api-tokens).
+### Auth Modes
 
-Use `--profile` or `-p` to switch between profiles:
+ACLI supports two authentication modes, detected automatically. The same credentials are used for Jira, Confluence, and Bitbucket:
 
-```bash
-acli -p work jira issue list
-```
+| Mode | When | How |
+|---|---|---|
+| **Basic Auth** | Email is set in profile | `email:api_token` (personal API tokens) |
+| **Bearer Auth** | Email is blank | `Authorization: Bearer <token>` (OAuth 2.0 / scoped tokens) |
 
 ## Usage
 

@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"strings"
+
+	"github.com/chinmaymk/acli/internal/config"
 )
 
 const baseURL = "https://api.bitbucket.org/2.0"
@@ -14,25 +15,19 @@ const baseURL = "https://api.bitbucket.org/2.0"
 type Client struct {
 	httpClient *http.Client
 	token      string
-	username   string // if set, use Basic auth (username:token)
+	email      string // if set, use Basic auth (email:token)
 }
 
-func NewClient() (*Client, error) {
-	token := os.Getenv("BB_SCOPED_TOKEN")
-	if token == "" {
-		token = os.Getenv("BB_TOKEN")
+// NewClient creates a Bitbucket client using profile credentials.
+func NewClient(profile config.Profile) (*Client, error) {
+	if profile.APIToken == "" {
+		return nil, fmt.Errorf("no API token configured: run 'acli config setup' to set one")
 	}
-	if token == "" {
-		return nil, fmt.Errorf("BB_SCOPED_TOKEN (or BB_TOKEN) environment variable is not set")
-	}
-	username := os.Getenv("BB_USERNAME")
-	if username == "" {
-		username = os.Getenv("BB_EMAIL")
-	}
+
 	return &Client{
 		httpClient: &http.Client{},
-		token:      token,
-		username:   username,
+		token:      profile.APIToken,
+		email:      profile.Email,
 	}, nil
 }
 
@@ -47,8 +42,8 @@ func (c *Client) do(method, path string, body io.Reader) ([]byte, error) {
 		return nil, err
 	}
 
-	if c.username != "" {
-		req.SetBasicAuth(c.username, c.token)
+	if c.email != "" {
+		req.SetBasicAuth(c.email, c.token)
 	} else {
 		req.Header.Set("Authorization", "Bearer "+c.token)
 	}

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/chinmaymk/acli/internal/bitbucket"
 	"github.com/spf13/cobra"
 )
 
@@ -21,7 +20,7 @@ func init() {
 		Short: "Search for code in a workspace",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := bitbucket.NewClient()
+			client, err := getBitbucketClient(cmd)
 			if err != nil {
 				return err
 			}

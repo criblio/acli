@@ -25,9 +25,10 @@ func init() {
 	rootCmd.AddCommand(jiraCmd)
 	rootCmd.AddCommand(confluenceCmd)
 	rootCmd.AddCommand(bitbucketCmd)
+	rootCmd.AddCommand(configCmd)
 	rootCmd.AddCommand(versionCmd)
 
-	rootCmd.PersistentFlags().StringP("profile", "p", "default", "configuration profile to use")
+	rootCmd.PersistentFlags().StringP("profile", "p", "", "configuration profile to use (defaults to the default profile)")
 }
 
 var versionCmd = &cobra.Command{

@@ -60,7 +60,7 @@ func confDelete(cmd *cobra.Command, path string, query url.Values) ([]byte, erro
 	return client.ConfluenceV2("DELETE", path, query, nil)
 }
 
-func printJSON(data []byte) {
+func printJSONBytes(data []byte) {
 	var out interface{}
 	if err := json.Unmarshal(data, &out); err != nil {
 		fmt.Println(string(data))
@@ -167,7 +167,7 @@ func addTreeSubResources(parentCmd *cobra.Command, pathPrefix, resourceName stri
 			if err != nil {
 				return err
 			}
-			printJSON(data)
+			printJSONBytes(data)
 			return nil
 		},
 	}
@@ -194,7 +194,7 @@ func addTreeSubResources(parentCmd *cobra.Command, pathPrefix, resourceName stri
 			if err != nil {
 				return err
 			}
-			printJSON(data)
+			printJSONBytes(data)
 			return nil
 		},
 	}
@@ -223,7 +223,7 @@ func addTreeSubResources(parentCmd *cobra.Command, pathPrefix, resourceName stri
 			if err != nil {
 				return err
 			}
-			printJSON(data)
+			printJSONBytes(data)
 			return nil
 		},
 	}
@@ -241,7 +241,7 @@ func addTreeSubResources(parentCmd *cobra.Command, pathPrefix, resourceName stri
 			if err != nil {
 				return err
 			}
-			printJSON(data)
+			printJSONBytes(data)
 			return nil
 		},
 	}
@@ -261,7 +261,7 @@ func addTreeSubResources(parentCmd *cobra.Command, pathPrefix, resourceName stri
 			if err != nil {
 				return err
 			}
-			printJSON(data)
+			printJSONBytes(data)
 			return nil
 		},
 	}

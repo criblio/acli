@@ -30,7 +30,7 @@ func init() {
 			if err != nil {
 				return err
 			}
-			printJSON(data)
+			printJSONBytes(data)
 			return nil
 		},
 	}
@@ -57,7 +57,7 @@ func init() {
 			if err != nil {
 				return err
 			}
-			printJSON(data)
+			printJSONBytes(data)
 			return nil
 		},
 	}

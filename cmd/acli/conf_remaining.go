@@ -150,11 +150,7 @@ func init() {
 		Short: "Delete space default classification level",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			body := map[string]interface{}{
-				"status": getStringFlag(cmd, "status"),
-			}
 			_, err := confDelete(cmd, "/spaces/"+args[0]+"/classification-level/default", nil)
-			_ = body // status passed in body for DELETE per API spec
 			if err != nil {
 				return err
 			}
@@ -162,7 +158,6 @@ func init() {
 			return nil
 		},
 	}
-	spaceClassDeleteCmd.Flags().String("status", "", "Status (required)")
 	spaceClassCmd.AddCommand(spaceClassDeleteCmd)
 
 	confClassificationCmd.AddCommand(spaceClassCmd)

@@ -100,19 +100,21 @@ main() {
             echo "Error: unzip is required to extract the archive" >&2
             exit 1
         fi
+        binary="${BINARY_NAME}.exe"
         target="${INSTALL_DIR}/${BINARY_NAME}.exe"
     else
         tar -xzf "${tmpdir}/${filename}" -C "${tmpdir}"
+        binary="${BINARY_NAME}"
         target="${INSTALL_DIR}/${BINARY_NAME}"
-        chmod +x "${tmpdir}/${BINARY_NAME}"
+        chmod +x "${tmpdir}/${binary}"
     fi
 
     # Install the binary
     if [ -w "$INSTALL_DIR" ]; then
-        mv "${tmpdir}/${BINARY_NAME}$([ "$os" = "windows" ] && echo '.exe')" "$target"
+        mv "${tmpdir}/${binary}" "$target"
     else
         echo "Installing to ${INSTALL_DIR} (requires sudo)..."
-        sudo mv "${tmpdir}/${BINARY_NAME}$([ "$os" = "windows" ] && echo '.exe')" "$target"
+        sudo mv "${tmpdir}/${binary}" "$target"
     fi
 
     echo "acli ${version} installed to ${target}"

@@ -74,11 +74,14 @@ main() {
 
     echo "Installing acli ${version}..."
 
-    # Build download URL
+    # Strip leading 'v' from version for archive name (goreleaser uses version without 'v' prefix)
+    version_num="${version#v}"
+
+    # Build download URL — goreleaser produces tar.gz (linux/mac) and zip (windows)
     if [ "$os" = "windows" ]; then
-        filename="${BINARY_NAME}-${os}-${arch}.exe"
+        filename="${BINARY_NAME}_${version_num}_${os}_${arch}.zip"
     else
-        filename="${BINARY_NAME}-${os}-${arch}"
+        filename="${BINARY_NAME}_${version_num}_${os}_${arch}.tar.gz"
     fi
 
     url="https://github.com/${REPO}/releases/download/${version}/${filename}"
@@ -89,19 +92,27 @@ main() {
 
     download "$url" "${tmpdir}/${filename}"
 
+    # Extract the binary from the archive
     if [ "$os" = "windows" ]; then
+        if command -v unzip >/dev/null 2>&1; then
+            unzip -q "${tmpdir}/${filename}" -d "${tmpdir}"
+        else
+            echo "Error: unzip is required to extract the archive" >&2
+            exit 1
+        fi
         target="${INSTALL_DIR}/${BINARY_NAME}.exe"
     else
+        tar -xzf "${tmpdir}/${filename}" -C "${tmpdir}"
         target="${INSTALL_DIR}/${BINARY_NAME}"
-        chmod +x "${tmpdir}/${filename}"
+        chmod +x "${tmpdir}/${BINARY_NAME}"
     fi
 
     # Install the binary
     if [ -w "$INSTALL_DIR" ]; then
-        mv "${tmpdir}/${filename}" "$target"
+        mv "${tmpdir}/${BINARY_NAME}$([ "$os" = "windows" ] && echo '.exe')" "$target"
     else
         echo "Installing to ${INSTALL_DIR} (requires sudo)..."
-        sudo mv "${tmpdir}/${filename}" "$target"
+        sudo mv "${tmpdir}/${BINARY_NAME}$([ "$os" = "windows" ] && echo '.exe')" "$target"
     fi
 
     echo "acli ${version} installed to ${target}"

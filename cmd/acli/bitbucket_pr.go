@@ -358,7 +358,25 @@ func init() {
 				return fmt.Errorf("--body is required")
 			}
 
-			comment, err := client.CreatePRComment(workspace, repoSlug, prID, body)
+			filePath, _ := cmd.Flags().GetString("file")
+			line, _ := cmd.Flags().GetInt("line")
+
+			if filePath != "" && line == 0 {
+				return fmt.Errorf("--line is required when --file is specified")
+			}
+			if line != 0 && filePath == "" {
+				return fmt.Errorf("--file is required when --line is specified")
+			}
+
+			var inline *bitbucket.InlineCommentParams
+			if filePath != "" {
+				inline = &bitbucket.InlineCommentParams{
+					Path: filePath,
+					To:   line,
+				}
+			}
+
+			comment, err := client.CreatePRCommentInline(workspace, repoSlug, prID, body, inline)
 			if err != nil {
 				return err
 			}
@@ -366,6 +384,8 @@ func init() {
 		},
 	}
 	prCommentCmd.Flags().String("body", "", "Comment body (required)")
+	prCommentCmd.Flags().String("file", "", "File path for an inline comment")
+	prCommentCmd.Flags().Int("line", 0, "Line number in the new version of the file (requires --file)")
 	bbPRCmd.AddCommand(prCommentCmd)
 
 	// pr diff

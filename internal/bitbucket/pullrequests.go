@@ -254,9 +254,11 @@ type PRComment struct {
 		UUID        string `json:"uuid"`
 	} `json:"user"`
 	Inline *struct {
-		Path string `json:"path"`
-		From *int   `json:"from"`
-		To   *int   `json:"to"`
+		Path      string `json:"path"`
+		From      *int   `json:"from"`
+		To        *int   `json:"to"`
+		StartFrom *int   `json:"start_from,omitempty"`
+		StartTo   *int   `json:"start_to,omitempty"`
 	} `json:"inline,omitempty"`
 	Parent *struct {
 		ID int `json:"id"`
@@ -281,11 +283,27 @@ func (c *Client) ListPRComments(workspace, repoSlug string, prID int) ([]PRComme
 	return comments, nil
 }
 
+// InlineCommentParams specifies the file and line for an inline PR comment.
+type InlineCommentParams struct {
+	Path string
+	To   int // Line number in the new version of the file
+}
+
 func (c *Client) CreatePRComment(workspace, repoSlug string, prID int, content string) (*PRComment, error) {
+	return c.CreatePRCommentInline(workspace, repoSlug, prID, content, nil)
+}
+
+func (c *Client) CreatePRCommentInline(workspace, repoSlug string, prID int, content string, inline *InlineCommentParams) (*PRComment, error) {
 	body := map[string]interface{}{
 		"content": map[string]string{
 			"raw": content,
 		},
+	}
+	if inline != nil {
+		body["inline"] = map[string]interface{}{
+			"path": inline.Path,
+			"to":   inline.To,
+		}
 	}
 	jsonBody, err := json.Marshal(body)
 	if err != nil {

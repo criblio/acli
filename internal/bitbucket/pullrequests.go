@@ -313,3 +313,132 @@ func (c *Client) GetPRDiff(workspace, repoSlug string, prID int) (string, error)
 	}
 	return string(data), nil
 }
+
+// PR Task types and methods
+
+type PRTask struct {
+	ID        int    `json:"id"`
+	State     string `json:"state"`
+	Content   struct {
+		Raw    string `json:"raw"`
+		Markup string `json:"markup"`
+		HTML   string `json:"html"`
+	} `json:"content"`
+	Creator struct {
+		DisplayName string `json:"display_name"`
+		UUID        string `json:"uuid"`
+	} `json:"creator"`
+	CreatedOn  string `json:"created_on"`
+	UpdatedOn  string `json:"updated_on"`
+	ResolvedOn string `json:"resolved_on,omitempty"`
+	ResolvedBy *struct {
+		DisplayName string `json:"display_name"`
+		UUID        string `json:"uuid"`
+	} `json:"resolved_by,omitempty"`
+	Comment *struct {
+		ID int `json:"id"`
+	} `json:"comment,omitempty"`
+}
+
+func (c *Client) ListPRTasks(workspace, repoSlug string, prID int) ([]PRTask, error) {
+	path := fmt.Sprintf("/repositories/%s/%s/pullrequests/%d/tasks",
+		url.PathEscape(workspace), url.PathEscape(repoSlug), prID)
+	data, err := c.get(path)
+	if err != nil {
+		return nil, err
+	}
+	var page PaginatedResponse
+	if err := json.Unmarshal(data, &page); err != nil {
+		return nil, fmt.Errorf("parsing response: %w", err)
+	}
+	var tasks []PRTask
+	if err := json.Unmarshal(page.Values, &tasks); err != nil {
+		return nil, fmt.Errorf("parsing tasks: %w", err)
+	}
+	return tasks, nil
+}
+
+func (c *Client) GetPRTask(workspace, repoSlug string, prID, taskID int) (*PRTask, error) {
+	path := fmt.Sprintf("/repositories/%s/%s/pullrequests/%d/tasks/%d",
+		url.PathEscape(workspace), url.PathEscape(repoSlug), prID, taskID)
+	data, err := c.get(path)
+	if err != nil {
+		return nil, err
+	}
+	var task PRTask
+	if err := json.Unmarshal(data, &task); err != nil {
+		return nil, fmt.Errorf("parsing task: %w", err)
+	}
+	return &task, nil
+}
+
+type CreatePRTaskRequest struct {
+	Content   string `json:"-"`
+	CommentID *int   `json:"-"`
+}
+
+func (c *Client) CreatePRTask(workspace, repoSlug string, prID int, req *CreatePRTaskRequest) (*PRTask, error) {
+	body := map[string]interface{}{
+		"content": map[string]string{
+			"raw": req.Content,
+		},
+	}
+	if req.CommentID != nil {
+		body["comment"] = map[string]int{
+			"id": *req.CommentID,
+		}
+	}
+	jsonBody, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	path := fmt.Sprintf("/repositories/%s/%s/pullrequests/%d/tasks",
+		url.PathEscape(workspace), url.PathEscape(repoSlug), prID)
+	data, err := c.post(path, bytes.NewReader(jsonBody))
+	if err != nil {
+		return nil, err
+	}
+	var task PRTask
+	if err := json.Unmarshal(data, &task); err != nil {
+		return nil, fmt.Errorf("parsing task: %w", err)
+	}
+	return &task, nil
+}
+
+type UpdatePRTaskRequest struct {
+	Content *string `json:"-"`
+	State   string  `json:"-"`
+}
+
+func (c *Client) UpdatePRTask(workspace, repoSlug string, prID, taskID int, req *UpdatePRTaskRequest) (*PRTask, error) {
+	body := map[string]interface{}{}
+	if req.Content != nil {
+		body["content"] = map[string]string{
+			"raw": *req.Content,
+		}
+	}
+	if req.State != "" {
+		body["state"] = req.State
+	}
+	jsonBody, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	path := fmt.Sprintf("/repositories/%s/%s/pullrequests/%d/tasks/%d",
+		url.PathEscape(workspace), url.PathEscape(repoSlug), prID, taskID)
+	data, err := c.put(path, bytes.NewReader(jsonBody))
+	if err != nil {
+		return nil, err
+	}
+	var task PRTask
+	if err := json.Unmarshal(data, &task); err != nil {
+		return nil, fmt.Errorf("parsing task: %w", err)
+	}
+	return &task, nil
+}
+
+func (c *Client) DeletePRTask(workspace, repoSlug string, prID, taskID int) error {
+	path := fmt.Sprintf("/repositories/%s/%s/pullrequests/%d/tasks/%d",
+		url.PathEscape(workspace), url.PathEscape(repoSlug), prID, taskID)
+	return c.deleteNoContent(path)
+}

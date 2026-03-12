@@ -65,6 +65,19 @@ func defaultWorkspace(cmd *cobra.Command, args []string, argIndex int) (string, 
 	return "", fmt.Errorf("workspace is required: provide it as an argument or set a default with 'acli config set-defaults'")
 }
 
+// defaultBBProject returns the --project flag value if set, otherwise falls back to the profile default BB project.
+func defaultBBProject(cmd *cobra.Command) (string, error) {
+	project, _ := cmd.Flags().GetString("project")
+	if project != "" {
+		return project, nil
+	}
+	profile, err := getProfile(cmd)
+	if err != nil {
+		return "", err
+	}
+	return profile.Defaults.BBProject, nil
+}
+
 // resolveWorkspaceAndRepo handles the common pattern of [workspace] <repo> args.
 // With 2 args: workspace=args[0], repo=args[1].
 // With 1 arg: workspace from profile default, repo=args[0].

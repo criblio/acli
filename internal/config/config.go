@@ -10,6 +10,7 @@ import (
 type Defaults struct {
 	Project   string `json:"project,omitempty"`
 	Workspace string `json:"workspace,omitempty"`
+	BBProject string `json:"bb_project,omitempty"`
 }
 
 type Profile struct {

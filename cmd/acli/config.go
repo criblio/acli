@@ -143,13 +143,16 @@ var configShowCmd = &cobra.Command{
 		fmt.Printf("  Atlassian URL:    %s\n", p.AtlassianURL)
 		fmt.Printf("  Email:            %s\n", p.Email)
 		fmt.Printf("  API Token:        %s\n", maskToken(p.APIToken))
-		if p.Defaults.Project != "" || p.Defaults.Workspace != "" {
+		if p.Defaults.Project != "" || p.Defaults.Workspace != "" || p.Defaults.BBProject != "" {
 			fmt.Println("  Defaults:")
 			if p.Defaults.Project != "" {
 				fmt.Printf("    Project:        %s\n", p.Defaults.Project)
 			}
 			if p.Defaults.Workspace != "" {
 				fmt.Printf("    Workspace:      %s\n", p.Defaults.Workspace)
+			}
+			if p.Defaults.BBProject != "" {
+				fmt.Printf("    BB Project:     %s\n", p.Defaults.BBProject)
 			}
 		}
 		return nil
@@ -227,7 +230,8 @@ var configSetDefaultsCmd = &cobra.Command{
 
 These defaults are used as fallbacks when the flag/argument is not provided:
   - project: Default Jira project key (used by issue list, issue create, etc.)
-  - workspace: Default Bitbucket workspace (used by repo, pr, pipeline, etc.)`,
+  - workspace: Default Bitbucket workspace (used by repo, pr, pipeline, etc.)
+  - bb_project: Default Bitbucket project key (used by repo create, etc.)`,
 	Args: cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		cfg, err := config.Load()
@@ -250,10 +254,12 @@ These defaults are used as fallbacks when the flag/argument is not provided:
 
 		project := promptWithDefault(reader, "Default Jira project key", profile.Defaults.Project, "")
 		workspace := promptWithDefault(reader, "Default Bitbucket workspace", profile.Defaults.Workspace, "")
+		bbProject := promptWithDefault(reader, "Default Bitbucket project key", profile.Defaults.BBProject, "")
 
 		profile.Defaults = config.Defaults{
 			Project:   project,
 			Workspace: workspace,
+			BBProject: bbProject,
 		}
 
 		cfg.Profiles[profile.Name] = profile
@@ -267,6 +273,9 @@ These defaults are used as fallbacks when the flag/argument is not provided:
 		}
 		if workspace != "" {
 			fmt.Printf("  Default workspace: %s\n", workspace)
+		}
+		if bbProject != "" {
+			fmt.Printf("  Default BB project: %s\n", bbProject)
 		}
 		return nil
 	},

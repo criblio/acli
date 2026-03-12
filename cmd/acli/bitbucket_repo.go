@@ -135,7 +135,10 @@ func init() {
 			desc, _ := cmd.Flags().GetString("description")
 			language, _ := cmd.Flags().GetString("language")
 			isPrivate, _ := cmd.Flags().GetBool("private")
-			projectKey, _ := cmd.Flags().GetString("project")
+			projectKey, err := defaultBBProject(cmd)
+			if err != nil {
+				return err
+			}
 
 			req := &bitbucket.CreateRepoRequest{
 				SCM:         "git",
@@ -162,7 +165,7 @@ func init() {
 	repoCreateCmd.Flags().String("description", "", "Repository description")
 	repoCreateCmd.Flags().String("language", "", "Programming language")
 	repoCreateCmd.Flags().Bool("private", true, "Make repository private")
-	repoCreateCmd.Flags().String("project", "", "Project key to assign to")
+	repoCreateCmd.Flags().String("project", "", "Project key to assign to (falls back to default BB project)")
 	bbRepoCmd.AddCommand(repoCreateCmd)
 
 	// repo delete

@@ -66,11 +66,13 @@ acli config setup work
 
 ### Getting Your Credentials
 
-All Atlassian products (Jira, Confluence, and Bitbucket) use email + API token (Basic Auth):
+All Atlassian products (Jira, Confluence, and Bitbucket) use email + API token (Basic Auth). ACLI requires a **scoped API token** with access to the specific Atlassian products you plan to use:
 
 1. Go to [Atlassian API Tokens](https://id.atlassian.com/manage-profile/security/api-tokens)
-2. Click **Create API token**, give it a label, and copy the token
-3. Your Atlassian URL looks like `https://your-instance.atlassian.net`
+2. Click **Create API token**, give it a label
+3. Select the **scoped** token type and grant access to the products you need (Jira, Confluence, and/or Bitbucket)
+4. Copy the token
+5. Your Atlassian URL looks like `https://your-instance.atlassian.net`
 
 ### Profile Management
 

@@ -15,7 +15,7 @@ func init() {
 		Aliases: []string{"ls"},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			q := getPaginationQuery(cmd)
-			data, err := confGet(cmd, "/classification-levels", q)
+			data, err := confGetPaginated(cmd, "/classification-levels", q)
 			if err != nil {
 				return err
 			}
@@ -201,7 +201,7 @@ func init() {
 					q.Add("keys", k)
 				}
 			}
-			data, err := confGet(cmd, "/data-policies/spaces", q)
+			data, err := confGetPaginated(cmd, "/data-policies/spaces", q)
 			if err != nil {
 				return err
 			}
@@ -255,7 +255,7 @@ func init() {
 			if limit := getIntFlag(cmd, "limit"); limit > 0 {
 				q.Set("limit", fmt.Sprintf("%d", limit))
 			}
-			data, err := confGet(cmd, "/space-roles", q)
+			data, err := confGetPaginated(cmd, "/space-roles", q)
 			if err != nil {
 				return err
 			}

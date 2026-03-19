@@ -17,7 +17,7 @@ func init() {
 		Aliases: []string{"ls"},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			q := getPaginationQuery(cmd)
-			data, err := confGet(cmd, "/footer-comments", q)
+			data, err := confGetPaginated(cmd, "/footer-comments", q)
 			if err != nil {
 				return err
 			}
@@ -165,7 +165,7 @@ func init() {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			q := getPaginationQuery(cmd)
-			data, err := confGet(cmd, "/footer-comments/"+args[0]+"/children", q)
+			data, err := confGetPaginated(cmd, "/footer-comments/"+args[0]+"/children", q)
 			if err != nil {
 				return err
 			}
@@ -201,7 +201,7 @@ func init() {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			q := getPaginationQuery(cmd)
-			data, err := confGet(cmd, "/footer-comments/"+args[0]+"/versions", q)
+			data, err := confGetPaginated(cmd, "/footer-comments/"+args[0]+"/versions", q)
 			if err != nil {
 				return err
 			}
@@ -237,7 +237,7 @@ func init() {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			q := getPaginationQuery(cmd)
-			data, err := confGet(cmd, "/footer-comments/"+args[0]+"/likes/users", q)
+			data, err := confGetPaginated(cmd, "/footer-comments/"+args[0]+"/likes/users", q)
 			if err != nil {
 				return err
 			}
@@ -273,7 +273,7 @@ func init() {
 		Aliases: []string{"ls"},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			q := getPaginationQuery(cmd)
-			data, err := confGet(cmd, "/inline-comments", q)
+			data, err := confGetPaginated(cmd, "/inline-comments", q)
 			if err != nil {
 				return err
 			}
@@ -425,7 +425,7 @@ func init() {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			q := getPaginationQuery(cmd)
-			data, err := confGet(cmd, "/inline-comments/"+args[0]+"/children", q)
+			data, err := confGetPaginated(cmd, "/inline-comments/"+args[0]+"/children", q)
 			if err != nil {
 				return err
 			}
@@ -461,7 +461,7 @@ func init() {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			q := getPaginationQuery(cmd)
-			data, err := confGet(cmd, "/inline-comments/"+args[0]+"/versions", q)
+			data, err := confGetPaginated(cmd, "/inline-comments/"+args[0]+"/versions", q)
 			if err != nil {
 				return err
 			}
@@ -497,7 +497,7 @@ func init() {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			q := getPaginationQuery(cmd)
-			data, err := confGet(cmd, "/inline-comments/"+args[0]+"/likes/users", q)
+			data, err := confGetPaginated(cmd, "/inline-comments/"+args[0]+"/likes/users", q)
 			if err != nil {
 				return err
 			}

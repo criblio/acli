@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"strings"
 
 	"github.com/chinmaymk/acli/internal/api"
 	"github.com/chinmaymk/acli/internal/config"
@@ -64,6 +65,85 @@ func confDelete(cmd *cobra.Command, path string, query url.Values) ([]byte, erro
 	return client.ConfluenceV2("DELETE", path, query, nil)
 }
 
+// confluencePaginatedResponse represents a Confluence v2 API paginated response.
+type confluencePaginatedResponse struct {
+	Results json.RawMessage `json:"results"`
+	Links   struct {
+		Next string `json:"next"`
+	} `json:"_links"`
+}
+
+// confGetPaginated fetches paginated results, following cursor links when --all is set.
+// When --all is not set, it returns the raw single-page response.
+func confGetPaginated(cmd *cobra.Command, path string, query url.Values) ([]byte, error) {
+	allPages, _ := cmd.Flags().GetBool("all")
+	if !allPages {
+		return confGet(cmd, path, query)
+	}
+
+	client, err := newConfluenceClient(cmd)
+	if err != nil {
+		return nil, err
+	}
+
+	var allResults []json.RawMessage
+	currentPath := path
+	currentQuery := query
+
+	for {
+		data, err := client.ConfluenceV2("GET", currentPath, currentQuery, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		var page confluencePaginatedResponse
+		if err := json.Unmarshal(data, &page); err != nil {
+			// Not a paginated response, return as-is
+			return data, nil
+		}
+
+		if page.Results != nil {
+			var items []json.RawMessage
+			if err := json.Unmarshal(page.Results, &items); err == nil {
+				allResults = append(allResults, items...)
+			}
+		}
+
+		if page.Links.Next == "" {
+			break
+		}
+
+		// Parse the next link to extract path and query params.
+		// The next link is a relative URL like "/wiki/api/v2/spaces?cursor=..."
+		nextURL := page.Links.Next
+		// Strip the /wiki/api/v2 prefix since ConfluenceV2 adds it
+		if idx := strings.Index(nextURL, "/wiki/api/v2"); idx >= 0 {
+			nextURL = nextURL[idx+len("/wiki/api/v2"):]
+		}
+		if qIdx := strings.IndexByte(nextURL, '?'); qIdx >= 0 {
+			parsedQuery, err := url.ParseQuery(nextURL[qIdx+1:])
+			if err != nil {
+				return nil, fmt.Errorf("parsing next link query: %w", err)
+			}
+			currentPath = nextURL[:qIdx]
+			currentQuery = parsedQuery
+		} else {
+			currentPath = nextURL
+			currentQuery = nil
+		}
+	}
+
+	// Build a combined response with all results
+	resultsJSON, err := json.Marshal(allResults)
+	if err != nil {
+		return nil, err
+	}
+	combined := map[string]interface{}{
+		"results": json.RawMessage(resultsJSON),
+	}
+	return json.Marshal(combined)
+}
+
 func printJSONBytes(data []byte) {
 	var out interface{}
 	if err := json.Unmarshal(data, &out); err != nil {
@@ -78,9 +158,13 @@ func printJSONBytes(data []byte) {
 	fmt.Println(string(pretty))
 }
 
+// defaultConfluenceLimit is the default number of items per page for Confluence API requests.
+const defaultConfluenceLimit = 50
+
 func addPaginationFlags(cmd *cobra.Command) {
-	cmd.Flags().Int("limit", 25, "Maximum number of results to return")
+	cmd.Flags().Int("limit", defaultConfluenceLimit, "Maximum number of results to return")
 	cmd.Flags().String("cursor", "", "Pagination cursor")
+	cmd.Flags().Bool("all", false, "Fetch all pages of results (follows pagination cursors)")
 }
 
 func addSortFlag(cmd *cobra.Command) {
@@ -100,7 +184,7 @@ func getPaginationQuery(cmd *cobra.Command) url.Values {
 	if limit, _ := cmd.Flags().GetInt("limit"); limit > 0 {
 		q.Set("limit", fmt.Sprintf("%d", limit))
 	}
-	if cursor, _ := cmd.Flags().GetString("cursor"); cursor != "" {
+	if cursor, _ := cmd.Flags().GetString("cursor"); cursor != "" && !getBoolFlag(cmd, "all") {
 		q.Set("cursor", cursor)
 	}
 	if sort, _ := cmd.Flags().GetString("sort"); sort != "" {
@@ -165,7 +249,7 @@ func addTreeSubResources(parentCmd *cobra.Command, pathPrefix, resourceName stri
 			return nil
 		},
 	}
-	ancestorsCmd.Flags().Int("limit", 25, "Maximum number of results")
+	ancestorsCmd.Flags().Int("limit", defaultConfluenceLimit, "Maximum number of results")
 	parentCmd.AddCommand(ancestorsCmd)
 
 	// descendants
@@ -184,7 +268,7 @@ func addTreeSubResources(parentCmd *cobra.Command, pathPrefix, resourceName stri
 			if cursor := getStringFlag(cmd, "cursor"); cursor != "" {
 				q.Set("cursor", cursor)
 			}
-			data, err := confGet(cmd, pathPrefix+"/"+args[0]+"/descendants", q)
+			data, err := confGetPaginated(cmd, pathPrefix+"/"+args[0]+"/descendants", q)
 			if err != nil {
 				return err
 			}
@@ -192,9 +276,10 @@ func addTreeSubResources(parentCmd *cobra.Command, pathPrefix, resourceName stri
 			return nil
 		},
 	}
-	descendantsCmd.Flags().Int("limit", 25, "Maximum number of results")
+	descendantsCmd.Flags().Int("limit", defaultConfluenceLimit, "Maximum number of results")
 	descendantsCmd.Flags().Int("depth", 0, "Maximum depth of descendants")
 	descendantsCmd.Flags().String("cursor", "", "Pagination cursor")
+	descendantsCmd.Flags().Bool("all", false, "Fetch all pages of results")
 	parentCmd.AddCommand(descendantsCmd)
 
 	// direct-children
@@ -213,7 +298,7 @@ func addTreeSubResources(parentCmd *cobra.Command, pathPrefix, resourceName stri
 			if sort := getStringFlag(cmd, "sort"); sort != "" {
 				q.Set("sort", sort)
 			}
-			data, err := confGet(cmd, pathPrefix+"/"+args[0]+"/direct-children", q)
+			data, err := confGetPaginated(cmd, pathPrefix+"/"+args[0]+"/direct-children", q)
 			if err != nil {
 				return err
 			}
@@ -251,7 +336,7 @@ func addTreeSubResources(parentCmd *cobra.Command, pathPrefix, resourceName stri
 			if k := getStringFlag(cmd, "key"); k != "" {
 				q.Set("key", k)
 			}
-			data, err := confGet(cmd, pathPrefix+"/"+args[0]+"/properties", q)
+			data, err := confGetPaginated(cmd, pathPrefix+"/"+args[0]+"/properties", q)
 			if err != nil {
 				return err
 			}

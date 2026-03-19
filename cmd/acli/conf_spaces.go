@@ -45,7 +45,7 @@ func init() {
 			if getBoolFlag(cmd, "include-icon") {
 				q.Set("include-icon", "true")
 			}
-			data, err := confGet(cmd, "/spaces", q)
+			data, err := confGetPaginated(cmd, "/spaces", q)
 			if err != nil {
 				return err
 			}
@@ -167,7 +167,7 @@ func init() {
 			if t := getStringFlag(cmd, "title"); t != "" {
 				q.Set("title", t)
 			}
-			data, err := confGet(cmd, "/spaces/"+args[0]+"/pages", q)
+			data, err := confGetPaginated(cmd, "/spaces/"+args[0]+"/pages", q)
 			if err != nil {
 				return err
 			}
@@ -194,7 +194,7 @@ func init() {
 			if t := getStringFlag(cmd, "title"); t != "" {
 				q.Set("title", t)
 			}
-			data, err := confGet(cmd, "/blogposts", q)
+			data, err := confGetPaginated(cmd, "/blogposts", q)
 			if err != nil {
 				return err
 			}
@@ -216,7 +216,7 @@ func init() {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			q := getPaginationQuery(cmd)
-			data, err := confGet(cmd, "/spaces/"+args[0]+"/labels", q)
+			data, err := confGetPaginated(cmd, "/spaces/"+args[0]+"/labels", q)
 			if err != nil {
 				return err
 			}
@@ -237,7 +237,7 @@ func init() {
 			if p := getStringFlag(cmd, "prefix"); p != "" {
 				q.Set("prefix", p)
 			}
-			data, err := confGet(cmd, "/spaces/"+args[0]+"/content/labels", q)
+			data, err := confGetPaginated(cmd, "/spaces/"+args[0]+"/content/labels", q)
 			if err != nil {
 				return err
 			}
@@ -259,7 +259,7 @@ func init() {
 			if t := getStringFlag(cmd, "type"); t != "" {
 				q.Set("type", t)
 			}
-			data, err := confGet(cmd, "/spaces/"+args[0]+"/custom-content", q)
+			data, err := confGetPaginated(cmd, "/spaces/"+args[0]+"/custom-content", q)
 			if err != nil {
 				return err
 			}
@@ -302,7 +302,7 @@ func init() {
 			if limit := getIntFlag(cmd, "limit"); limit > 0 {
 				q.Set("limit", fmt.Sprintf("%d", limit))
 			}
-			data, err := confGet(cmd, "/spaces/"+args[0]+"/permissions", q)
+			data, err := confGetPaginated(cmd, "/spaces/"+args[0]+"/permissions", q)
 			if err != nil {
 				return err
 			}
@@ -338,7 +338,7 @@ func init() {
 			if pt := getStringFlag(cmd, "principal-type"); pt != "" {
 				q.Set("principal-type", pt)
 			}
-			data, err := confGet(cmd, "/spaces/"+args[0]+"/role-assignments", q)
+			data, err := confGetPaginated(cmd, "/spaces/"+args[0]+"/role-assignments", q)
 			if err != nil {
 				return err
 			}

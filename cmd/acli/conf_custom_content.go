@@ -28,7 +28,7 @@ func init() {
 					q.Add("space-id", id)
 				}
 			}
-			data, err := confGet(cmd, "/custom-content", q)
+			data, err := confGetPaginated(cmd, "/custom-content", q)
 			if err != nil {
 				return err
 			}
@@ -224,7 +224,7 @@ func init() {
 			if f := getStringFlag(cmd, "filename"); f != "" {
 				q.Set("filename", f)
 			}
-			data, err := confGet(cmd, "/custom-content/"+args[0]+"/attachments", q)
+			data, err := confGetPaginated(cmd, "/custom-content/"+args[0]+"/attachments", q)
 			if err != nil {
 				return err
 			}
@@ -246,7 +246,7 @@ func init() {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			q := getPaginationQuery(cmd)
-			data, err := confGet(cmd, "/custom-content/"+args[0]+"/children", q)
+			data, err := confGetPaginated(cmd, "/custom-content/"+args[0]+"/children", q)
 			if err != nil {
 				return err
 			}
@@ -268,7 +268,7 @@ func init() {
 			if p := getStringFlag(cmd, "prefix"); p != "" {
 				q.Set("prefix", p)
 			}
-			data, err := confGet(cmd, "/custom-content/"+args[0]+"/labels", q)
+			data, err := confGetPaginated(cmd, "/custom-content/"+args[0]+"/labels", q)
 			if err != nil {
 				return err
 			}
@@ -288,7 +288,7 @@ func init() {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			q := getPaginationQuery(cmd)
-			data, err := confGet(cmd, "/custom-content/"+args[0]+"/footer-comments", q)
+			data, err := confGetPaginated(cmd, "/custom-content/"+args[0]+"/footer-comments", q)
 			if err != nil {
 				return err
 			}
@@ -324,7 +324,7 @@ func init() {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			q := getPaginationQuery(cmd)
-			data, err := confGet(cmd, "/custom-content/"+args[0]+"/versions", q)
+			data, err := confGetPaginated(cmd, "/custom-content/"+args[0]+"/versions", q)
 			if err != nil {
 				return err
 			}

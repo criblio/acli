@@ -21,7 +21,7 @@ func init() {
 			if f := getStringFlag(cmd, "filename"); f != "" {
 				q.Set("filename", f)
 			}
-			data, err := confGet(cmd, "/attachments", q)
+			data, err := confGetPaginated(cmd, "/attachments", q)
 			if err != nil {
 				return err
 			}
@@ -100,7 +100,7 @@ func init() {
 			if p := getStringFlag(cmd, "prefix"); p != "" {
 				q.Set("prefix", p)
 			}
-			data, err := confGet(cmd, "/attachments/"+args[0]+"/labels", q)
+			data, err := confGetPaginated(cmd, "/attachments/"+args[0]+"/labels", q)
 			if err != nil {
 				return err
 			}
@@ -123,7 +123,7 @@ func init() {
 			if v := getIntFlag(cmd, "version"); v > 0 {
 				q.Set("version", fmt.Sprintf("%d", v))
 			}
-			data, err := confGet(cmd, "/attachments/"+args[0]+"/footer-comments", q)
+			data, err := confGetPaginated(cmd, "/attachments/"+args[0]+"/footer-comments", q)
 			if err != nil {
 				return err
 			}
@@ -160,7 +160,7 @@ func init() {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			q := getPaginationQuery(cmd)
-			data, err := confGet(cmd, "/attachments/"+args[0]+"/versions", q)
+			data, err := confGetPaginated(cmd, "/attachments/"+args[0]+"/versions", q)
 			if err != nil {
 				return err
 			}

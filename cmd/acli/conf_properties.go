@@ -42,7 +42,7 @@ func init() {
 				if k := getStringFlag(cmd, "key"); k != "" {
 					q.Set("key", k)
 				}
-				data, err := confGet(cmd, res.pathPrefix+"/"+args[0]+"/properties", q)
+				data, err := confGetPaginated(cmd, res.pathPrefix+"/"+args[0]+"/properties", q)
 				if err != nil {
 					return err
 				}
@@ -177,7 +177,7 @@ func init() {
 			if k := getStringFlag(cmd, "key"); k != "" {
 				q.Set("key", k)
 			}
-			data, err := confGet(cmd, "/spaces/"+args[0]+"/properties", q)
+			data, err := confGetPaginated(cmd, "/spaces/"+args[0]+"/properties", q)
 			if err != nil {
 				return err
 			}

@@ -60,7 +60,7 @@ func init() {
 					q.Set(f, v)
 				}
 			}
-			data, err := confGet(cmd, "/tasks", q)
+			data, err := confGetPaginated(cmd, "/tasks", q)
 			if err != nil {
 				return err
 			}

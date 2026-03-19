@@ -22,7 +22,7 @@ func init() {
 					q.Add("prefix", p)
 				}
 			}
-			data, err := confGet(cmd, "/labels", q)
+			data, err := confGetPaginated(cmd, "/labels", q)
 			if err != nil {
 				return err
 			}
@@ -48,7 +48,7 @@ func init() {
 					q.Add("space-id", id)
 				}
 			}
-			data, err := confGet(cmd, "/labels/"+args[0]+"/pages", q)
+			data, err := confGetPaginated(cmd, "/labels/"+args[0]+"/pages", q)
 			if err != nil {
 				return err
 			}
@@ -74,7 +74,7 @@ func init() {
 					q.Add("space-id", id)
 				}
 			}
-			data, err := confGet(cmd, "/labels/"+args[0]+"/blogposts", q)
+			data, err := confGetPaginated(cmd, "/labels/"+args[0]+"/blogposts", q)
 			if err != nil {
 				return err
 			}
@@ -95,7 +95,7 @@ func init() {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			q := getPaginationQuery(cmd)
-			data, err := confGet(cmd, "/labels/"+args[0]+"/attachments", q)
+			data, err := confGetPaginated(cmd, "/labels/"+args[0]+"/attachments", q)
 			if err != nil {
 				return err
 			}

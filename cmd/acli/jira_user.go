@@ -64,11 +64,21 @@ var jiraUserSearchCmd = &cobra.Command{
 		query, _ := cmd.Flags().GetString("query")
 		maxResults, _ := cmd.Flags().GetInt("max-results")
 		startAt, _ := cmd.Flags().GetInt("start-at")
+		all, _ := cmd.Flags().GetBool("all")
 		jsonOut := isJSONOutput(cmd)
 
 		users, err := client.FindUsers(query, startAt, maxResults)
 		if err != nil {
 			return err
+		}
+		if all {
+			for len(users) >= maxResults {
+				next, err := client.FindUsers(query, startAt+len(users), maxResults)
+				if err != nil || len(next) == 0 {
+					break
+				}
+				users = append(users, next...)
+			}
 		}
 		if jsonOut {
 			return outputJSON(users)
@@ -132,10 +142,20 @@ var jiraUserListCmd = &cobra.Command{
 		}
 		maxResults, _ := cmd.Flags().GetInt("max-results")
 		startAt, _ := cmd.Flags().GetInt("start-at")
+		all, _ := cmd.Flags().GetBool("all")
 
 		users, err := client.GetAllUsers(startAt, maxResults)
 		if err != nil {
 			return err
+		}
+		if all {
+			for len(users) >= maxResults {
+				next, err := client.GetAllUsers(startAt+len(users), maxResults)
+				if err != nil || len(next) == 0 {
+					break
+				}
+				users = append(users, next...)
+			}
 		}
 		printUsersTable(users)
 		return nil
@@ -203,18 +223,30 @@ var jiraGroupListCmd = &cobra.Command{
 		}
 		maxResults, _ := cmd.Flags().GetInt("max-results")
 		startAt, _ := cmd.Flags().GetInt("start-at")
+		all, _ := cmd.Flags().GetBool("all")
 		jsonOut := isJSONOutput(cmd)
 
 		page, err := client.GetBulkGroups(startAt, maxResults)
 		if err != nil {
 			return err
 		}
+		allGroups := page.Values
+		if all {
+			for !page.IsLast && len(allGroups) < page.Total {
+				next, err := client.GetBulkGroups(startAt+len(allGroups), maxResults)
+				if err != nil || len(next.Values) == 0 {
+					break
+				}
+				allGroups = append(allGroups, next.Values...)
+				page = next
+			}
+		}
 		if jsonOut {
-			return outputJSON(page)
+			return outputJSON(allGroups)
 		}
 		w := newTabWriter()
 		fmt.Fprintln(w, "GROUP_ID\tNAME")
-		for _, g := range page.Values {
+		for _, g := range allGroups {
 			fmt.Fprintf(w, "%s\t%s\n", g.GroupID, g.Name)
 		}
 		w.Flush()
@@ -291,12 +323,24 @@ var jiraGroupMembersCmd = &cobra.Command{
 		}
 		maxResults, _ := cmd.Flags().GetInt("max-results")
 		startAt, _ := cmd.Flags().GetInt("start-at")
+		all, _ := cmd.Flags().GetBool("all")
 
 		members, err := client.GetGroupMembers(args[0], startAt, maxResults)
 		if err != nil {
 			return err
 		}
-		printUsersTable(members.Values)
+		allMembers := members.Values
+		if all {
+			for !members.IsLast && len(allMembers) < members.Total {
+				next, err := client.GetGroupMembers(args[0], startAt+len(allMembers), maxResults)
+				if err != nil || len(next.Values) == 0 {
+					break
+				}
+				allMembers = append(allMembers, next.Values...)
+				members = next
+			}
+		}
+		printUsersTable(allMembers)
 		return nil
 	},
 }
@@ -372,6 +416,7 @@ func init() {
 	_ = jiraUserSearchCmd.MarkFlagRequired("query")
 	jiraUserSearchCmd.Flags().Int("max-results", 50, "Maximum number of results")
 	jiraUserSearchCmd.Flags().Int("start-at", 0, "Index of the first result")
+	addAllFlag(jiraUserSearchCmd)
 	jiraUserSearchCmd.Flags().Bool("json", false, "Output as JSON")
 	jiraUserCmd.AddCommand(jiraUserSearchCmd)
 
@@ -385,6 +430,7 @@ func init() {
 
 	jiraUserListCmd.Flags().Int("max-results", 50, "Maximum number of results")
 	jiraUserListCmd.Flags().Int("start-at", 0, "Index of the first result")
+	addAllFlag(jiraUserListCmd)
 	jiraUserCmd.AddCommand(jiraUserListCmd)
 
 	jiraUserCreateCmd.Flags().String("email", "", "User email address (required)")
@@ -398,6 +444,7 @@ func init() {
 	// Group
 	jiraGroupListCmd.Flags().Int("max-results", 50, "Maximum number of results")
 	jiraGroupListCmd.Flags().Int("start-at", 0, "Index of the first result")
+	addAllFlag(jiraGroupListCmd)
 	jiraGroupListCmd.Flags().Bool("json", false, "Output as JSON")
 	jiraGroupCmd.AddCommand(jiraGroupListCmd)
 
@@ -412,6 +459,7 @@ func init() {
 
 	jiraGroupMembersCmd.Flags().Int("max-results", 50, "Maximum number of results")
 	jiraGroupMembersCmd.Flags().Int("start-at", 0, "Index of the first result")
+	addAllFlag(jiraGroupMembersCmd)
 	jiraGroupCmd.AddCommand(jiraGroupMembersCmd)
 
 	jiraGroupAddUserCmd.Flags().String("account-id", "", "User account ID (required)")

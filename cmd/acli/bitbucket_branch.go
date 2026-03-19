@@ -40,7 +40,11 @@ func init() {
 			}
 
 			q, _ := cmd.Flags().GetString("query")
-			branches, err := client.ListBranches(workspace, repoSlug, q)
+			pOpts := getBBPaginationOpts(cmd)
+			branches, err := client.ListBranches(workspace, repoSlug, &bitbucket.ListBranchesOptions{
+				Q:                 q,
+				PaginationOptions: *pOpts,
+			})
 			if err != nil {
 				return err
 			}
@@ -59,6 +63,7 @@ func init() {
 		},
 	}
 	branchListCmd.Flags().String("query", "", "Filter branches (e.g. name ~ \"feature\")")
+	addBBPaginationFlags(branchListCmd)
 	bbBranchCmd.AddCommand(branchListCmd)
 
 	// branch get
@@ -167,7 +172,11 @@ func init() {
 			}
 
 			q, _ := cmd.Flags().GetString("query")
-			tags, err := client.ListTags(workspace, repoSlug, q)
+			pOpts := getBBPaginationOpts(cmd)
+			tags, err := client.ListTags(workspace, repoSlug, &bitbucket.ListTagsOptions{
+				Q:                 q,
+				PaginationOptions: *pOpts,
+			})
 			if err != nil {
 				return err
 			}
@@ -190,6 +199,7 @@ func init() {
 		},
 	}
 	tagListCmd.Flags().String("query", "", "Filter tags (e.g. name ~ \"v1\")")
+	addBBPaginationFlags(tagListCmd)
 	bbTagCmd.AddCommand(tagListCmd)
 
 	// tag get

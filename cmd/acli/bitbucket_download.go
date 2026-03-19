@@ -17,7 +17,7 @@ var bbDownloadCmd = &cobra.Command{
 
 func init() {
 	// download list
-	bbDownloadCmd.AddCommand(&cobra.Command{
+	dlListCmd := &cobra.Command{
 		Use:     "list [workspace] <repo-slug>",
 		Short:   "List downloads for a repository",
 		Aliases: []string{"ls"},
@@ -32,7 +32,7 @@ func init() {
 				return err
 			}
 
-			downloads, err := client.ListDownloads(workspace, repoSlug)
+			downloads, err := client.ListDownloads(workspace, repoSlug, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -45,7 +45,9 @@ func init() {
 			}
 			return w.Flush()
 		},
-	})
+	}
+	addBBPaginationFlags(dlListCmd)
+	bbDownloadCmd.AddCommand(dlListCmd)
 
 	// download delete
 	bbDownloadCmd.AddCommand(&cobra.Command{

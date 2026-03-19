@@ -18,7 +18,7 @@ var bbProjectCmd = &cobra.Command{
 
 func init() {
 	// project list
-	bbProjectCmd.AddCommand(&cobra.Command{
+	projectListCmd := &cobra.Command{
 		Use:     "list [workspace]",
 		Short:   "List projects in a workspace",
 		Aliases: []string{"ls"},
@@ -33,7 +33,7 @@ func init() {
 				return err
 			}
 
-			projects, err := client.ListProjects(workspace)
+			projects, err := client.ListProjects(workspace, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -46,7 +46,9 @@ func init() {
 			}
 			return w.Flush()
 		},
-	})
+	}
+	addBBPaginationFlags(projectListCmd)
+	bbProjectCmd.AddCommand(projectListCmd)
 
 	// project get
 	bbProjectCmd.AddCommand(&cobra.Command{

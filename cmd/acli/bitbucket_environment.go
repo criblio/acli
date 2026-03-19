@@ -18,7 +18,7 @@ var bbEnvironmentCmd = &cobra.Command{
 
 func init() {
 	// environment list
-	bbEnvironmentCmd.AddCommand(&cobra.Command{
+	envListCmd := &cobra.Command{
 		Use:     "list [workspace] <repo-slug>",
 		Short:   "List deployment environments",
 		Aliases: []string{"ls"},
@@ -33,7 +33,7 @@ func init() {
 				return err
 			}
 
-			envs, err := client.ListEnvironments(workspace, repoSlug)
+			envs, err := client.ListEnvironments(workspace, repoSlug, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -46,7 +46,9 @@ func init() {
 			}
 			return w.Flush()
 		},
-	})
+	}
+	addBBPaginationFlags(envListCmd)
+	bbEnvironmentCmd.AddCommand(envListCmd)
 
 	// environment get
 	bbEnvironmentCmd.AddCommand(&cobra.Command{

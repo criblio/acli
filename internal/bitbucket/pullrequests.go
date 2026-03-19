@@ -65,6 +65,7 @@ func (c *Client) ListPullRequests(workspace, repoSlug string, opts *ListPRsOptio
 			params.Set("pagelen", fmt.Sprintf("%d", opts.PageLen))
 		}
 	}
+	ensurePageLen(params)
 
 	path := fmt.Sprintf("/repositories/%s/%s/pullrequests",
 		url.PathEscape(workspace), url.PathEscape(repoSlug))
@@ -290,9 +291,35 @@ type PRComment struct {
 	} `json:"parent,omitempty"`
 }
 
-func (c *Client) ListPRComments(workspace, repoSlug string, prID int) ([]PRComment, error) {
+func (c *Client) ListPRComments(workspace, repoSlug string, prID int, opts *PaginationOptions) ([]PRComment, error) {
+	params := url.Values{}
+	if opts != nil {
+		opts.applyParams(params)
+	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/repositories/%s/%s/pullrequests/%d/comments",
 		url.PathEscape(workspace), url.PathEscape(repoSlug), prID)
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var comments []PRComment
+		for _, pg := range pages {
+			var pageComments []PRComment
+			if err := json.Unmarshal(pg.Values, &pageComments); err != nil {
+				return comments, fmt.Errorf("parsing comments: %w", err)
+			}
+			comments = append(comments, pageComments...)
+		}
+		return comments, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err
@@ -383,9 +410,35 @@ type PRTask struct {
 	} `json:"comment,omitempty"`
 }
 
-func (c *Client) ListPRTasks(workspace, repoSlug string, prID int) ([]PRTask, error) {
+func (c *Client) ListPRTasks(workspace, repoSlug string, prID int, opts *PaginationOptions) ([]PRTask, error) {
+	params := url.Values{}
+	if opts != nil {
+		opts.applyParams(params)
+	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/repositories/%s/%s/pullrequests/%d/tasks",
 		url.PathEscape(workspace), url.PathEscape(repoSlug), prID)
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var tasks []PRTask
+		for _, pg := range pages {
+			var pageTasks []PRTask
+			if err := json.Unmarshal(pg.Values, &pageTasks); err != nil {
+				return tasks, fmt.Errorf("parsing tasks: %w", err)
+			}
+			tasks = append(tasks, pageTasks...)
+		}
+		return tasks, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err

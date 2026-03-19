@@ -415,17 +415,29 @@ var jiraLabelCmd = &cobra.Command{
 		}
 		startAt, _ := cmd.Flags().GetInt("start-at")
 		maxResults, _ := cmd.Flags().GetInt("max-results")
+		all, _ := cmd.Flags().GetBool("all")
 		result, err := client.GetLabels(startAt, maxResults)
 		if err != nil {
 			return err
 		}
+		allLabels := result.Values
+		if all {
+			for !result.IsLast && len(allLabels) < result.Total {
+				next, err := client.GetLabels(startAt+len(allLabels), maxResults)
+				if err != nil || len(next.Values) == 0 {
+					break
+				}
+				allLabels = append(allLabels, next.Values...)
+				result = next
+			}
+		}
 		jsonFlag := isJSONOutput(cmd)
 		if jsonFlag {
-			return outputJSON(result)
+			return outputJSON(allLabels)
 		}
 		w := newTabWriter()
 		fmt.Fprintf(w, "LABEL\n")
-		for _, label := range result.Values {
+		for _, label := range allLabels {
 			fmt.Fprintf(w, "%s\n", label)
 		}
 		w.Flush()
@@ -973,6 +985,7 @@ func init() {
 	jiraCmd.AddCommand(jiraLabelCmd)
 	jiraLabelCmd.Flags().Int("max-results", 50, "Maximum number of results")
 	jiraLabelCmd.Flags().Int("start-at", 0, "Index of the first result")
+	addAllFlag(jiraLabelCmd)
 	jiraLabelCmd.Flags().Bool("json", false, "Output as JSON")
 
 	// --- Issue Types ---

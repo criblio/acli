@@ -31,19 +31,47 @@ type Commit struct {
 	} `json:"repository"`
 }
 
-func (c *Client) ListCommits(workspace, repoSlug string, include, exclude string) ([]Commit, error) {
+type ListCommitsOptions struct {
+	Include string
+	Exclude string
+	PaginationOptions
+}
+
+func (c *Client) ListCommits(workspace, repoSlug string, opts *ListCommitsOptions) ([]Commit, error) {
 	params := url.Values{}
-	if include != "" {
-		params.Set("include", include)
+	if opts != nil {
+		if opts.Include != "" {
+			params.Set("include", opts.Include)
+		}
+		if opts.Exclude != "" {
+			params.Set("exclude", opts.Exclude)
+		}
+		opts.applyParams(params)
 	}
-	if exclude != "" {
-		params.Set("exclude", exclude)
-	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/repositories/%s/%s/commits",
 		url.PathEscape(workspace), url.PathEscape(repoSlug))
 	if len(params) > 0 {
 		path += "?" + params.Encode()
 	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var commits []Commit
+		for _, pg := range pages {
+			var pageCommits []Commit
+			if err := json.Unmarshal(pg.Values, &pageCommits); err != nil {
+				return commits, fmt.Errorf("parsing commits: %w", err)
+			}
+			commits = append(commits, pageCommits...)
+		}
+		return commits, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err
@@ -85,9 +113,35 @@ type CommitStatus struct {
 	Refname     string `json:"refname"`
 }
 
-func (c *Client) ListCommitStatuses(workspace, repoSlug, commitHash string) ([]CommitStatus, error) {
+func (c *Client) ListCommitStatuses(workspace, repoSlug, commitHash string, opts *PaginationOptions) ([]CommitStatus, error) {
+	params := url.Values{}
+	if opts != nil {
+		opts.applyParams(params)
+	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/repositories/%s/%s/commit/%s/statuses",
 		url.PathEscape(workspace), url.PathEscape(repoSlug), url.PathEscape(commitHash))
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var statuses []CommitStatus
+		for _, pg := range pages {
+			var pageStatuses []CommitStatus
+			if err := json.Unmarshal(pg.Values, &pageStatuses); err != nil {
+				return statuses, fmt.Errorf("parsing statuses: %w", err)
+			}
+			statuses = append(statuses, pageStatuses...)
+		}
+		return statuses, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err

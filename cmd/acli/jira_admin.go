@@ -314,13 +314,25 @@ var jiraScreenListCmd = &cobra.Command{
 		}
 		startAt, _ := cmd.Flags().GetInt("start-at")
 		maxResults, _ := cmd.Flags().GetInt("max-results")
+		all, _ := cmd.Flags().GetBool("all")
 		result, err := client.GetScreens(startAt, maxResults)
 		if err != nil {
 			return err
 		}
+		allValues := result.Values
+		if all {
+			for !result.IsLast && len(allValues) < result.Total {
+				next, err := client.GetScreens(startAt+len(allValues), maxResults)
+				if err != nil || len(next.Values) == 0 {
+					break
+				}
+				allValues = append(allValues, next.Values...)
+				result = next
+			}
+		}
 		w := newTabWriter()
 		fmt.Fprintln(w, "ID\tNAME\tDESCRIPTION")
-		for _, s := range result.Values {
+		for _, s := range allValues {
 			fmt.Fprintf(w, "%d\t%s\t%s\n", s.ID, s.Name, s.Description)
 		}
 		return w.Flush()
@@ -483,13 +495,25 @@ var jiraWorkflowSchemeListCmd = &cobra.Command{
 		}
 		startAt, _ := cmd.Flags().GetInt("start-at")
 		maxResults, _ := cmd.Flags().GetInt("max-results")
+		all, _ := cmd.Flags().GetBool("all")
 		result, err := client.GetWorkflowSchemes(startAt, maxResults)
 		if err != nil {
 			return err
 		}
+		allValues := result.Values
+		if all {
+			for !result.IsLast && len(allValues) < result.Total {
+				next, err := client.GetWorkflowSchemes(startAt+len(allValues), maxResults)
+				if err != nil || len(next.Values) == 0 {
+					break
+				}
+				allValues = append(allValues, next.Values...)
+				result = next
+			}
+		}
 		w := newTabWriter()
 		fmt.Fprintln(w, "ID\tNAME\tDESCRIPTION")
-		for _, s := range result.Values {
+		for _, s := range allValues {
 			fmt.Fprintf(w, "%d\t%s\t%s\n", s.ID, s.Name, s.Description)
 		}
 		return w.Flush()
@@ -711,13 +735,25 @@ var jiraNotificationSchemeListCmd = &cobra.Command{
 		}
 		startAt, _ := cmd.Flags().GetInt("start-at")
 		maxResults, _ := cmd.Flags().GetInt("max-results")
+		all, _ := cmd.Flags().GetBool("all")
 		result, err := client.GetNotificationSchemes(startAt, maxResults)
 		if err != nil {
 			return err
 		}
+		allValues := result.Values
+		if all {
+			for !result.IsLast && len(allValues) < result.Total {
+				next, err := client.GetNotificationSchemes(startAt+len(allValues), maxResults)
+				if err != nil || len(next.Values) == 0 {
+					break
+				}
+				allValues = append(allValues, next.Values...)
+				result = next
+			}
+		}
 		w := newTabWriter()
 		fmt.Fprintln(w, "ID\tNAME")
-		for _, s := range result.Values {
+		for _, s := range allValues {
 			fmt.Fprintf(w, "%d\t%s\n", s.ID, s.Name)
 		}
 		return w.Flush()
@@ -911,13 +947,25 @@ var jiraFieldConfigListCmd = &cobra.Command{
 		}
 		startAt, _ := cmd.Flags().GetInt("start-at")
 		maxResults, _ := cmd.Flags().GetInt("max-results")
+		all, _ := cmd.Flags().GetBool("all")
 		result, err := client.GetFieldConfigurations(startAt, maxResults)
 		if err != nil {
 			return err
 		}
+		allValues := result.Values
+		if all {
+			for !result.IsLast && len(allValues) < result.Total {
+				next, err := client.GetFieldConfigurations(startAt+len(allValues), maxResults)
+				if err != nil || len(next.Values) == 0 {
+					break
+				}
+				allValues = append(allValues, next.Values...)
+				result = next
+			}
+		}
 		w := newTabWriter()
 		fmt.Fprintln(w, "ID\tNAME\tDEFAULT")
-		for _, fc := range result.Values {
+		for _, fc := range allValues {
 			fmt.Fprintf(w, "%d\t%s\t%v\n", fc.ID, fc.Name, fc.IsDefault)
 		}
 		return w.Flush()
@@ -991,13 +1039,25 @@ var jiraIssueTypeSchemeListCmd = &cobra.Command{
 		}
 		startAt, _ := cmd.Flags().GetInt("start-at")
 		maxResults, _ := cmd.Flags().GetInt("max-results")
+		all, _ := cmd.Flags().GetBool("all")
 		result, err := client.GetIssueTypeSchemes(startAt, maxResults)
 		if err != nil {
 			return err
 		}
+		allValues := result.Values
+		if all {
+			for !result.IsLast && len(allValues) < result.Total {
+				next, err := client.GetIssueTypeSchemes(startAt+len(allValues), maxResults)
+				if err != nil || len(next.Values) == 0 {
+					break
+				}
+				allValues = append(allValues, next.Values...)
+				result = next
+			}
+		}
 		w := newTabWriter()
 		fmt.Fprintln(w, "ID\tNAME")
-		for _, s := range result.Values {
+		for _, s := range allValues {
 			fmt.Fprintf(w, "%s\t%s\n", s.ID, s.Name)
 		}
 		return w.Flush()
@@ -1088,13 +1148,25 @@ var jiraWebhookListCmd = &cobra.Command{
 		}
 		startAt, _ := cmd.Flags().GetInt("start-at")
 		maxResults, _ := cmd.Flags().GetInt("max-results")
+		all, _ := cmd.Flags().GetBool("all")
 		result, err := client.GetWebhooks(startAt, maxResults)
 		if err != nil {
 			return err
 		}
+		allValues := result.Values
+		if all {
+			for !result.IsLast && len(allValues) < result.Total {
+				next, err := client.GetWebhooks(startAt+len(allValues), maxResults)
+				if err != nil || len(next.Values) == 0 {
+					break
+				}
+				allValues = append(allValues, next.Values...)
+				result = next
+			}
+		}
 		w := newTabWriter()
 		fmt.Fprintln(w, "ID\tJQL\tEVENTS")
-		for _, wh := range result.Values {
+		for _, wh := range allValues {
 			events := strings.Join(wh.Events, ", ")
 			fmt.Fprintf(w, "%d\t%s\t%s\n", wh.ID, wh.JqlFilter, events)
 		}
@@ -1184,13 +1256,24 @@ var jiraAuditCmd = &cobra.Command{
 		}
 		startAt, _ := cmd.Flags().GetInt("start-at")
 		maxResults, _ := cmd.Flags().GetInt("max-results")
+		all, _ := cmd.Flags().GetBool("all")
 		records, err := client.GetAuditRecords(startAt, maxResults)
 		if err != nil {
 			return err
 		}
+		allRecords := records.Records
+		if all {
+			for len(allRecords) < records.Total {
+				next, err := client.GetAuditRecords(startAt+len(allRecords), maxResults)
+				if err != nil || len(next.Records) == 0 {
+					break
+				}
+				allRecords = append(allRecords, next.Records...)
+			}
+		}
 		w := newTabWriter()
 		fmt.Fprintln(w, "ID\tSUMMARY\tCREATED\tCATEGORY")
-		for _, r := range records.Records {
+		for _, r := range allRecords {
 			fmt.Fprintf(w, "%d\t%s\t%s\t%s\n", r.ID, r.Summary, r.Created, r.Category)
 		}
 		return w.Flush()
@@ -1531,6 +1614,7 @@ func init() {
 	// --- Screens ---
 	jiraScreenListCmd.Flags().Int("start-at", 0, "Start index")
 	jiraScreenListCmd.Flags().Int("max-results", 50, "Max results")
+	addAllFlag(jiraScreenListCmd)
 	jiraScreenCreateCmd.Flags().String("name", "", "Screen name (required)")
 	jiraScreenCreateCmd.Flags().String("description", "", "Screen description")
 	_ = jiraScreenCreateCmd.MarkFlagRequired("name")
@@ -1548,6 +1632,7 @@ func init() {
 	// --- Workflow Schemes ---
 	jiraWorkflowSchemeListCmd.Flags().Int("start-at", 0, "Start index")
 	jiraWorkflowSchemeListCmd.Flags().Int("max-results", 50, "Max results")
+	addAllFlag(jiraWorkflowSchemeListCmd)
 	jiraWorkflowSchemeCreateCmd.Flags().String("name", "", "Scheme name (required)")
 	jiraWorkflowSchemeCreateCmd.Flags().String("description", "", "Scheme description")
 	_ = jiraWorkflowSchemeCreateCmd.MarkFlagRequired("name")
@@ -1573,6 +1658,7 @@ func init() {
 	// --- Notification Schemes ---
 	jiraNotificationSchemeListCmd.Flags().Int("start-at", 0, "Start index")
 	jiraNotificationSchemeListCmd.Flags().Int("max-results", 50, "Max results")
+	addAllFlag(jiraNotificationSchemeListCmd)
 	jiraNotificationSchemeCreateCmd.Flags().String("name", "", "Scheme name (required)")
 	jiraNotificationSchemeCreateCmd.Flags().String("description", "", "Scheme description")
 	_ = jiraNotificationSchemeCreateCmd.MarkFlagRequired("name")
@@ -1595,6 +1681,7 @@ func init() {
 	// --- Field Configs ---
 	jiraFieldConfigListCmd.Flags().Int("start-at", 0, "Start index")
 	jiraFieldConfigListCmd.Flags().Int("max-results", 50, "Max results")
+	addAllFlag(jiraFieldConfigListCmd)
 	jiraFieldConfigCreateCmd.Flags().String("name", "", "Configuration name (required)")
 	jiraFieldConfigCreateCmd.Flags().String("description", "", "Configuration description")
 	_ = jiraFieldConfigCreateCmd.MarkFlagRequired("name")
@@ -1606,6 +1693,7 @@ func init() {
 	// --- Issue Type Schemes ---
 	jiraIssueTypeSchemeListCmd.Flags().Int("start-at", 0, "Start index")
 	jiraIssueTypeSchemeListCmd.Flags().Int("max-results", 50, "Max results")
+	addAllFlag(jiraIssueTypeSchemeListCmd)
 	jiraIssueTypeSchemeCreateCmd.Flags().String("name", "", "Scheme name (required)")
 	jiraIssueTypeSchemeCreateCmd.Flags().String("description", "", "Scheme description")
 	_ = jiraIssueTypeSchemeCreateCmd.MarkFlagRequired("name")
@@ -1620,6 +1708,7 @@ func init() {
 	// --- Webhooks ---
 	jiraWebhookListCmd.Flags().Int("start-at", 0, "Start index")
 	jiraWebhookListCmd.Flags().Int("max-results", 50, "Max results")
+	addAllFlag(jiraWebhookListCmd)
 	jiraWebhookCmd.AddCommand(jiraWebhookListCmd)
 	jiraCmd.AddCommand(jiraWebhookCmd)
 
@@ -1633,6 +1722,7 @@ func init() {
 	// --- Audit ---
 	jiraAuditCmd.Flags().Int("start-at", 0, "Start index")
 	jiraAuditCmd.Flags().Int("max-results", 50, "Max results")
+	addAllFlag(jiraAuditCmd)
 	jiraCmd.AddCommand(jiraAuditCmd)
 
 	// --- Banner ---

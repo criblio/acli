@@ -29,9 +29,35 @@ type DeployKey struct {
 	} `json:"links"`
 }
 
-func (c *Client) ListDeployKeys(workspace, repoSlug string) ([]DeployKey, error) {
+func (c *Client) ListDeployKeys(workspace, repoSlug string, opts *PaginationOptions) ([]DeployKey, error) {
+	params := url.Values{}
+	if opts != nil {
+		opts.applyParams(params)
+	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/repositories/%s/%s/deploy-keys",
 		url.PathEscape(workspace), url.PathEscape(repoSlug))
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var keys []DeployKey
+		for _, pg := range pages {
+			var pageKeys []DeployKey
+			if err := json.Unmarshal(pg.Values, &pageKeys); err != nil {
+				return keys, fmt.Errorf("parsing deploy keys: %w", err)
+			}
+			keys = append(keys, pageKeys...)
+		}
+		return keys, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err

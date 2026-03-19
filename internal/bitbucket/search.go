@@ -34,11 +34,43 @@ type SearchResponse struct {
 	Values  []SearchResult `json:"values"`
 }
 
-func (c *Client) SearchCode(workspace, query string) (*SearchResponse, error) {
+func (c *Client) SearchCode(workspace, query string, opts *PaginationOptions) (*SearchResponse, error) {
 	params := url.Values{}
 	params.Set("search_query", query)
+	if opts != nil {
+		opts.applyParams(params)
+	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/workspaces/%s/search/code?%s",
 		url.PathEscape(workspace), params.Encode())
+
+	if opts != nil && opts.All {
+		var allResults []SearchResult
+		currentPath := path
+		totalSize := 0
+		for currentPath != "" {
+			data, err := c.get(currentPath)
+			if err != nil {
+				if len(allResults) == 0 {
+					return nil, err
+				}
+				break
+			}
+			var result SearchResponse
+			if err := json.Unmarshal(data, &result); err != nil {
+				return nil, fmt.Errorf("parsing search results: %w", err)
+			}
+			allResults = append(allResults, result.Values...)
+			totalSize = result.Size
+			currentPath = result.Next
+		}
+		return &SearchResponse{
+			Size:   totalSize,
+			Values: allResults,
+		}, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err

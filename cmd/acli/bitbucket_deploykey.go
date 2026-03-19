@@ -19,7 +19,7 @@ var bbDeployKeyCmd = &cobra.Command{
 
 func init() {
 	// deploy-key list
-	bbDeployKeyCmd.AddCommand(&cobra.Command{
+	dkListCmd := &cobra.Command{
 		Use:     "list [workspace] <repo-slug>",
 		Short:   "List deploy keys",
 		Aliases: []string{"ls"},
@@ -34,7 +34,7 @@ func init() {
 				return err
 			}
 
-			keys, err := client.ListDeployKeys(workspace, repoSlug)
+			keys, err := client.ListDeployKeys(workspace, repoSlug, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -47,7 +47,9 @@ func init() {
 			}
 			return w.Flush()
 		},
-	})
+	}
+	addBBPaginationFlags(dkListCmd)
+	bbDeployKeyCmd.AddCommand(dkListCmd)
 
 	// deploy-key get
 	bbDeployKeyCmd.AddCommand(&cobra.Command{

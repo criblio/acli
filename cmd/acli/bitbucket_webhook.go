@@ -19,7 +19,7 @@ var bbWebhookCmd = &cobra.Command{
 
 func init() {
 	// webhook list (repo-level)
-	bbWebhookCmd.AddCommand(&cobra.Command{
+	webhookListCmd := &cobra.Command{
 		Use:     "list [workspace] <repo-slug>",
 		Short:   "List webhooks for a repository",
 		Aliases: []string{"ls"},
@@ -34,7 +34,7 @@ func init() {
 				return err
 			}
 
-			hooks, err := client.ListRepoWebhooks(workspace, repoSlug)
+			hooks, err := client.ListRepoWebhooks(workspace, repoSlug, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -47,7 +47,9 @@ func init() {
 			}
 			return w.Flush()
 		},
-	})
+	}
+	addBBPaginationFlags(webhookListCmd)
+	bbWebhookCmd.AddCommand(webhookListCmd)
 
 	// webhook get
 	bbWebhookCmd.AddCommand(&cobra.Command{
@@ -146,7 +148,7 @@ func init() {
 	})
 
 	// webhook list-workspace
-	bbWebhookCmd.AddCommand(&cobra.Command{
+	wsWebhookListCmd := &cobra.Command{
 		Use:   "list-workspace [workspace]",
 		Short: "List webhooks for a workspace",
 		Args:  cobra.MaximumNArgs(1),
@@ -160,7 +162,7 @@ func init() {
 				return err
 			}
 
-			hooks, err := client.ListWorkspaceWebhooks(workspace)
+			hooks, err := client.ListWorkspaceWebhooks(workspace, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -173,7 +175,9 @@ func init() {
 			}
 			return w.Flush()
 		},
-	})
+	}
+	addBBPaginationFlags(wsWebhookListCmd)
+	bbWebhookCmd.AddCommand(wsWebhookListCmd)
 
 	// webhook create-workspace
 	wsWebhookCreateCmd := &cobra.Command{

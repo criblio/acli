@@ -34,8 +34,10 @@ func init() {
 			}
 
 			status, _ := cmd.Flags().GetString("status")
+			pOpts := getBBPaginationOpts(cmd)
 			pipelines, err := client.ListPipelines(workspace, repoSlug, &bitbucket.ListPipelinesOptions{
-				Status: status,
+				Status:            status,
+				PaginationOptions: *pOpts,
 			})
 			if err != nil {
 				return err
@@ -59,6 +61,7 @@ func init() {
 		},
 	}
 	pipelineListCmd.Flags().String("status", "", "Filter by status (PENDING, BUILDING, PASSED, FAILED, etc.)")
+	addBBPaginationFlags(pipelineListCmd)
 	bbPipelineCmd.AddCommand(pipelineListCmd)
 
 	// pipeline get
@@ -170,7 +173,7 @@ func init() {
 	})
 
 	// pipeline steps
-	bbPipelineCmd.AddCommand(&cobra.Command{
+	pipelineStepsCmd := &cobra.Command{
 		Use:   "steps [workspace] <repo-slug> <pipeline-uuid>",
 		Short: "List steps for a pipeline",
 		Args:  cobra.RangeArgs(2, 3),
@@ -184,7 +187,7 @@ func init() {
 				return err
 			}
 
-			steps, err := client.ListPipelineSteps(workspace, repoSlug, pipelineUUID)
+			steps, err := client.ListPipelineSteps(workspace, repoSlug, pipelineUUID, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -201,7 +204,9 @@ func init() {
 			}
 			return w.Flush()
 		},
-	})
+	}
+	addBBPaginationFlags(pipelineStepsCmd)
+	bbPipelineCmd.AddCommand(pipelineStepsCmd)
 
 	// pipeline log
 	bbPipelineCmd.AddCommand(&cobra.Command{
@@ -224,7 +229,7 @@ func init() {
 	})
 
 	// pipeline variables
-	bbPipelineCmd.AddCommand(&cobra.Command{
+	pipelineVarsCmd := &cobra.Command{
 		Use:     "variables [workspace] <repo-slug>",
 		Short:   "List pipeline variables",
 		Aliases: []string{"vars"},
@@ -239,7 +244,7 @@ func init() {
 				return err
 			}
 
-			vars, err := client.ListPipelineVariables(workspace, repoSlug)
+			vars, err := client.ListPipelineVariables(workspace, repoSlug, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -255,7 +260,9 @@ func init() {
 			}
 			return w.Flush()
 		},
-	})
+	}
+	addBBPaginationFlags(pipelineVarsCmd)
+	bbPipelineCmd.AddCommand(pipelineVarsCmd)
 
 	// pipeline add-variable
 	addVarCmd := &cobra.Command{

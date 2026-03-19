@@ -17,7 +17,7 @@ var bbDeploymentCmd = &cobra.Command{
 
 func init() {
 	// deployment list
-	bbDeploymentCmd.AddCommand(&cobra.Command{
+	deploymentListCmd := &cobra.Command{
 		Use:     "list [workspace] <repo-slug>",
 		Short:   "List deployments",
 		Aliases: []string{"ls"},
@@ -32,7 +32,7 @@ func init() {
 				return err
 			}
 
-			deployments, err := client.ListDeployments(workspace, repoSlug)
+			deployments, err := client.ListDeployments(workspace, repoSlug, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -50,7 +50,9 @@ func init() {
 			}
 			return w.Flush()
 		},
-	})
+	}
+	addBBPaginationFlags(deploymentListCmd)
+	bbDeploymentCmd.AddCommand(deploymentListCmd)
 
 	// deployment get
 	bbDeploymentCmd.AddCommand(&cobra.Command{

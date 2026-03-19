@@ -3,6 +3,7 @@ package acli
 import (
 	"fmt"
 
+	"github.com/chinmaymk/acli/internal/bitbucket"
 	"github.com/spf13/cobra"
 )
 
@@ -16,6 +17,18 @@ func addBBPaginationFlags(cmd *cobra.Command) {
 	cmd.Flags().Int("page", 0, "Page number (default: server-side default)")
 	cmd.Flags().Int("pagelen", 0, "Number of results per page (max 100)")
 	cmd.Flags().Bool("all", false, "Fetch all pages of results")
+}
+
+// getBBPaginationOpts reads the common Bitbucket pagination flags from a command.
+func getBBPaginationOpts(cmd *cobra.Command) *bitbucket.PaginationOptions {
+	page, _ := cmd.Flags().GetInt("page")
+	pagelen, _ := cmd.Flags().GetInt("pagelen")
+	all, _ := cmd.Flags().GetBool("all")
+	return &bitbucket.PaginationOptions{
+		Page:    page,
+		PageLen: pagelen,
+		All:     all,
+	}
 }
 
 // printPaginationHint prints a hint about fetching more results if there are more pages.

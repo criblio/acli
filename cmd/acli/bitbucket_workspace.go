@@ -17,7 +17,7 @@ var bbWorkspaceCmd = &cobra.Command{
 
 func init() {
 	// workspace list
-	bbWorkspaceCmd.AddCommand(&cobra.Command{
+	wsListCmd := &cobra.Command{
 		Use:     "list",
 		Short:   "List workspaces",
 		Aliases: []string{"ls"},
@@ -28,7 +28,7 @@ func init() {
 				return err
 			}
 
-			workspaces, err := client.ListWorkspaces()
+			workspaces, err := client.ListWorkspaces(getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -40,7 +40,9 @@ func init() {
 			}
 			return w.Flush()
 		},
-	})
+	}
+	addBBPaginationFlags(wsListCmd)
+	bbWorkspaceCmd.AddCommand(wsListCmd)
 
 	// workspace get
 	bbWorkspaceCmd.AddCommand(&cobra.Command{
@@ -73,7 +75,7 @@ func init() {
 	})
 
 	// workspace members
-	bbWorkspaceCmd.AddCommand(&cobra.Command{
+	wsMembersCmd := &cobra.Command{
 		Use:   "members [workspace]",
 		Short: "List workspace members",
 		Args:  cobra.MaximumNArgs(1),
@@ -87,7 +89,7 @@ func init() {
 				return err
 			}
 
-			members, err := client.ListWorkspaceMembers(workspace)
+			members, err := client.ListWorkspaceMembers(workspace, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -100,10 +102,12 @@ func init() {
 			}
 			return w.Flush()
 		},
-	})
+	}
+	addBBPaginationFlags(wsMembersCmd)
+	bbWorkspaceCmd.AddCommand(wsMembersCmd)
 
 	// workspace permissions
-	bbWorkspaceCmd.AddCommand(&cobra.Command{
+	wsPermsCmd := &cobra.Command{
 		Use:   "permissions [workspace]",
 		Short: "List user permissions in workspace",
 		Args:  cobra.MaximumNArgs(1),
@@ -117,7 +121,7 @@ func init() {
 				return err
 			}
 
-			perms, err := client.ListWorkspacePermissions(workspace)
+			perms, err := client.ListWorkspacePermissions(workspace, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -129,5 +133,7 @@ func init() {
 			}
 			return w.Flush()
 		},
-	})
+	}
+	addBBPaginationFlags(wsPermsCmd)
+	bbWorkspaceCmd.AddCommand(wsPermsCmd)
 }

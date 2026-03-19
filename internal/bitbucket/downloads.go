@@ -18,9 +18,35 @@ type Download struct {
 	} `json:"links"`
 }
 
-func (c *Client) ListDownloads(workspace, repoSlug string) ([]Download, error) {
+func (c *Client) ListDownloads(workspace, repoSlug string, opts *PaginationOptions) ([]Download, error) {
+	params := url.Values{}
+	if opts != nil {
+		opts.applyParams(params)
+	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/repositories/%s/%s/downloads",
 		url.PathEscape(workspace), url.PathEscape(repoSlug))
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var downloads []Download
+		for _, pg := range pages {
+			var pageDownloads []Download
+			if err := json.Unmarshal(pg.Values, &pageDownloads); err != nil {
+				return downloads, fmt.Errorf("parsing downloads: %w", err)
+			}
+			downloads = append(downloads, pageDownloads...)
+		}
+		return downloads, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err

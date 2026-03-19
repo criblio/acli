@@ -34,14 +34,12 @@ func init() {
 			}
 
 			state, _ := cmd.Flags().GetString("state")
-			page, _ := cmd.Flags().GetInt("page")
-			pagelen, _ := cmd.Flags().GetInt("pagelen")
-			all, _ := cmd.Flags().GetBool("all")
+			pOpts := getBBPaginationOpts(cmd)
 			prs, err := client.ListPullRequests(workspace, repoSlug, &bitbucket.ListPRsOptions{
 				State:   state,
-				Page:    page,
-				PageLen: pagelen,
-				All:     all,
+				Page:    pOpts.Page,
+				PageLen: pOpts.PageLen,
+				All:     pOpts.All,
 			})
 			if err != nil {
 				return err
@@ -303,7 +301,7 @@ func init() {
 	})
 
 	// pr comments
-	bbPRCmd.AddCommand(&cobra.Command{
+	prCommentsCmd := &cobra.Command{
 		Use:   "comments [workspace] <repo-slug> <pr-id>",
 		Short: "List comments on a pull request",
 		Args:  cobra.RangeArgs(2, 3),
@@ -321,7 +319,7 @@ func init() {
 				return err
 			}
 
-			comments, err := client.ListPRComments(workspace, repoSlug, prID)
+			comments, err := client.ListPRComments(workspace, repoSlug, prID, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -339,7 +337,9 @@ func init() {
 			}
 			return nil
 		},
-	})
+	}
+	addBBPaginationFlags(prCommentsCmd)
+	bbPRCmd.AddCommand(prCommentsCmd)
 
 	// pr comment (add a comment)
 	prCommentCmd := &cobra.Command{

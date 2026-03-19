@@ -21,7 +21,7 @@ func init() {
 	bbPRCmd.AddCommand(bbPRTaskCmd)
 
 	// task list
-	bbPRTaskCmd.AddCommand(&cobra.Command{
+	taskListCmd := &cobra.Command{
 		Use:     "list [workspace] <repo-slug> <pr-id>",
 		Short:   "List tasks on a pull request",
 		Aliases: []string{"ls"},
@@ -40,7 +40,7 @@ func init() {
 				return err
 			}
 
-			tasks, err := client.ListPRTasks(workspace, repoSlug, prID)
+			tasks, err := client.ListPRTasks(workspace, repoSlug, prID, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -57,7 +57,9 @@ func init() {
 			}
 			return w.Flush()
 		},
-	})
+	}
+	addBBPaginationFlags(taskListCmd)
+	bbPRTaskCmd.AddCommand(taskListCmd)
 
 	// task get
 	bbPRTaskCmd.AddCommand(&cobra.Command{

@@ -303,7 +303,7 @@ func init() {
 	})
 
 	// pr comments
-	bbPRCmd.AddCommand(&cobra.Command{
+	prCommentsCmd := &cobra.Command{
 		Use:   "comments [workspace] <repo-slug> <pr-id>",
 		Short: "List comments on a pull request",
 		Args:  cobra.RangeArgs(2, 3),
@@ -321,7 +321,14 @@ func init() {
 				return err
 			}
 
-			comments, err := client.ListPRComments(workspace, repoSlug, prID)
+			page, _ := cmd.Flags().GetInt("page")
+			pagelen, _ := cmd.Flags().GetInt("pagelen")
+			all, _ := cmd.Flags().GetBool("all")
+			comments, err := client.ListPRComments(workspace, repoSlug, prID, &bitbucket.ListPRCommentsOptions{
+				Page:    page,
+				PageLen: pagelen,
+				All:     all,
+			})
 			if err != nil {
 				return err
 			}
@@ -339,7 +346,9 @@ func init() {
 			}
 			return nil
 		},
-	})
+	}
+	addBBPaginationFlags(prCommentsCmd)
+	bbPRCmd.AddCommand(prCommentsCmd)
 
 	// pr comment (add a comment)
 	prCommentCmd := &cobra.Command{

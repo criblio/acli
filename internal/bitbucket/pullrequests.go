@@ -65,6 +65,9 @@ func (c *Client) ListPullRequests(workspace, repoSlug string, opts *ListPRsOptio
 			params.Set("pagelen", fmt.Sprintf("%d", opts.PageLen))
 		}
 	}
+	if params.Get("pagelen") == "" {
+		params.Set("pagelen", "50")
+	}
 
 	path := fmt.Sprintf("/repositories/%s/%s/pullrequests",
 		url.PathEscape(workspace), url.PathEscape(repoSlug))
@@ -290,9 +293,48 @@ type PRComment struct {
 	} `json:"parent,omitempty"`
 }
 
-func (c *Client) ListPRComments(workspace, repoSlug string, prID int) ([]PRComment, error) {
+type ListPRCommentsOptions struct {
+	Page    int
+	PageLen int
+	All     bool
+}
+
+func (c *Client) ListPRComments(workspace, repoSlug string, prID int, opts *ListPRCommentsOptions) ([]PRComment, error) {
+	params := url.Values{}
+	if opts != nil {
+		if opts.Page > 0 {
+			params.Set("page", fmt.Sprintf("%d", opts.Page))
+		}
+		if opts.PageLen > 0 {
+			params.Set("pagelen", fmt.Sprintf("%d", opts.PageLen))
+		}
+	}
+	if len(params) == 0 || params.Get("pagelen") == "" {
+		params.Set("pagelen", "50")
+	}
+
 	path := fmt.Sprintf("/repositories/%s/%s/pullrequests/%d/comments",
 		url.PathEscape(workspace), url.PathEscape(repoSlug), prID)
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var comments []PRComment
+		for _, pg := range pages {
+			var pageComments []PRComment
+			if err := json.Unmarshal(pg.Values, &pageComments); err != nil {
+				return comments, fmt.Errorf("parsing comments: %w", err)
+			}
+			comments = append(comments, pageComments...)
+		}
+		return comments, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err
@@ -383,9 +425,48 @@ type PRTask struct {
 	} `json:"comment,omitempty"`
 }
 
-func (c *Client) ListPRTasks(workspace, repoSlug string, prID int) ([]PRTask, error) {
+type ListPRTasksOptions struct {
+	Page    int
+	PageLen int
+	All     bool
+}
+
+func (c *Client) ListPRTasks(workspace, repoSlug string, prID int, opts *ListPRTasksOptions) ([]PRTask, error) {
+	params := url.Values{}
+	if opts != nil {
+		if opts.Page > 0 {
+			params.Set("page", fmt.Sprintf("%d", opts.Page))
+		}
+		if opts.PageLen > 0 {
+			params.Set("pagelen", fmt.Sprintf("%d", opts.PageLen))
+		}
+	}
+	if len(params) == 0 || params.Get("pagelen") == "" {
+		params.Set("pagelen", "50")
+	}
+
 	path := fmt.Sprintf("/repositories/%s/%s/pullrequests/%d/tasks",
 		url.PathEscape(workspace), url.PathEscape(repoSlug), prID)
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var tasks []PRTask
+		for _, pg := range pages {
+			var pageTasks []PRTask
+			if err := json.Unmarshal(pg.Values, &pageTasks); err != nil {
+				return tasks, fmt.Errorf("parsing tasks: %w", err)
+			}
+			tasks = append(tasks, pageTasks...)
+		}
+		return tasks, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err

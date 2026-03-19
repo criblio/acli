@@ -64,6 +64,9 @@ func (c *Client) ListRepositories(workspace string, opts *ListReposOptions) ([]R
 			params.Set("pagelen", fmt.Sprintf("%d", opts.PageLen))
 		}
 	}
+	if params.Get("pagelen") == "" {
+		params.Set("pagelen", "50")
+	}
 
 	path := fmt.Sprintf("/repositories/%s", url.PathEscape(workspace))
 	if len(params) > 0 {

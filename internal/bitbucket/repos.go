@@ -64,9 +64,7 @@ func (c *Client) ListRepositories(workspace string, opts *ListReposOptions) ([]R
 			params.Set("pagelen", fmt.Sprintf("%d", opts.PageLen))
 		}
 	}
-	if params.Get("pagelen") == "" {
-		params.Set("pagelen", "50")
-	}
+	ensurePageLen(params)
 
 	path := fmt.Sprintf("/repositories/%s", url.PathEscape(workspace))
 	if len(params) > 0 {
@@ -186,8 +184,34 @@ func (c *Client) ForkRepository(workspace, repoSlug string, req *ForkRepoRequest
 	return &repo, nil
 }
 
-func (c *Client) ListForks(workspace, repoSlug string) ([]Repository, error) {
+func (c *Client) ListForks(workspace, repoSlug string, opts *PaginationOptions) ([]Repository, error) {
+	params := url.Values{}
+	if opts != nil {
+		opts.applyParams(params)
+	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/repositories/%s/%s/forks", url.PathEscape(workspace), url.PathEscape(repoSlug))
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var repos []Repository
+		for _, pg := range pages {
+			var pageRepos []Repository
+			if err := json.Unmarshal(pg.Values, &pageRepos); err != nil {
+				return repos, fmt.Errorf("parsing forks: %w", err)
+			}
+			repos = append(repos, pageRepos...)
+		}
+		return repos, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err

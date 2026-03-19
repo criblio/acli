@@ -40,14 +40,7 @@ func init() {
 				return err
 			}
 
-			page, _ := cmd.Flags().GetInt("page")
-			pagelen, _ := cmd.Flags().GetInt("pagelen")
-			all, _ := cmd.Flags().GetBool("all")
-			tasks, err := client.ListPRTasks(workspace, repoSlug, prID, &bitbucket.ListPRTasksOptions{
-				Page:    page,
-				PageLen: pagelen,
-				All:     all,
-			})
+			tasks, err := client.ListPRTasks(workspace, repoSlug, prID, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}

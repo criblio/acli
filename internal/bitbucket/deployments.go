@@ -33,9 +33,35 @@ type Deployment struct {
 	} `json:"step"`
 }
 
-func (c *Client) ListDeployments(workspace, repoSlug string) ([]Deployment, error) {
+func (c *Client) ListDeployments(workspace, repoSlug string, opts *PaginationOptions) ([]Deployment, error) {
+	params := url.Values{}
+	if opts != nil {
+		opts.applyParams(params)
+	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/repositories/%s/%s/deployments",
 		url.PathEscape(workspace), url.PathEscape(repoSlug))
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var deployments []Deployment
+		for _, pg := range pages {
+			var pageDeployments []Deployment
+			if err := json.Unmarshal(pg.Values, &pageDeployments); err != nil {
+				return deployments, fmt.Errorf("parsing deployments: %w", err)
+			}
+			deployments = append(deployments, pageDeployments...)
+		}
+		return deployments, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err

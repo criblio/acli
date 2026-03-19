@@ -48,6 +48,7 @@ type Issue struct {
 type ListIssuesOptions struct {
 	Q    string
 	Sort string
+	PaginationOptions
 }
 
 func (c *Client) ListIssues(workspace, repoSlug string, opts *ListIssuesOptions) ([]Issue, error) {
@@ -59,12 +60,32 @@ func (c *Client) ListIssues(workspace, repoSlug string, opts *ListIssuesOptions)
 		if opts.Sort != "" {
 			params.Set("sort", opts.Sort)
 		}
+		opts.applyParams(params)
 	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/repositories/%s/%s/issues",
 		url.PathEscape(workspace), url.PathEscape(repoSlug))
 	if len(params) > 0 {
 		path += "?" + params.Encode()
 	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var issues []Issue
+		for _, pg := range pages {
+			var pageIssues []Issue
+			if err := json.Unmarshal(pg.Values, &pageIssues); err != nil {
+				return issues, fmt.Errorf("parsing issues: %w", err)
+			}
+			issues = append(issues, pageIssues...)
+		}
+		return issues, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err
@@ -186,9 +207,35 @@ type IssueComment struct {
 	} `json:"user"`
 }
 
-func (c *Client) ListIssueComments(workspace, repoSlug string, issueID int) ([]IssueComment, error) {
+func (c *Client) ListIssueComments(workspace, repoSlug string, issueID int, opts *PaginationOptions) ([]IssueComment, error) {
+	params := url.Values{}
+	if opts != nil {
+		opts.applyParams(params)
+	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/repositories/%s/%s/issues/%d/comments",
 		url.PathEscape(workspace), url.PathEscape(repoSlug), issueID)
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var comments []IssueComment
+		for _, pg := range pages {
+			var pageComments []IssueComment
+			if err := json.Unmarshal(pg.Values, &pageComments); err != nil {
+				return comments, fmt.Errorf("parsing comments: %w", err)
+			}
+			comments = append(comments, pageComments...)
+		}
+		return comments, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err

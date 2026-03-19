@@ -18,7 +18,7 @@ var bbSnippetCmd = &cobra.Command{
 
 func init() {
 	// snippet list
-	bbSnippetCmd.AddCommand(&cobra.Command{
+	snippetListCmd := &cobra.Command{
 		Use:     "list [workspace]",
 		Short:   "List snippets in a workspace",
 		Aliases: []string{"ls"},
@@ -33,7 +33,7 @@ func init() {
 				return err
 			}
 
-			snippets, err := client.ListSnippets(workspace)
+			snippets, err := client.ListSnippets(workspace, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -46,7 +46,9 @@ func init() {
 			}
 			return w.Flush()
 		},
-	})
+	}
+	addBBPaginationFlags(snippetListCmd)
+	bbSnippetCmd.AddCommand(snippetListCmd)
 
 	// snippet get
 	bbSnippetCmd.AddCommand(&cobra.Command{

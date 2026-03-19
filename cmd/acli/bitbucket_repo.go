@@ -36,16 +36,14 @@ func init() {
 			role, _ := cmd.Flags().GetString("role")
 			q, _ := cmd.Flags().GetString("query")
 			sort, _ := cmd.Flags().GetString("sort")
-			page, _ := cmd.Flags().GetInt("page")
-			pagelen, _ := cmd.Flags().GetInt("pagelen")
-			all, _ := cmd.Flags().GetBool("all")
+			pOpts := getBBPaginationOpts(cmd)
 			repos, err := client.ListRepositories(workspace, &bitbucket.ListReposOptions{
 				Role:    role,
 				Q:       q,
 				Sort:    sort,
-				Page:    page,
-				PageLen: pagelen,
-				All:     all,
+				Page:    pOpts.Page,
+				PageLen: pOpts.PageLen,
+				All:     pOpts.All,
 			})
 			if err != nil {
 				return err
@@ -229,7 +227,7 @@ func init() {
 	bbRepoCmd.AddCommand(repoForkCmd)
 
 	// repo forks (list forks)
-	bbRepoCmd.AddCommand(&cobra.Command{
+	repoForksCmd := &cobra.Command{
 		Use:   "forks [workspace] <repo-slug>",
 		Short: "List forks of a repository",
 		Args:  cobra.RangeArgs(1, 2),
@@ -243,7 +241,7 @@ func init() {
 				return err
 			}
 
-			forks, err := client.ListForks(workspace, repoSlug)
+			forks, err := client.ListForks(workspace, repoSlug, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -260,5 +258,7 @@ func init() {
 			}
 			return w.Flush()
 		},
-	})
+	}
+	addBBPaginationFlags(repoForksCmd)
+	bbRepoCmd.AddCommand(repoForksCmd)
 }

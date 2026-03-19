@@ -45,8 +45,35 @@ type WorkspacePermission struct {
 	} `json:"user"`
 }
 
-func (c *Client) ListWorkspaces() ([]Workspace, error) {
-	data, err := c.get("/workspaces")
+func (c *Client) ListWorkspaces(opts *PaginationOptions) ([]Workspace, error) {
+	params := url.Values{}
+	if opts != nil {
+		opts.applyParams(params)
+	}
+	ensurePageLen(params)
+
+	path := "/workspaces"
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var workspaces []Workspace
+		for _, pg := range pages {
+			var pageWorkspaces []Workspace
+			if err := json.Unmarshal(pg.Values, &pageWorkspaces); err != nil {
+				return workspaces, fmt.Errorf("parsing workspaces: %w", err)
+			}
+			workspaces = append(workspaces, pageWorkspaces...)
+		}
+		return workspaces, nil
+	}
+
+	data, err := c.get(path)
 	if err != nil {
 		return nil, err
 	}
@@ -74,8 +101,34 @@ func (c *Client) GetWorkspace(workspace string) (*Workspace, error) {
 	return &ws, nil
 }
 
-func (c *Client) ListWorkspaceMembers(workspace string) ([]WorkspaceMember, error) {
+func (c *Client) ListWorkspaceMembers(workspace string, opts *PaginationOptions) ([]WorkspaceMember, error) {
+	params := url.Values{}
+	if opts != nil {
+		opts.applyParams(params)
+	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/workspaces/%s/members", url.PathEscape(workspace))
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var members []WorkspaceMember
+		for _, pg := range pages {
+			var pageMembers []WorkspaceMember
+			if err := json.Unmarshal(pg.Values, &pageMembers); err != nil {
+				return members, fmt.Errorf("parsing members: %w", err)
+			}
+			members = append(members, pageMembers...)
+		}
+		return members, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err
@@ -91,8 +144,34 @@ func (c *Client) ListWorkspaceMembers(workspace string) ([]WorkspaceMember, erro
 	return members, nil
 }
 
-func (c *Client) ListWorkspacePermissions(workspace string) ([]WorkspacePermission, error) {
+func (c *Client) ListWorkspacePermissions(workspace string, opts *PaginationOptions) ([]WorkspacePermission, error) {
+	params := url.Values{}
+	if opts != nil {
+		opts.applyParams(params)
+	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/workspaces/%s/permissions", url.PathEscape(workspace))
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var perms []WorkspacePermission
+		for _, pg := range pages {
+			var pagePerms []WorkspacePermission
+			if err := json.Unmarshal(pg.Values, &pagePerms); err != nil {
+				return perms, fmt.Errorf("parsing permissions: %w", err)
+			}
+			perms = append(perms, pagePerms...)
+		}
+		return perms, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err

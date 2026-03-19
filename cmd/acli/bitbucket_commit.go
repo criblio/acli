@@ -6,6 +6,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
+	"github.com/chinmaymk/acli/internal/bitbucket"
 	"github.com/spf13/cobra"
 )
 
@@ -35,8 +36,13 @@ func init() {
 
 			include, _ := cmd.Flags().GetString("include")
 			exclude, _ := cmd.Flags().GetString("exclude")
+			pOpts := getBBPaginationOpts(cmd)
 
-			commits, err := client.ListCommits(workspace, repoSlug, include, exclude)
+			commits, err := client.ListCommits(workspace, repoSlug, &bitbucket.ListCommitsOptions{
+				Include:           include,
+				Exclude:           exclude,
+				PaginationOptions: *pOpts,
+			})
 			if err != nil {
 				return err
 			}
@@ -60,6 +66,7 @@ func init() {
 	}
 	commitListCmd.Flags().String("include", "", "Include commits reachable from this ref")
 	commitListCmd.Flags().String("exclude", "", "Exclude commits reachable from this ref")
+	addBBPaginationFlags(commitListCmd)
 	bbCommitCmd.AddCommand(commitListCmd)
 
 	// commit get
@@ -99,7 +106,7 @@ func init() {
 	})
 
 	// commit statuses
-	bbCommitCmd.AddCommand(&cobra.Command{
+	commitStatusesCmd := &cobra.Command{
 		Use:   "statuses [workspace] <repo-slug> <commit-hash>",
 		Short: "List build statuses for a commit",
 		Args:  cobra.RangeArgs(2, 3),
@@ -113,7 +120,7 @@ func init() {
 				return err
 			}
 
-			statuses, err := client.ListCommitStatuses(workspace, repoSlug, commitHash)
+			statuses, err := client.ListCommitStatuses(workspace, repoSlug, commitHash, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -126,7 +133,9 @@ func init() {
 			}
 			return w.Flush()
 		},
-	})
+	}
+	addBBPaginationFlags(commitStatusesCmd)
+	bbCommitCmd.AddCommand(commitStatusesCmd)
 
 	// commit diff
 	bbCommitCmd.AddCommand(&cobra.Command{

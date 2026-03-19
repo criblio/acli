@@ -57,16 +57,43 @@ type Tag struct {
 	} `json:"links"`
 }
 
-func (c *Client) ListBranches(workspace, repoSlug string, q string) ([]Branch, error) {
+type ListBranchesOptions struct {
+	Q string
+	PaginationOptions
+}
+
+func (c *Client) ListBranches(workspace, repoSlug string, opts *ListBranchesOptions) ([]Branch, error) {
 	params := url.Values{}
-	if q != "" {
-		params.Set("q", q)
+	if opts != nil {
+		if opts.Q != "" {
+			params.Set("q", opts.Q)
+		}
+		opts.applyParams(params)
 	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/repositories/%s/%s/refs/branches",
 		url.PathEscape(workspace), url.PathEscape(repoSlug))
 	if len(params) > 0 {
 		path += "?" + params.Encode()
 	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var branches []Branch
+		for _, pg := range pages {
+			var pageBranches []Branch
+			if err := json.Unmarshal(pg.Values, &pageBranches); err != nil {
+				return branches, fmt.Errorf("parsing branches: %w", err)
+			}
+			branches = append(branches, pageBranches...)
+		}
+		return branches, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err
@@ -127,16 +154,43 @@ func (c *Client) DeleteBranch(workspace, repoSlug, name string) error {
 	return c.deleteNoContent(path)
 }
 
-func (c *Client) ListTags(workspace, repoSlug string, q string) ([]Tag, error) {
+type ListTagsOptions struct {
+	Q string
+	PaginationOptions
+}
+
+func (c *Client) ListTags(workspace, repoSlug string, opts *ListTagsOptions) ([]Tag, error) {
 	params := url.Values{}
-	if q != "" {
-		params.Set("q", q)
+	if opts != nil {
+		if opts.Q != "" {
+			params.Set("q", opts.Q)
+		}
+		opts.applyParams(params)
 	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/repositories/%s/%s/refs/tags",
 		url.PathEscape(workspace), url.PathEscape(repoSlug))
 	if len(params) > 0 {
 		path += "?" + params.Encode()
 	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var tags []Tag
+		for _, pg := range pages {
+			var pageTags []Tag
+			if err := json.Unmarshal(pg.Values, &pageTags); err != nil {
+				return tags, fmt.Errorf("parsing tags: %w", err)
+			}
+			tags = append(tags, pageTags...)
+		}
+		return tags, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err

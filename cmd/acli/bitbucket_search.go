@@ -34,7 +34,7 @@ func init() {
 				return fmt.Errorf("--query is required")
 			}
 
-			results, err := client.SearchCode(workspace, query)
+			results, err := client.SearchCode(workspace, query, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -61,5 +61,6 @@ func init() {
 		},
 	}
 	searchCodeCmd.Flags().String("query", "", "Search query (required)")
+	addBBPaginationFlags(searchCodeCmd)
 	bbSearchCmd.AddCommand(searchCodeCmd)
 }

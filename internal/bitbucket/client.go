@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/chinmaymk/acli/internal/config"
@@ -141,6 +142,36 @@ type PaginatedResponse struct {
 	Next     string          `json:"next"`
 	Previous string          `json:"previous"`
 	Values   json.RawMessage `json:"values"`
+}
+
+// PaginationOptions provides common pagination parameters for list endpoints.
+type PaginationOptions struct {
+	Page    int
+	PageLen int
+	All     bool
+}
+
+// defaultPageLen is the default number of items per page for Bitbucket API requests.
+const defaultPageLen = 50
+
+// applyParams adds pagination query parameters to the given url.Values.
+func (opts *PaginationOptions) applyParams(params url.Values) {
+	if opts == nil {
+		return
+	}
+	if opts.Page > 0 {
+		params.Set("page", fmt.Sprintf("%d", opts.Page))
+	}
+	if opts.PageLen > 0 {
+		params.Set("pagelen", fmt.Sprintf("%d", opts.PageLen))
+	}
+}
+
+// ensurePageLen sets pagelen to the default if not already set.
+func ensurePageLen(params url.Values) {
+	if params.Get("pagelen") == "" {
+		params.Set("pagelen", fmt.Sprintf("%d", defaultPageLen))
+	}
 }
 
 // getAll follows pagination links to fetch all pages and returns all PaginatedResponses.

@@ -28,9 +28,35 @@ type Environment struct {
 	} `json:"restrictions"`
 }
 
-func (c *Client) ListEnvironments(workspace, repoSlug string) ([]Environment, error) {
+func (c *Client) ListEnvironments(workspace, repoSlug string, opts *PaginationOptions) ([]Environment, error) {
+	params := url.Values{}
+	if opts != nil {
+		opts.applyParams(params)
+	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/repositories/%s/%s/environments",
 		url.PathEscape(workspace), url.PathEscape(repoSlug))
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var envs []Environment
+		for _, pg := range pages {
+			var pageEnvs []Environment
+			if err := json.Unmarshal(pg.Values, &pageEnvs); err != nil {
+				return envs, fmt.Errorf("parsing environments: %w", err)
+			}
+			envs = append(envs, pageEnvs...)
+		}
+		return envs, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err

@@ -34,14 +34,12 @@ func init() {
 			}
 
 			state, _ := cmd.Flags().GetString("state")
-			page, _ := cmd.Flags().GetInt("page")
-			pagelen, _ := cmd.Flags().GetInt("pagelen")
-			all, _ := cmd.Flags().GetBool("all")
+			pOpts := getBBPaginationOpts(cmd)
 			prs, err := client.ListPullRequests(workspace, repoSlug, &bitbucket.ListPRsOptions{
 				State:   state,
-				Page:    page,
-				PageLen: pagelen,
-				All:     all,
+				Page:    pOpts.Page,
+				PageLen: pOpts.PageLen,
+				All:     pOpts.All,
 			})
 			if err != nil {
 				return err
@@ -321,14 +319,7 @@ func init() {
 				return err
 			}
 
-			page, _ := cmd.Flags().GetInt("page")
-			pagelen, _ := cmd.Flags().GetInt("pagelen")
-			all, _ := cmd.Flags().GetBool("all")
-			comments, err := client.ListPRComments(workspace, repoSlug, prID, &bitbucket.ListPRCommentsOptions{
-				Page:    page,
-				PageLen: pagelen,
-				All:     all,
-			})
+			comments, err := client.ListPRComments(workspace, repoSlug, prID, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}

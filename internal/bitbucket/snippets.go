@@ -29,8 +29,38 @@ type Snippet struct {
 	} `json:"links"`
 }
 
-func (c *Client) ListSnippets(workspace string) ([]Snippet, error) {
+func (c *Client) ListSnippets(workspace string, opts *PaginationOptions) ([]Snippet, error) {
+	params := url.Values{}
+	if opts != nil {
+		opts.applyParams(params)
+	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/snippets/%s", url.PathEscape(workspace))
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var snippets []Snippet
+		for _, pg := range pages {
+			var pageSnippets []Snippet
+			if err := json.Unmarshal(pg.Values, &pageSnippets); err != nil {
+				var msgs []string
+				if json.Unmarshal(pg.Values, &msgs) == nil && len(msgs) > 0 {
+					return snippets, fmt.Errorf("%s", msgs[0])
+				}
+				return snippets, fmt.Errorf("parsing snippets: %w", err)
+			}
+			snippets = append(snippets, pageSnippets...)
+		}
+		return snippets, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err
@@ -41,8 +71,6 @@ func (c *Client) ListSnippets(workspace string) ([]Snippet, error) {
 	}
 	var snippets []Snippet
 	if err := json.Unmarshal(page.Values, &snippets); err != nil {
-		// The API may return a string array (e.g. plan limitation messages)
-		// instead of snippet objects — surface the message as an error.
 		var msgs []string
 		if json.Unmarshal(page.Values, &msgs) == nil && len(msgs) > 0 {
 			return nil, fmt.Errorf("%s", msgs[0])

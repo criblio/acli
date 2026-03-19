@@ -47,6 +47,7 @@ type Pipeline struct {
 type ListPipelinesOptions struct {
 	Status string
 	Sort   string
+	PaginationOptions
 }
 
 func (c *Client) ListPipelines(workspace, repoSlug string, opts *ListPipelinesOptions) ([]Pipeline, error) {
@@ -58,16 +59,33 @@ func (c *Client) ListPipelines(workspace, repoSlug string, opts *ListPipelinesOp
 		if opts.Sort != "" {
 			params.Set("sort", opts.Sort)
 		}
+		opts.applyParams(params)
 	}
 	if params.Get("sort") == "" {
 		params.Set("sort", "-created_on")
 	}
-	params.Set("pagelen", "20")
+	ensurePageLen(params)
 
 	path := fmt.Sprintf("/repositories/%s/%s/pipelines",
 		url.PathEscape(workspace), url.PathEscape(repoSlug))
 	if len(params) > 0 {
 		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var pipelines []Pipeline
+		for _, pg := range pages {
+			var pagePipelines []Pipeline
+			if err := json.Unmarshal(pg.Values, &pagePipelines); err != nil {
+				return pipelines, fmt.Errorf("parsing pipelines: %w", err)
+			}
+			pipelines = append(pipelines, pagePipelines...)
+		}
+		return pipelines, nil
 	}
 
 	data, err := c.get(path)
@@ -184,9 +202,35 @@ type PipelineStep struct {
 	} `json:"image"`
 }
 
-func (c *Client) ListPipelineSteps(workspace, repoSlug, pipelineUUID string) ([]PipelineStep, error) {
+func (c *Client) ListPipelineSteps(workspace, repoSlug, pipelineUUID string, opts *PaginationOptions) ([]PipelineStep, error) {
+	params := url.Values{}
+	if opts != nil {
+		opts.applyParams(params)
+	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/repositories/%s/%s/pipelines/%s/steps",
 		url.PathEscape(workspace), url.PathEscape(repoSlug), url.PathEscape(pipelineUUID))
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var steps []PipelineStep
+		for _, pg := range pages {
+			var pageSteps []PipelineStep
+			if err := json.Unmarshal(pg.Values, &pageSteps); err != nil {
+				return steps, fmt.Errorf("parsing steps: %w", err)
+			}
+			steps = append(steps, pageSteps...)
+		}
+		return steps, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err
@@ -235,9 +279,35 @@ type PipelineVariable struct {
 	Secured bool   `json:"secured"`
 }
 
-func (c *Client) ListPipelineVariables(workspace, repoSlug string) ([]PipelineVariable, error) {
+func (c *Client) ListPipelineVariables(workspace, repoSlug string, opts *PaginationOptions) ([]PipelineVariable, error) {
+	params := url.Values{}
+	if opts != nil {
+		opts.applyParams(params)
+	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/repositories/%s/%s/pipelines_config/variables",
 		url.PathEscape(workspace), url.PathEscape(repoSlug))
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var vars []PipelineVariable
+		for _, pg := range pages {
+			var pageVars []PipelineVariable
+			if err := json.Unmarshal(pg.Values, &pageVars); err != nil {
+				return vars, fmt.Errorf("parsing variables: %w", err)
+			}
+			vars = append(vars, pageVars...)
+		}
+		return vars, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err

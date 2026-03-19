@@ -36,10 +36,12 @@ func init() {
 
 			q, _ := cmd.Flags().GetString("query")
 			sort, _ := cmd.Flags().GetString("sort")
+			pOpts := getBBPaginationOpts(cmd)
 
 			issues, err := client.ListIssues(workspace, repoSlug, &bitbucket.ListIssuesOptions{
-				Q:    q,
-				Sort: sort,
+				Q:                 q,
+				Sort:              sort,
+				PaginationOptions: *pOpts,
 			})
 			if err != nil {
 				return err
@@ -60,6 +62,7 @@ func init() {
 	}
 	issueListCmd.Flags().String("query", "", "Filter issues (Bitbucket query syntax)")
 	issueListCmd.Flags().String("sort", "", "Sort field (e.g. -priority)")
+	addBBPaginationFlags(issueListCmd)
 	bbIssueCmd.AddCommand(issueListCmd)
 
 	// issue get
@@ -240,7 +243,7 @@ func init() {
 	})
 
 	// issue comments
-	bbIssueCmd.AddCommand(&cobra.Command{
+	issueCommentsCmd := &cobra.Command{
 		Use:   "comments [workspace] <repo-slug> <issue-id>",
 		Short: "List comments on an issue",
 		Args:  cobra.RangeArgs(2, 3),
@@ -258,7 +261,7 @@ func init() {
 				return err
 			}
 
-			comments, err := client.ListIssueComments(workspace, repoSlug, issueID)
+			comments, err := client.ListIssueComments(workspace, repoSlug, issueID, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -269,7 +272,9 @@ func init() {
 			}
 			return nil
 		},
-	})
+	}
+	addBBPaginationFlags(issueCommentsCmd)
+	bbIssueCmd.AddCommand(issueCommentsCmd)
 
 	// issue comment (add)
 	issueCommentCmd := &cobra.Command{

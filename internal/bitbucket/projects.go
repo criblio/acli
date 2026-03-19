@@ -29,8 +29,34 @@ type Project struct {
 	} `json:"links"`
 }
 
-func (c *Client) ListProjects(workspace string) ([]Project, error) {
+func (c *Client) ListProjects(workspace string, opts *PaginationOptions) ([]Project, error) {
+	params := url.Values{}
+	if opts != nil {
+		opts.applyParams(params)
+	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/workspaces/%s/projects", url.PathEscape(workspace))
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var projects []Project
+		for _, pg := range pages {
+			var pageProjects []Project
+			if err := json.Unmarshal(pg.Values, &pageProjects); err != nil {
+				return projects, fmt.Errorf("parsing projects: %w", err)
+			}
+			projects = append(projects, pageProjects...)
+		}
+		return projects, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err

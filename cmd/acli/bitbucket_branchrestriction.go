@@ -19,7 +19,7 @@ var bbBranchRestrictionCmd = &cobra.Command{
 
 func init() {
 	// branch-restriction list
-	bbBranchRestrictionCmd.AddCommand(&cobra.Command{
+	brListCmd := &cobra.Command{
 		Use:     "list [workspace] <repo-slug>",
 		Short:   "List branch restrictions",
 		Aliases: []string{"ls"},
@@ -34,7 +34,7 @@ func init() {
 				return err
 			}
 
-			restrictions, err := client.ListBranchRestrictions(workspace, repoSlug)
+			restrictions, err := client.ListBranchRestrictions(workspace, repoSlug, getBBPaginationOpts(cmd))
 			if err != nil {
 				return err
 			}
@@ -46,7 +46,9 @@ func init() {
 			}
 			return w.Flush()
 		},
-	})
+	}
+	addBBPaginationFlags(brListCmd)
+	bbBranchRestrictionCmd.AddCommand(brListCmd)
 
 	// branch-restriction get
 	bbBranchRestrictionCmd.AddCommand(&cobra.Command{

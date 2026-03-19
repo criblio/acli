@@ -65,9 +65,7 @@ func (c *Client) ListPullRequests(workspace, repoSlug string, opts *ListPRsOptio
 			params.Set("pagelen", fmt.Sprintf("%d", opts.PageLen))
 		}
 	}
-	if params.Get("pagelen") == "" {
-		params.Set("pagelen", "50")
-	}
+	ensurePageLen(params)
 
 	path := fmt.Sprintf("/repositories/%s/%s/pullrequests",
 		url.PathEscape(workspace), url.PathEscape(repoSlug))
@@ -293,25 +291,12 @@ type PRComment struct {
 	} `json:"parent,omitempty"`
 }
 
-type ListPRCommentsOptions struct {
-	Page    int
-	PageLen int
-	All     bool
-}
-
-func (c *Client) ListPRComments(workspace, repoSlug string, prID int, opts *ListPRCommentsOptions) ([]PRComment, error) {
+func (c *Client) ListPRComments(workspace, repoSlug string, prID int, opts *PaginationOptions) ([]PRComment, error) {
 	params := url.Values{}
 	if opts != nil {
-		if opts.Page > 0 {
-			params.Set("page", fmt.Sprintf("%d", opts.Page))
-		}
-		if opts.PageLen > 0 {
-			params.Set("pagelen", fmt.Sprintf("%d", opts.PageLen))
-		}
+		opts.applyParams(params)
 	}
-	if len(params) == 0 || params.Get("pagelen") == "" {
-		params.Set("pagelen", "50")
-	}
+	ensurePageLen(params)
 
 	path := fmt.Sprintf("/repositories/%s/%s/pullrequests/%d/comments",
 		url.PathEscape(workspace), url.PathEscape(repoSlug), prID)
@@ -425,25 +410,12 @@ type PRTask struct {
 	} `json:"comment,omitempty"`
 }
 
-type ListPRTasksOptions struct {
-	Page    int
-	PageLen int
-	All     bool
-}
-
-func (c *Client) ListPRTasks(workspace, repoSlug string, prID int, opts *ListPRTasksOptions) ([]PRTask, error) {
+func (c *Client) ListPRTasks(workspace, repoSlug string, prID int, opts *PaginationOptions) ([]PRTask, error) {
 	params := url.Values{}
 	if opts != nil {
-		if opts.Page > 0 {
-			params.Set("page", fmt.Sprintf("%d", opts.Page))
-		}
-		if opts.PageLen > 0 {
-			params.Set("pagelen", fmt.Sprintf("%d", opts.PageLen))
-		}
+		opts.applyParams(params)
 	}
-	if len(params) == 0 || params.Get("pagelen") == "" {
-		params.Set("pagelen", "50")
-	}
+	ensurePageLen(params)
 
 	path := fmt.Sprintf("/repositories/%s/%s/pullrequests/%d/tasks",
 		url.PathEscape(workspace), url.PathEscape(repoSlug), prID)

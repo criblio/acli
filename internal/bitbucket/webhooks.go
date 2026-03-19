@@ -32,9 +32,35 @@ type CreateWebhookRequest struct {
 	Events      []string `json:"events"`
 }
 
-func (c *Client) ListRepoWebhooks(workspace, repoSlug string) ([]Webhook, error) {
+func (c *Client) ListRepoWebhooks(workspace, repoSlug string, opts *PaginationOptions) ([]Webhook, error) {
+	params := url.Values{}
+	if opts != nil {
+		opts.applyParams(params)
+	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/repositories/%s/%s/hooks",
 		url.PathEscape(workspace), url.PathEscape(repoSlug))
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var hooks []Webhook
+		for _, pg := range pages {
+			var pageHooks []Webhook
+			if err := json.Unmarshal(pg.Values, &pageHooks); err != nil {
+				return hooks, fmt.Errorf("parsing webhooks: %w", err)
+			}
+			hooks = append(hooks, pageHooks...)
+		}
+		return hooks, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err
@@ -106,8 +132,34 @@ func (c *Client) DeleteRepoWebhook(workspace, repoSlug, uid string) error {
 	return c.deleteNoContent(path)
 }
 
-func (c *Client) ListWorkspaceWebhooks(workspace string) ([]Webhook, error) {
+func (c *Client) ListWorkspaceWebhooks(workspace string, opts *PaginationOptions) ([]Webhook, error) {
+	params := url.Values{}
+	if opts != nil {
+		opts.applyParams(params)
+	}
+	ensurePageLen(params)
+
 	path := fmt.Sprintf("/workspaces/%s/hooks", url.PathEscape(workspace))
+	if len(params) > 0 {
+		path += "?" + params.Encode()
+	}
+
+	if opts != nil && opts.All {
+		pages, err := c.getAll(path)
+		if err != nil && len(pages) == 0 {
+			return nil, err
+		}
+		var hooks []Webhook
+		for _, pg := range pages {
+			var pageHooks []Webhook
+			if err := json.Unmarshal(pg.Values, &pageHooks); err != nil {
+				return hooks, fmt.Errorf("parsing webhooks: %w", err)
+			}
+			hooks = append(hooks, pageHooks...)
+		}
+		return hooks, nil
+	}
+
 	data, err := c.get(path)
 	if err != nil {
 		return nil, err

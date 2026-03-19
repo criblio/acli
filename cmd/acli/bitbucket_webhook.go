@@ -40,9 +40,9 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "UUID\tDESCRIPTION\tURL\tACTIVE\tEVENTS")
+			_, _ = fmt.Fprintln(w, "UUID\tDESCRIPTION\tURL\tACTIVE\tEVENTS")
 			for _, h := range hooks {
-				fmt.Fprintf(w, "%s\t%s\t%s\t%v\t%s\n",
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%v\t%s\n",
 					h.UUID, h.Description, h.URL, h.Active, strings.Join(h.Events, ","))
 			}
 			return w.Flush()
@@ -168,9 +168,9 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "UUID\tDESCRIPTION\tURL\tACTIVE\tEVENTS")
+			_, _ = fmt.Fprintln(w, "UUID\tDESCRIPTION\tURL\tACTIVE\tEVENTS")
 			for _, h := range hooks {
-				fmt.Fprintf(w, "%s\t%s\t%s\t%v\t%s\n",
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%v\t%s\n",
 					h.UUID, h.Description, h.URL, h.Active, strings.Join(h.Events, ","))
 			}
 			return w.Flush()

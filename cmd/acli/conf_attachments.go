@@ -38,7 +38,7 @@ func init() {
 
 	// attachment get
 	getAttachmentCmd := &cobra.Command{
-		Use:   "get [attachment-id]",
+		Use:   "get <attachment-id>",
 		Short: "Get attachment by ID",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -71,7 +71,7 @@ func init() {
 
 	// attachment delete
 	deleteAttachmentCmd := &cobra.Command{
-		Use:   "delete [attachment-id]",
+		Use:   "delete <attachment-id>",
 		Short: "Delete attachment",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -92,7 +92,7 @@ func init() {
 
 	// attachment labels
 	attLabelsCmd := &cobra.Command{
-		Use:   "labels [attachment-id]",
+		Use:   "labels <attachment-id>",
 		Short: "Get labels for attachment",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -115,7 +115,7 @@ func init() {
 
 	// attachment comments
 	attCommentsCmd := &cobra.Command{
-		Use:   "comments [attachment-id]",
+		Use:   "comments <attachment-id>",
 		Short: "Get footer comments for attachment",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -139,7 +139,7 @@ func init() {
 
 	// attachment operations
 	attOpsCmd := &cobra.Command{
-		Use:   "operations [attachment-id]",
+		Use:   "operations <attachment-id>",
 		Short: "Get permitted operations",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -155,7 +155,7 @@ func init() {
 
 	// attachment versions
 	attVersionsCmd := &cobra.Command{
-		Use:   "versions [attachment-id]",
+		Use:   "versions <attachment-id>",
 		Short: "Get attachment versions",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -174,7 +174,7 @@ func init() {
 
 	// attachment version-details
 	attVersionDetailCmd := &cobra.Command{
-		Use:   "version-details [attachment-id] [version-number]",
+		Use:   "version-details <attachment-id> <version-number>",
 		Short: "Get version details for attachment version",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {

@@ -38,7 +38,7 @@ func init() {
 
 	// label pages
 	labelPagesCmd := &cobra.Command{
-		Use:   "pages [label-id]",
+		Use:   "pages <label-id>",
 		Short: "Get pages for label",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -64,7 +64,7 @@ func init() {
 
 	// label blogposts
 	labelBlogPostsCmd := &cobra.Command{
-		Use:   "blogposts [label-id]",
+		Use:   "blogposts <label-id>",
 		Short: "Get blog posts for label",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -90,7 +90,7 @@ func init() {
 
 	// label attachments
 	labelAttachmentsCmd := &cobra.Command{
-		Use:   "attachments [label-id]",
+		Use:   "attachments <label-id>",
 		Short: "Get attachments for label",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

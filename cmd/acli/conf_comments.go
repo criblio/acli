@@ -32,7 +32,7 @@ func init() {
 
 	// footer get
 	getFooterCmd := &cobra.Command{
-		Use:   "get [comment-id]",
+		Use:   "get <comment-id>",
 		Short: "Get footer comment by ID",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -111,7 +111,7 @@ func init() {
 
 	// footer update
 	updateFooterCmd := &cobra.Command{
-		Use:   "update [comment-id]",
+		Use:   "update <comment-id>",
 		Short: "Update a footer comment",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -144,7 +144,7 @@ func init() {
 
 	// footer delete
 	deleteFooterCmd := &cobra.Command{
-		Use:   "delete [comment-id]",
+		Use:   "delete <comment-id>",
 		Short: "Delete a footer comment",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -160,7 +160,7 @@ func init() {
 
 	// footer children
 	footerChildrenCmd := &cobra.Command{
-		Use:   "children [comment-id]",
+		Use:   "children <comment-id>",
 		Short: "Get children footer comments",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -180,7 +180,7 @@ func init() {
 
 	// footer operations
 	footerOpsCmd := &cobra.Command{
-		Use:   "operations [comment-id]",
+		Use:   "operations <comment-id>",
 		Short: "Get permitted operations",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -196,7 +196,7 @@ func init() {
 
 	// footer versions
 	footerVersionsCmd := &cobra.Command{
-		Use:   "versions [comment-id]",
+		Use:   "versions <comment-id>",
 		Short: "Get footer comment versions",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -216,7 +216,7 @@ func init() {
 
 	// footer likes-count
 	footerLikesCountCmd := &cobra.Command{
-		Use:   "likes-count [comment-id]",
+		Use:   "likes-count <comment-id>",
 		Short: "Get like count",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -232,7 +232,7 @@ func init() {
 
 	// footer likes-users
 	footerLikesUsersCmd := &cobra.Command{
-		Use:   "likes-users [comment-id]",
+		Use:   "likes-users <comment-id>",
 		Short: "Get like users",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -250,7 +250,7 @@ func init() {
 
 	// footer version-details
 	footerVersionDetailCmd := &cobra.Command{
-		Use:   "version-details [comment-id] [version-number]",
+		Use:   "version-details <comment-id> <version-number>",
 		Short: "Get version details for footer comment version",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -288,7 +288,7 @@ func init() {
 
 	// inline get
 	getInlineCmd := &cobra.Command{
-		Use:   "get [comment-id]",
+		Use:   "get <comment-id>",
 		Short: "Get inline comment by ID",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -367,7 +367,7 @@ func init() {
 
 	// inline update
 	updateInlineCmd := &cobra.Command{
-		Use:   "update [comment-id]",
+		Use:   "update <comment-id>",
 		Short: "Update an inline comment",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -404,7 +404,7 @@ func init() {
 
 	// inline delete
 	deleteInlineCmd := &cobra.Command{
-		Use:   "delete [comment-id]",
+		Use:   "delete <comment-id>",
 		Short: "Delete an inline comment",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -420,7 +420,7 @@ func init() {
 
 	// inline children
 	inlineChildrenCmd := &cobra.Command{
-		Use:   "children [comment-id]",
+		Use:   "children <comment-id>",
 		Short: "Get children inline comments",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -440,7 +440,7 @@ func init() {
 
 	// inline operations
 	inlineOpsCmd := &cobra.Command{
-		Use:   "operations [comment-id]",
+		Use:   "operations <comment-id>",
 		Short: "Get permitted operations",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -456,7 +456,7 @@ func init() {
 
 	// inline versions
 	inlineVersionsCmd := &cobra.Command{
-		Use:   "versions [comment-id]",
+		Use:   "versions <comment-id>",
 		Short: "Get inline comment versions",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -476,7 +476,7 @@ func init() {
 
 	// inline likes-count
 	inlineLikesCountCmd := &cobra.Command{
-		Use:   "likes-count [comment-id]",
+		Use:   "likes-count <comment-id>",
 		Short: "Get like count",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -492,7 +492,7 @@ func init() {
 
 	// inline likes-users
 	inlineLikesUsersCmd := &cobra.Command{
-		Use:   "likes-users [comment-id]",
+		Use:   "likes-users <comment-id>",
 		Short: "Get like users",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -510,7 +510,7 @@ func init() {
 
 	// inline version-details
 	inlineVersionDetailCmd := &cobra.Command{
-		Use:   "version-details [comment-id] [version-number]",
+		Use:   "version-details <comment-id> <version-number>",
 		Short: "Get version details for inline comment version",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {

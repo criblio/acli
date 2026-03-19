@@ -55,15 +55,15 @@ func init() {
 			}
 
 			w := newTabWriter()
-			fmt.Fprintln(w, "KEY\tNAME\tTYPE\tLEAD")
+			_, _ = fmt.Fprintln(w, "KEY\tNAME\tTYPE\tLEAD")
 			for _, p := range result.Values {
 				lead := ""
 				if p.Lead != nil {
 					lead = p.Lead.DisplayName
 				}
-				fmt.Fprintf(w, "%s\t%s\t%s\t%s\n", p.Key, p.Name, p.ProjectTypeKey, lead)
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%s\n", p.Key, p.Name, p.ProjectTypeKey, lead)
 			}
-			w.Flush()
+			_ = w.Flush()
 			printPaginationHint(cmd, len(result.Values), result.Total)
 			return nil
 		},
@@ -242,13 +242,13 @@ func init() {
 				return err
 			}
 			w := newTabWriter()
-			fmt.Fprintln(w, "ID\tNAME\tLEAD\tASSIGNEE TYPE")
+			_, _ = fmt.Fprintln(w, "ID\tNAME\tLEAD\tASSIGNEE TYPE")
 			for _, c := range components {
 				lead := ""
 				if c.Lead != nil {
 					lead = c.Lead.DisplayName
 				}
-				fmt.Fprintf(w, "%s\t%s\t%s\t%s\n", c.ID, c.Name, lead, c.AssigneeType)
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%s\n", c.ID, c.Name, lead, c.AssigneeType)
 			}
 			return w.Flush()
 		},
@@ -269,7 +269,7 @@ func init() {
 				return err
 			}
 			w := newTabWriter()
-			fmt.Fprintln(w, "ID\tNAME\tSTATUS\tRELEASE DATE")
+			_, _ = fmt.Fprintln(w, "ID\tNAME\tSTATUS\tRELEASE DATE")
 			for _, v := range versions {
 				status := "Unreleased"
 				if v.Released {
@@ -277,7 +277,7 @@ func init() {
 				} else if v.Archived {
 					status = "Archived"
 				}
-				fmt.Fprintf(w, "%s\t%s\t%s\t%s\n", v.ID, v.Name, status, v.ReleaseDate)
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%s\n", v.ID, v.Name, status, v.ReleaseDate)
 			}
 			return w.Flush()
 		},
@@ -298,10 +298,10 @@ func init() {
 				return err
 			}
 			w := newTabWriter()
-			fmt.Fprintln(w, "ISSUE TYPE\tSTATUS NAME\tCATEGORY")
+			_, _ = fmt.Fprintln(w, "ISSUE TYPE\tSTATUS NAME\tCATEGORY")
 			for _, it := range issueTypes {
 				for _, s := range it.Statuses {
-					fmt.Fprintf(w, "%s\t%s\t%s\n", it.Name, s.Name, s.StatusCategory.Name)
+					_, _ = fmt.Fprintf(w, "%s\t%s\t%s\n", it.Name, s.Name, s.StatusCategory.Name)
 				}
 			}
 			return w.Flush()
@@ -323,9 +323,9 @@ func init() {
 				return err
 			}
 			w := newTabWriter()
-			fmt.Fprintln(w, "ROLE NAME\tURL")
+			_, _ = fmt.Fprintln(w, "ROLE NAME\tURL")
 			for name, url := range roles {
-				fmt.Fprintf(w, "%s\t%s\n", name, url)
+				_, _ = fmt.Fprintf(w, "%s\t%s\n", name, url)
 			}
 			return w.Flush()
 		},
@@ -380,13 +380,13 @@ func init() {
 				return err
 			}
 			w := newTabWriter()
-			fmt.Fprintln(w, "FEATURE\tSTATE")
+			_, _ = fmt.Fprintln(w, "FEATURE\tSTATE")
 			for _, f := range resp.Features {
 				name := f.LocalisedName
 				if name == "" {
 					name = f.Feature
 				}
-				fmt.Fprintf(w, "%s\t%s\n", name, f.State)
+				_, _ = fmt.Fprintf(w, "%s\t%s\n", name, f.State)
 			}
 			return w.Flush()
 		},

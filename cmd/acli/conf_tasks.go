@@ -89,7 +89,7 @@ func init() {
 
 	// task get
 	getTaskCmd := &cobra.Command{
-		Use:   "get [task-id]",
+		Use:   "get <task-id>",
 		Short: "Get task by ID",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -107,7 +107,7 @@ func init() {
 
 	// task update
 	updateTaskCmd := &cobra.Command{
-		Use:   "update [task-id]",
+		Use:   "update <task-id>",
 		Short: "Update a task",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

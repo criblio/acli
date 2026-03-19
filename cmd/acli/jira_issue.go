@@ -80,7 +80,7 @@ var jiraIssueListCmd = &cobra.Command{
 		}
 
 		w := newTabWriter()
-		fmt.Fprintf(w, "KEY\tTYPE\tSTATUS\tPRIORITY\tASSIGNEE\tSUMMARY\n")
+		_, _ = fmt.Fprintf(w, "KEY\tTYPE\tSTATUS\tPRIORITY\tASSIGNEE\tSUMMARY\n")
 		for _, issue := range results.Issues {
 			issueType := ""
 			if issue.Fields.IssueType != nil {
@@ -98,10 +98,10 @@ var jiraIssueListCmd = &cobra.Command{
 			if issue.Fields.Assignee != nil {
 				assignee = issue.Fields.Assignee.DisplayName
 			}
-			fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\n",
+			_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\n",
 				issue.Key, issueType, status, priority, assignee, issue.Fields.Summary)
 		}
-		w.Flush()
+		_ = w.Flush()
 		printPaginationHint(cmd, len(results.Issues), results.Total)
 		return nil
 	},
@@ -176,19 +176,19 @@ var jiraIssueGetCmd = &cobra.Command{
 			fixVersions = append(fixVersions, v.Name)
 		}
 
-		fmt.Fprintf(cmd.OutOrStdout(), "Key:          %s\n", issue.Key)
-		fmt.Fprintf(cmd.OutOrStdout(), "Summary:      %s\n", f.Summary)
-		fmt.Fprintf(cmd.OutOrStdout(), "Status:       %s\n", status)
-		fmt.Fprintf(cmd.OutOrStdout(), "Type:         %s\n", issueType)
-		fmt.Fprintf(cmd.OutOrStdout(), "Priority:     %s\n", priority)
-		fmt.Fprintf(cmd.OutOrStdout(), "Assignee:     %s\n", assignee)
-		fmt.Fprintf(cmd.OutOrStdout(), "Reporter:     %s\n", reporter)
-		fmt.Fprintf(cmd.OutOrStdout(), "Created:      %s\n", f.Created)
-		fmt.Fprintf(cmd.OutOrStdout(), "Updated:      %s\n", f.Updated)
-		fmt.Fprintf(cmd.OutOrStdout(), "Labels:       %s\n", strings.Join(labels, ", "))
-		fmt.Fprintf(cmd.OutOrStdout(), "Components:   %s\n", strings.Join(components, ", "))
-		fmt.Fprintf(cmd.OutOrStdout(), "Fix Versions: %s\n", strings.Join(fixVersions, ", "))
-		fmt.Fprintf(cmd.OutOrStdout(), "Description:\n%s\n", description)
+		_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Key:          %s\n", issue.Key)
+		_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Summary:      %s\n", f.Summary)
+		_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Status:       %s\n", status)
+		_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Type:         %s\n", issueType)
+		_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Priority:     %s\n", priority)
+		_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Assignee:     %s\n", assignee)
+		_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Reporter:     %s\n", reporter)
+		_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Created:      %s\n", f.Created)
+		_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Updated:      %s\n", f.Updated)
+		_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Labels:       %s\n", strings.Join(labels, ", "))
+		_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Components:   %s\n", strings.Join(components, ", "))
+		_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Fix Versions: %s\n", strings.Join(fixVersions, ", "))
+		_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Description:\n%s\n", description)
 
 		return nil
 	},
@@ -455,15 +455,15 @@ var jiraIssueTransitionsCmd = &cobra.Command{
 		}
 
 		w := newTabWriter()
-		fmt.Fprintf(w, "ID\tNAME\tTO STATUS\n")
+		_, _ = fmt.Fprintf(w, "ID\tNAME\tTO STATUS\n")
 		for _, t := range resp.Transitions {
 			toStatus := ""
 			if t.To != nil {
 				toStatus = t.To.Name
 			}
-			fmt.Fprintf(w, "%s\t%s\t%s\n", t.ID, t.Name, toStatus)
+			_, _ = fmt.Fprintf(w, "%s\t%s\t%s\n", t.ID, t.Name, toStatus)
 		}
-		w.Flush()
+		_ = w.Flush()
 		return nil
 	},
 }
@@ -518,7 +518,7 @@ var jiraIssueCommentListCmd = &cobra.Command{
 		}
 
 		w := newTabWriter()
-		fmt.Fprintf(w, "ID\tAUTHOR\tCREATED\tBODY\n")
+		_, _ = fmt.Fprintf(w, "ID\tAUTHOR\tCREATED\tBODY\n")
 		for _, c := range page.Comments {
 			author := ""
 			if c.Author != nil {
@@ -528,9 +528,9 @@ var jiraIssueCommentListCmd = &cobra.Command{
 			if len(body) > 60 {
 				body = body[:57] + "..."
 			}
-			fmt.Fprintf(w, "%s\t%s\t%s\t%s\n", c.ID, author, c.Created, body)
+			_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%s\n", c.ID, author, c.Created, body)
 		}
-		w.Flush()
+		_ = w.Flush()
 		printPaginationHint(cmd, len(page.Comments), page.Total)
 		return nil
 	},
@@ -710,15 +710,15 @@ var jiraIssueWorklogListCmd = &cobra.Command{
 		}
 
 		w := newTabWriter()
-		fmt.Fprintf(w, "ID\tAUTHOR\tTIME SPENT\tSTARTED\n")
+		_, _ = fmt.Fprintf(w, "ID\tAUTHOR\tTIME SPENT\tSTARTED\n")
 		for _, wl := range page.Worklogs {
 			author := ""
 			if wl.Author != nil {
 				author = wl.Author.DisplayName
 			}
-			fmt.Fprintf(w, "%s\t%s\t%s\t%s\n", wl.ID, author, wl.TimeSpent, wl.Started)
+			_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%s\n", wl.ID, author, wl.TimeSpent, wl.Started)
 		}
-		w.Flush()
+		_ = w.Flush()
 		printPaginationHint(cmd, len(page.Worklogs), page.Total)
 		return nil
 	},
@@ -797,7 +797,7 @@ var jiraIssueAttachCmd = &cobra.Command{
 			return outputJSON(attachments)
 		}
 		for _, a := range attachments {
-			fmt.Fprintf(cmd.OutOrStdout(), "Attached: %s (id: %s)\n", a.Filename, a.ID)
+			_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Attached: %s (id: %s)\n", a.Filename, a.ID)
 		}
 		return nil
 	},
@@ -917,12 +917,12 @@ var jiraIssueWatchersCmd = &cobra.Command{
 		}
 
 		w := newTabWriter()
-		fmt.Fprintf(w, "ACCOUNT ID\tDISPLAY NAME\n")
+		_, _ = fmt.Fprintf(w, "ACCOUNT ID\tDISPLAY NAME\n")
 		for _, watcher := range watches.Watchers {
-			fmt.Fprintf(w, "%s\t%s\n", watcher.AccountID, watcher.DisplayName)
+			_, _ = fmt.Fprintf(w, "%s\t%s\n", watcher.AccountID, watcher.DisplayName)
 		}
-		w.Flush()
-		fmt.Fprintf(cmd.OutOrStdout(), "\nTotal watchers: %d\n", watches.WatchCount)
+		_ = w.Flush()
+		_, _ = fmt.Fprintf(cmd.OutOrStdout(), "\nTotal watchers: %d\n", watches.WatchCount)
 		return nil
 	},
 }
@@ -974,18 +974,18 @@ var jiraIssueChangelogCmd = &cobra.Command{
 		}
 
 		w := newTabWriter()
-		fmt.Fprintf(w, "DATE\tAUTHOR\tFIELD\tFROM\tTO\n")
+		_, _ = fmt.Fprintf(w, "DATE\tAUTHOR\tFIELD\tFROM\tTO\n")
 		for _, entry := range histories {
 			author := ""
 			if entry.Author != nil {
 				author = entry.Author.DisplayName
 			}
 			for _, item := range entry.Items {
-				fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\n",
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\n",
 					entry.Created, author, item.Field, item.FromString, item.ToString)
 			}
 		}
-		w.Flush()
+		_ = w.Flush()
 		printPaginationHint(cmd, len(histories), page.Total)
 		return nil
 	},
@@ -1022,7 +1022,7 @@ var jiraIssueRemoteLinkListCmd = &cobra.Command{
 		}
 
 		w := newTabWriter()
-		fmt.Fprintf(w, "ID\tTITLE\tURL\n")
+		_, _ = fmt.Fprintf(w, "ID\tTITLE\tURL\n")
 		for _, link := range links {
 			title := ""
 			url := ""
@@ -1030,9 +1030,9 @@ var jiraIssueRemoteLinkListCmd = &cobra.Command{
 				title = link.Object.Title
 				url = link.Object.URL
 			}
-			fmt.Fprintf(w, "%d\t%s\t%s\n", link.ID, title, url)
+			_, _ = fmt.Fprintf(w, "%d\t%s\t%s\n", link.ID, title, url)
 		}
-		w.Flush()
+		_ = w.Flush()
 		return nil
 	},
 }

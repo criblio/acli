@@ -68,7 +68,7 @@ func init() {
 
 	// space get
 	getSpaceCmd := &cobra.Command{
-		Use:   "get [space-id]",
+		Use:   "get <space-id>",
 		Short: "Get space by ID",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -156,7 +156,7 @@ func init() {
 
 	// space pages
 	spacePagesCmd := &cobra.Command{
-		Use:   "pages [space-id]",
+		Use:   "pages <space-id>",
 		Short: "List pages in a space",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -185,7 +185,7 @@ func init() {
 
 	// space blogposts
 	spaceBlogPostsCmd := &cobra.Command{
-		Use:   "blogposts [space-id]",
+		Use:   "blogposts <space-id>",
 		Short: "List blog posts in a space",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -211,7 +211,7 @@ func init() {
 
 	// space labels
 	spaceLabelsCmd := &cobra.Command{
-		Use:   "labels [space-id]",
+		Use:   "labels <space-id>",
 		Short: "Get labels for a space",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -229,7 +229,7 @@ func init() {
 
 	// space content-labels
 	spaceContentLabelsCmd := &cobra.Command{
-		Use:   "content-labels [space-id]",
+		Use:   "content-labels <space-id>",
 		Short: "Get labels for space content",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -251,7 +251,7 @@ func init() {
 
 	// space custom-content
 	spaceCustomContentCmd := &cobra.Command{
-		Use:   "custom-content [space-id]",
+		Use:   "custom-content <space-id>",
 		Short: "Get custom content by type in space",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -275,7 +275,7 @@ func init() {
 
 	// space operations
 	spaceOpsCmd := &cobra.Command{
-		Use:   "operations [space-id]",
+		Use:   "operations <space-id>",
 		Short: "Get permitted operations for space",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -291,7 +291,7 @@ func init() {
 
 	// space permissions
 	spacePermsCmd := &cobra.Command{
-		Use:   "permissions [space-id]",
+		Use:   "permissions <space-id>",
 		Short: "Get space permissions assignments",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -315,7 +315,7 @@ func init() {
 
 	// space role-assignments
 	spaceRoleAssignCmd := &cobra.Command{
-		Use:   "role-assignments [space-id]",
+		Use:   "role-assignments <space-id>",
 		Short: "Get space role assignments",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -355,7 +355,7 @@ func init() {
 
 	// space set-role-assignments
 	setSpaceRoleAssignCmd := &cobra.Command{
-		Use:   "set-role-assignments [space-id]",
+		Use:   "set-role-assignments <space-id>",
 		Short: "Set space role assignments (provide JSON body via stdin or --body flag)",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

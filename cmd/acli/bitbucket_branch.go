@@ -50,13 +50,13 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "NAME\tHASH\tDATE\tAUTHOR")
+			_, _ = fmt.Fprintln(w, "NAME\tHASH\tDATE\tAUTHOR")
 			for _, b := range branches {
 				hash := b.Target.Hash
 				if len(hash) > 12 {
 					hash = hash[:12]
 				}
-				fmt.Fprintf(w, "%s\t%s\t%s\t%s\n",
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%s\n",
 					b.Name, hash, b.Target.Date, b.Target.Author.Raw)
 			}
 			return w.Flush()
@@ -182,7 +182,7 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "NAME\tHASH\tDATE\tMESSAGE")
+			_, _ = fmt.Fprintln(w, "NAME\tHASH\tDATE\tMESSAGE")
 			for _, t := range tags {
 				hash := t.Target.Hash
 				if len(hash) > 12 {
@@ -192,7 +192,7 @@ func init() {
 				if len(msg) > 60 {
 					msg = msg[:57] + "..."
 				}
-				fmt.Fprintf(w, "%s\t%s\t%s\t%s\n",
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%s\n",
 					t.Name, hash, t.Target.Date, msg)
 			}
 			return w.Flush()

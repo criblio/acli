@@ -40,9 +40,9 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "ID\tKIND\tPATTERN")
+			_, _ = fmt.Fprintln(w, "ID\tKIND\tPATTERN")
 			for _, r := range restrictions {
-				fmt.Fprintf(w, "%d\t%s\t%s\n", r.ID, r.Kind, r.Pattern)
+				_, _ = fmt.Fprintf(w, "%d\t%s\t%s\n", r.ID, r.Kind, r.Pattern)
 			}
 			return w.Flush()
 		},

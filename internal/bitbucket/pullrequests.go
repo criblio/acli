@@ -208,10 +208,29 @@ func (c *Client) UpdatePullRequest(workspace, repoSlug string, prID int, req *Up
 	return &pr, nil
 }
 
-func (c *Client) ApprovePullRequest(workspace, repoSlug string, prID int) error {
+// Participant represents a pull request participant (reviewer/approver).
+type Participant struct {
+	User struct {
+		DisplayName string `json:"display_name"`
+		UUID        string `json:"uuid"`
+	} `json:"user"`
+	Role     string `json:"role"`
+	Approved bool   `json:"approved"`
+	State    string `json:"state"`
+}
+
+func (c *Client) ApprovePullRequest(workspace, repoSlug string, prID int) (*Participant, error) {
 	path := fmt.Sprintf("/repositories/%s/%s/pullrequests/%d/approve",
 		url.PathEscape(workspace), url.PathEscape(repoSlug), prID)
-	return c.postNoContent(path, nil)
+	data, err := c.post(path, nil)
+	if err != nil {
+		return nil, err
+	}
+	var p Participant
+	if err := json.Unmarshal(data, &p); err != nil {
+		return nil, fmt.Errorf("parsing participant: %w", err)
+	}
+	return &p, nil
 }
 
 func (c *Client) UnapprovePullRequest(workspace, repoSlug string, prID int) error {
@@ -220,10 +239,18 @@ func (c *Client) UnapprovePullRequest(workspace, repoSlug string, prID int) erro
 	return c.deleteNoContent(path)
 }
 
-func (c *Client) DeclinePullRequest(workspace, repoSlug string, prID int) error {
+func (c *Client) DeclinePullRequest(workspace, repoSlug string, prID int) (*PullRequest, error) {
 	path := fmt.Sprintf("/repositories/%s/%s/pullrequests/%d/decline",
 		url.PathEscape(workspace), url.PathEscape(repoSlug), prID)
-	return c.postNoContent(path, nil)
+	data, err := c.post(path, nil)
+	if err != nil {
+		return nil, err
+	}
+	var pr PullRequest
+	if err := json.Unmarshal(data, &pr); err != nil {
+		return nil, fmt.Errorf("parsing pull request: %w", err)
+	}
+	return &pr, nil
 }
 
 type MergePRRequest struct {
@@ -254,10 +281,18 @@ func (c *Client) MergePullRequest(workspace, repoSlug string, prID int, req *Mer
 	return &pr, nil
 }
 
-func (c *Client) RequestChangesPullRequest(workspace, repoSlug string, prID int) error {
+func (c *Client) RequestChangesPullRequest(workspace, repoSlug string, prID int) (*Participant, error) {
 	path := fmt.Sprintf("/repositories/%s/%s/pullrequests/%d/request-changes",
 		url.PathEscape(workspace), url.PathEscape(repoSlug), prID)
-	return c.postNoContent(path, nil)
+	data, err := c.post(path, nil)
+	if err != nil {
+		return nil, err
+	}
+	var p Participant
+	if err := json.Unmarshal(data, &p); err != nil {
+		return nil, fmt.Errorf("parsing participant: %w", err)
+	}
+	return &p, nil
 }
 
 func (c *Client) RemoveRequestChangesPullRequest(workspace, repoSlug string, prID int) error {

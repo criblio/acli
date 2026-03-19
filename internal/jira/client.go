@@ -99,7 +99,7 @@ func (c *Client) do(req *http.Request, v interface{}) error {
 	if err != nil {
 		return fmt.Errorf("HTTP request failed: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode >= 400 {
 		body, _ := io.ReadAll(resp.Body)
@@ -185,7 +185,7 @@ func (c *Client) UploadFile(path string, fieldName string, filePath string, v in
 	if err != nil {
 		return fmt.Errorf("opening file: %w", err)
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	var buf bytes.Buffer
 	writer := multipart.NewWriter(&buf)
@@ -196,7 +196,7 @@ func (c *Client) UploadFile(path string, fieldName string, filePath string, v in
 	if _, err := io.Copy(part, file); err != nil {
 		return fmt.Errorf("copying file data: %w", err)
 	}
-	writer.Close()
+	_ = writer.Close()
 
 	u := c.BaseURL + path
 	req, err := http.NewRequest("POST", u, &buf)
@@ -225,7 +225,7 @@ func (c *Client) GetRaw(path string, query url.Values) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("HTTP request failed: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode >= 400 {
 		body, _ := io.ReadAll(resp.Body)

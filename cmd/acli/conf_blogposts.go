@@ -47,7 +47,7 @@ func init() {
 
 	// blogpost get
 	getBlogPostCmd := &cobra.Command{
-		Use:   "get [blogpost-id]",
+		Use:   "get <blogpost-id>",
 		Short: "Get blog post by ID",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -134,7 +134,7 @@ func init() {
 
 	// blogpost update
 	updateBlogPostCmd := &cobra.Command{
-		Use:   "update [blogpost-id]",
+		Use:   "update <blogpost-id>",
 		Short: "Update a blog post",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -177,7 +177,7 @@ func init() {
 
 	// blogpost delete
 	deleteBlogPostCmd := &cobra.Command{
-		Use:   "delete [blogpost-id]",
+		Use:   "delete <blogpost-id>",
 		Short: "Delete a blog post",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -202,7 +202,7 @@ func init() {
 
 	// blogpost attachments
 	bpAttachmentsCmd := &cobra.Command{
-		Use:   "attachments [blogpost-id]",
+		Use:   "attachments <blogpost-id>",
 		Short: "Get attachments for blog post",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -230,7 +230,7 @@ func init() {
 
 	// blogpost labels
 	bpLabelsCmd := &cobra.Command{
-		Use:   "labels [blogpost-id]",
+		Use:   "labels <blogpost-id>",
 		Short: "Get labels for blog post",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -253,7 +253,7 @@ func init() {
 
 	// blogpost footer-comments
 	bpFooterCommentsCmd := &cobra.Command{
-		Use:   "footer-comments [blogpost-id]",
+		Use:   "footer-comments <blogpost-id>",
 		Short: "Get footer comments for blog post",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -274,7 +274,7 @@ func init() {
 
 	// blogpost inline-comments
 	bpInlineCommentsCmd := &cobra.Command{
-		Use:   "inline-comments [blogpost-id]",
+		Use:   "inline-comments <blogpost-id>",
 		Short: "Get inline comments for blog post",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -301,7 +301,7 @@ func init() {
 
 	// blogpost custom-content
 	bpCustomContentCmd := &cobra.Command{
-		Use:   "custom-content [blogpost-id]",
+		Use:   "custom-content <blogpost-id>",
 		Short: "Get custom content in blog post",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -325,7 +325,7 @@ func init() {
 
 	// blogpost operations
 	bpOperationsCmd := &cobra.Command{
-		Use:   "operations [blogpost-id]",
+		Use:   "operations <blogpost-id>",
 		Short: "Get permitted operations for blog post",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -341,7 +341,7 @@ func init() {
 
 	// blogpost versions
 	bpVersionsCmd := &cobra.Command{
-		Use:   "versions [blogpost-id]",
+		Use:   "versions <blogpost-id>",
 		Short: "Get blog post versions",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -361,7 +361,7 @@ func init() {
 
 	// blogpost version-details
 	bpVersionDetailCmd := &cobra.Command{
-		Use:   "version-details [blogpost-id] [version-number]",
+		Use:   "version-details <blogpost-id> <version-number>",
 		Short: "Get version details for blog post version",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -377,7 +377,7 @@ func init() {
 
 	// blogpost likes
 	bpLikesCountCmd := &cobra.Command{
-		Use:   "likes-count [blogpost-id]",
+		Use:   "likes-count <blogpost-id>",
 		Short: "Get like count for blog post",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -392,7 +392,7 @@ func init() {
 	confBlogPostCmd.AddCommand(bpLikesCountCmd)
 
 	bpLikesUsersCmd := &cobra.Command{
-		Use:   "likes-users [blogpost-id]",
+		Use:   "likes-users <blogpost-id>",
 		Short: "Get account IDs of likes for blog post",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -410,7 +410,7 @@ func init() {
 
 	// blogpost redact
 	bpRedactCmd := &cobra.Command{
-		Use:   "redact [blogpost-id]",
+		Use:   "redact <blogpost-id>",
 		Short: "Redact content in a Confluence blog post",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

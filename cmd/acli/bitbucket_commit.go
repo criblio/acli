@@ -48,7 +48,7 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "HASH\tDATE\tAUTHOR\tMESSAGE")
+			_, _ = fmt.Fprintln(w, "HASH\tDATE\tAUTHOR\tMESSAGE")
 			for _, c := range commits {
 				hash := c.Hash
 				if len(hash) > 12 {
@@ -58,7 +58,7 @@ func init() {
 				if len(msg) > 60 {
 					msg = msg[:57] + "..."
 				}
-				fmt.Fprintf(w, "%s\t%s\t%s\t%s\n",
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%s\n",
 					hash, c.Date, c.Author.Raw, msg)
 			}
 			return w.Flush()
@@ -126,9 +126,9 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "KEY\tSTATE\tNAME\tDESCRIPTION\tUPDATED")
+			_, _ = fmt.Fprintln(w, "KEY\tSTATE\tNAME\tDESCRIPTION\tUPDATED")
 			for _, s := range statuses {
-				fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\n",
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\n",
 					s.Key, s.State, s.Name, s.Description, s.UpdatedOn)
 			}
 			return w.Flush()

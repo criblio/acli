@@ -54,15 +54,15 @@ var jiraDashboardListCmd = &cobra.Command{
 				return outputJSON(result)
 			}
 			w := newTabWriter()
-			fmt.Fprintf(w, "ID\tNAME\tOWNER\n")
+			_, _ = fmt.Fprintf(w, "ID\tNAME\tOWNER\n")
 			for _, d := range result.Values {
 				owner := ""
 				if d.Owner != nil {
 					owner = d.Owner.DisplayName
 				}
-				fmt.Fprintf(w, "%s\t%s\t%s\n", d.ID, d.Name, owner)
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\n", d.ID, d.Name, owner)
 			}
-			w.Flush()
+			_ = w.Flush()
 			printPaginationHint(cmd, len(result.Values), result.Total)
 			return nil
 		}
@@ -87,15 +87,15 @@ var jiraDashboardListCmd = &cobra.Command{
 			return outputJSON(result)
 		}
 		w := newTabWriter()
-		fmt.Fprintf(w, "ID\tNAME\tOWNER\n")
+		_, _ = fmt.Fprintf(w, "ID\tNAME\tOWNER\n")
 		for _, d := range result.Dashboards {
 			owner := ""
 			if d.Owner != nil {
 				owner = d.Owner.DisplayName
 			}
-			fmt.Fprintf(w, "%s\t%s\t%s\n", d.ID, d.Name, owner)
+			_, _ = fmt.Fprintf(w, "%s\t%s\t%s\n", d.ID, d.Name, owner)
 		}
-		w.Flush()
+		_ = w.Flush()
 		printPaginationHint(cmd, len(result.Dashboards), result.Total)
 		return nil
 	},
@@ -119,13 +119,13 @@ var jiraDashboardGetCmd = &cobra.Command{
 			return outputJSON(d)
 		}
 		w := newTabWriter()
-		fmt.Fprintf(w, "ID\t%s\n", d.ID)
-		fmt.Fprintf(w, "Name\t%s\n", d.Name)
-		fmt.Fprintf(w, "Description\t%s\n", d.Description)
+		_, _ = fmt.Fprintf(w, "ID\t%s\n", d.ID)
+		_, _ = fmt.Fprintf(w, "Name\t%s\n", d.Name)
+		_, _ = fmt.Fprintf(w, "Description\t%s\n", d.Description)
 		if d.Owner != nil {
-			fmt.Fprintf(w, "Owner\t%s\n", d.Owner.DisplayName)
+			_, _ = fmt.Fprintf(w, "Owner\t%s\n", d.Owner.DisplayName)
 		}
-		w.Flush()
+		_ = w.Flush()
 		return nil
 	},
 }
@@ -250,9 +250,9 @@ var jiraDashboardGadgetListCmd = &cobra.Command{
 			return outputJSON(gadgets)
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tTITLE\tMODULE KEY\tURI")
+		_, _ = fmt.Fprintln(w, "ID\tTITLE\tMODULE KEY\tURI")
 		for _, g := range gadgets.Gadgets {
-			fmt.Fprintf(w, "%d\t%s\t%s\t%s\n", g.ID, g.Title, g.ModuleKey, g.URI)
+			_, _ = fmt.Fprintf(w, "%d\t%s\t%s\t%s\n", g.ID, g.Title, g.ModuleKey, g.URI)
 		}
 		return w.Flush()
 	},

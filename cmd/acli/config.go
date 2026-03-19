@@ -108,13 +108,13 @@ var configListCmd = &cobra.Command{
 		}
 
 		w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-		fmt.Fprintf(w, "PROFILE\tDEFAULT\tURL\tEMAIL\n")
+		_, _ = fmt.Fprintf(w, "PROFILE\tDEFAULT\tURL\tEMAIL\n")
 		for name, p := range cfg.Profiles {
 			def := ""
 			if name == cfg.DefaultProfile {
 				def = "*"
 			}
-			fmt.Fprintf(w, "%s\t%s\t%s\t%s\n", name, def, p.AtlassianURL, p.Email)
+			_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%s\n", name, def, p.AtlassianURL, p.Email)
 		}
 		return w.Flush()
 	},

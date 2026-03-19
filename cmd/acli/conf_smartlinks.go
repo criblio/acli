@@ -42,7 +42,7 @@ func init() {
 
 	// smart-link get
 	getSmartLinkCmd := &cobra.Command{
-		Use:   "get [smart-link-id]",
+		Use:   "get <smart-link-id>",
 		Short: "Get smart link by ID",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -68,7 +68,7 @@ func init() {
 
 	// smart-link delete
 	deleteSmartLinkCmd := &cobra.Command{
-		Use:   "delete [smart-link-id]",
+		Use:   "delete <smart-link-id>",
 		Short: "Delete a smart link",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

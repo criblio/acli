@@ -43,7 +43,7 @@ func init() {
 		}
 
 		getCmd := &cobra.Command{
-			Use:   "get [id]",
+			Use:   "get <id>",
 			Short: fmt.Sprintf("Get %s classification level", res.name),
 			Args:  cobra.ExactArgs(1),
 			RunE: func(cmd *cobra.Command, args []string) error {
@@ -58,7 +58,7 @@ func init() {
 		resCmd.AddCommand(getCmd)
 
 		setCmd := &cobra.Command{
-			Use:   "set [id]",
+			Use:   "set <id>",
 			Short: fmt.Sprintf("Update %s classification level", res.name),
 			Args:  cobra.ExactArgs(1),
 			RunE: func(cmd *cobra.Command, args []string) error {
@@ -81,7 +81,7 @@ func init() {
 		resCmd.AddCommand(setCmd)
 
 		resetCmd := &cobra.Command{
-			Use:   "reset [id]",
+			Use:   "reset <id>",
 			Short: fmt.Sprintf("Reset %s classification level", res.name),
 			Args:  cobra.ExactArgs(1),
 			RunE: func(cmd *cobra.Command, args []string) error {
@@ -111,7 +111,7 @@ func init() {
 	}
 
 	spaceClassGetCmd := &cobra.Command{
-		Use:   "get [space-id]",
+		Use:   "get <space-id>",
 		Short: "Get space default classification level",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -126,7 +126,7 @@ func init() {
 	spaceClassCmd.AddCommand(spaceClassGetCmd)
 
 	spaceClassSetCmd := &cobra.Command{
-		Use:   "set [space-id]",
+		Use:   "set <space-id>",
 		Short: "Update space default classification level",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -146,7 +146,7 @@ func init() {
 	spaceClassCmd.AddCommand(spaceClassSetCmd)
 
 	spaceClassDeleteCmd := &cobra.Command{
-		Use:   "delete [space-id]",
+		Use:   "delete <space-id>",
 		Short: "Delete space default classification level",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -271,7 +271,7 @@ func init() {
 	confSpaceRoleCmd.AddCommand(listSpaceRolesCmd)
 
 	getSpaceRoleCmd := &cobra.Command{
-		Use:   "get [role-id]",
+		Use:   "get <role-id>",
 		Short: "Get space role by ID",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -309,7 +309,7 @@ func init() {
 	confSpaceRoleCmd.AddCommand(createSpaceRoleCmd)
 
 	updateSpaceRoleCmd := &cobra.Command{
-		Use:   "update [role-id]",
+		Use:   "update <role-id>",
 		Short: "Update a space role",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -333,7 +333,7 @@ func init() {
 	confSpaceRoleCmd.AddCommand(updateSpaceRoleCmd)
 
 	deleteSpaceRoleCmd := &cobra.Command{
-		Use:   "delete [role-id]",
+		Use:   "delete <role-id>",
 		Short: "Delete a space role",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -386,7 +386,7 @@ func init() {
 	appPropsCmd.AddCommand(appPropsListCmd)
 
 	appPropsGetCmd := &cobra.Command{
-		Use:   "get [property-key]",
+		Use:   "get <property-key>",
 		Short: "Get a Forge app property by key",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -401,7 +401,7 @@ func init() {
 	appPropsCmd.AddCommand(appPropsGetCmd)
 
 	appPropsSetCmd := &cobra.Command{
-		Use:   "set [property-key]",
+		Use:   "set <property-key>",
 		Short: "Create or update a Forge app property",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -425,7 +425,7 @@ func init() {
 	appPropsCmd.AddCommand(appPropsSetCmd)
 
 	appPropsDeleteCmd := &cobra.Command{
-		Use:   "delete [property-key]",
+		Use:   "delete <property-key>",
 		Short: "Delete a Forge app property",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

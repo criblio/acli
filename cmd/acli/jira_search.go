@@ -48,11 +48,11 @@ var jiraSearchCmd = &cobra.Command{
 		}
 
 		w := newTabWriter()
-		fmt.Fprintln(w, "KEY\tTYPE\tSTATUS\tPRIORITY\tASSIGNEE\tSUMMARY")
+		_, _ = fmt.Fprintln(w, "KEY\tTYPE\tSTATUS\tPRIORITY\tASSIGNEE\tSUMMARY")
 		for _, issue := range results.Issues {
 			printIssueRow(w, issue)
 		}
-		w.Flush()
+		_ = w.Flush()
 		printPaginationHint(cmd, len(results.Issues), results.Total)
 		return nil
 	},
@@ -126,22 +126,22 @@ var jiraFilterListCmd = &cobra.Command{
 		}
 
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tNAME\tOWNER\tJQL")
+		_, _ = fmt.Fprintln(w, "ID\tNAME\tOWNER\tJQL")
 		for _, f := range filters {
 			owner := ""
 			if f.Owner != nil {
 				owner = f.Owner.DisplayName
 			}
-			fmt.Fprintf(w, "%s\t%s\t%s\t%s\n", f.ID, f.Name, owner, truncate(f.JQL, 60))
+			_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%s\n", f.ID, f.Name, owner, truncate(f.JQL, 60))
 		}
-		w.Flush()
+		_ = w.Flush()
 		printPaginationHint(cmd, len(filters), total)
 		return nil
 	},
 }
 
 var jiraFilterGetCmd = &cobra.Command{
-	Use:   "get [filter-id]",
+	Use:   "get <filter-id>",
 	Short: "Get filter details",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -203,7 +203,7 @@ var jiraFilterCreateCmd = &cobra.Command{
 }
 
 var jiraFilterUpdateCmd = &cobra.Command{
-	Use:   "update [filter-id]",
+	Use:   "update <filter-id>",
 	Short: "Update a filter",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -236,7 +236,7 @@ var jiraFilterUpdateCmd = &cobra.Command{
 }
 
 var jiraFilterDeleteCmd = &cobra.Command{
-	Use:   "delete [filter-id]",
+	Use:   "delete <filter-id>",
 	Short: "Delete a filter",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {

@@ -48,13 +48,13 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "ID\tTITLE\tSTATE\tPRIORITY\tKIND\tASSIGNEE")
+			_, _ = fmt.Fprintln(w, "ID\tTITLE\tSTATE\tPRIORITY\tKIND\tASSIGNEE")
 			for _, issue := range issues {
 				assignee := ""
 				if issue.Assignee != nil {
 					assignee = issue.Assignee.DisplayName
 				}
-				fmt.Fprintf(w, "%d\t%s\t%s\t%s\t%s\t%s\n",
+				_, _ = fmt.Fprintf(w, "%d\t%s\t%s\t%s\t%s\t%s\n",
 					issue.ID, issue.Title, issue.State, issue.Priority, issue.Kind, assignee)
 			}
 			return w.Flush()

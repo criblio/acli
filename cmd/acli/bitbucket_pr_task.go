@@ -50,9 +50,9 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "ID\tSTATE\tCONTENT\tCREATOR\tCREATED")
+			_, _ = fmt.Fprintln(w, "ID\tSTATE\tCONTENT\tCREATOR\tCREATED")
 			for _, t := range tasks {
-				fmt.Fprintf(w, "%d\t%s\t%s\t%s\t%s\n",
+				_, _ = fmt.Fprintf(w, "%d\t%s\t%s\t%s\t%s\n",
 					t.ID, t.State, truncate(t.Content.Raw, 60), t.Creator.DisplayName, t.CreatedOn)
 			}
 			return w.Flush()

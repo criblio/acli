@@ -10,11 +10,11 @@ import (
 // printUsersTable prints a table of users.
 func printUsersTable(users []jira.UserDetails) {
 	w := newTabWriter()
-	fmt.Fprintln(w, "ACCOUNT_ID\tDISPLAY_NAME\tEMAIL\tACTIVE")
+	_, _ = fmt.Fprintln(w, "ACCOUNT_ID\tDISPLAY_NAME\tEMAIL\tACTIVE")
 	for _, u := range users {
-		fmt.Fprintf(w, "%s\t%s\t%s\t%v\n", u.AccountID, u.DisplayName, u.EmailAddress, u.Active)
+		_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%v\n", u.AccountID, u.DisplayName, u.EmailAddress, u.Active)
 	}
-	w.Flush()
+	_ = w.Flush()
 }
 
 // --- User commands ---
@@ -27,7 +27,7 @@ var jiraUserCmd = &cobra.Command{
 }
 
 var jiraUserGetCmd = &cobra.Command{
-	Use:   "get [account-id]",
+	Use:   "get <account-id>",
 	Short: "Get user details",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -187,7 +187,7 @@ var jiraUserCreateCmd = &cobra.Command{
 }
 
 var jiraUserDeleteCmd = &cobra.Command{
-	Use:   "delete [account-id]",
+	Use:   "delete <account-id>",
 	Short: "Delete a user",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -245,17 +245,17 @@ var jiraGroupListCmd = &cobra.Command{
 			return outputJSON(allGroups)
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "GROUP_ID\tNAME")
+		_, _ = fmt.Fprintln(w, "GROUP_ID\tNAME")
 		for _, g := range allGroups {
-			fmt.Fprintf(w, "%s\t%s\n", g.GroupID, g.Name)
+			_, _ = fmt.Fprintf(w, "%s\t%s\n", g.GroupID, g.Name)
 		}
-		w.Flush()
+		_ = w.Flush()
 		return nil
 	},
 }
 
 var jiraGroupGetCmd = &cobra.Command{
-	Use:   "get [group-name]",
+	Use:   "get <group-name>",
 	Short: "Get group details",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -296,7 +296,7 @@ var jiraGroupCreateCmd = &cobra.Command{
 }
 
 var jiraGroupDeleteCmd = &cobra.Command{
-	Use:   "delete [group-name]",
+	Use:   "delete <group-name>",
 	Short: "Delete a group",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -313,7 +313,7 @@ var jiraGroupDeleteCmd = &cobra.Command{
 }
 
 var jiraGroupMembersCmd = &cobra.Command{
-	Use:   "members [group-name]",
+	Use:   "members <group-name>",
 	Short: "List group members",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -346,7 +346,7 @@ var jiraGroupMembersCmd = &cobra.Command{
 }
 
 var jiraGroupAddUserCmd = &cobra.Command{
-	Use:   "add-user [group-name]",
+	Use:   "add-user <group-name>",
 	Short: "Add a user to a group",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -365,7 +365,7 @@ var jiraGroupAddUserCmd = &cobra.Command{
 }
 
 var jiraGroupRemoveUserCmd = &cobra.Command{
-	Use:   "remove-user [group-name]",
+	Use:   "remove-user <group-name>",
 	Short: "Remove a user from a group",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -398,11 +398,11 @@ var jiraGroupSearchCmd = &cobra.Command{
 			return err
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "GROUP_ID\tNAME")
+		_, _ = fmt.Fprintln(w, "GROUP_ID\tNAME")
 		for _, g := range found.Groups {
-			fmt.Fprintf(w, "%s\t%s\n", g.GroupID, g.Name)
+			_, _ = fmt.Fprintf(w, "%s\t%s\n", g.GroupID, g.Name)
 		}
-		w.Flush()
+		_ = w.Flush()
 		return nil
 	},
 }

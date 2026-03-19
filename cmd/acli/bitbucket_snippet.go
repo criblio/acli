@@ -39,9 +39,9 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "ID\tTITLE\tPRIVATE\tCREATED\tOWNER")
+			_, _ = fmt.Fprintln(w, "ID\tTITLE\tPRIVATE\tCREATED\tOWNER")
 			for _, s := range snippets {
-				fmt.Fprintf(w, "%d\t%s\t%v\t%s\t%s\n",
+				_, _ = fmt.Fprintf(w, "%d\t%s\t%v\t%s\t%s\n",
 					s.ID, s.Title, s.IsPrivate, s.CreatedOn, s.Owner.DisplayName)
 			}
 			return w.Flush()

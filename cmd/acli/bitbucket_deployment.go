@@ -38,13 +38,13 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "UUID\tENVIRONMENT\tSTATUS\tRELEASE\tCOMMIT\tCREATED")
+			_, _ = fmt.Fprintln(w, "UUID\tENVIRONMENT\tSTATUS\tRELEASE\tCOMMIT\tCREATED")
 			for _, d := range deployments {
 				hash := d.Release.Commit.Hash
 				if len(hash) > 12 {
 					hash = hash[:12]
 				}
-				fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\n",
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\n",
 					d.UUID, d.Environment.Name, d.State.Status.Name,
 					d.Release.Name, hash, d.Release.CreatedOn)
 			}

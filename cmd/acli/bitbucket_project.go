@@ -39,9 +39,9 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "KEY\tNAME\tPRIVATE\tUPDATED")
+			_, _ = fmt.Fprintln(w, "KEY\tNAME\tPRIVATE\tUPDATED")
 			for _, p := range projects {
-				fmt.Fprintf(w, "%s\t%s\t%v\t%s\n",
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%v\t%s\n",
 					p.Key, p.Name, p.IsPrivate, p.UpdatedOn)
 			}
 			return w.Flush()

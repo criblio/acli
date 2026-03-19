@@ -50,9 +50,9 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "ID\tTITLE\tSTATE\tAUTHOR\tSOURCE\tDESTINATION")
+			_, _ = fmt.Fprintln(w, "ID\tTITLE\tSTATE\tAUTHOR\tSOURCE\tDESTINATION")
 			for _, pr := range prs {
-				fmt.Fprintf(w, "%d\t%s\t%s\t%s\t%s\t%s\n",
+				_, _ = fmt.Fprintf(w, "%d\t%s\t%s\t%s\t%s\t%s\n",
 					pr.ID, pr.Title, pr.State, pr.Author.DisplayName,
 					pr.Source.Branch.Name, pr.Destination.Branch.Name)
 			}
@@ -175,7 +175,7 @@ func init() {
 			if err != nil {
 				return err
 			}
-			if err := client.ApprovePullRequest(workspace, repoSlug, prID); err != nil {
+			if _, err := client.ApprovePullRequest(workspace, repoSlug, prID); err != nil {
 				return err
 			}
 			return outputResult(cmd, "approved", fmt.Sprintf("%d", prID), fmt.Sprintf("Approved PR #%d", prID), nil)
@@ -225,7 +225,7 @@ func init() {
 			if err != nil {
 				return err
 			}
-			if err := client.DeclinePullRequest(workspace, repoSlug, prID); err != nil {
+			if _, err := client.DeclinePullRequest(workspace, repoSlug, prID); err != nil {
 				return err
 			}
 			return outputResult(cmd, "declined", fmt.Sprintf("%d", prID), fmt.Sprintf("Declined PR #%d", prID), nil)
@@ -293,7 +293,7 @@ func init() {
 			if err != nil {
 				return err
 			}
-			if err := client.RequestChangesPullRequest(workspace, repoSlug, prID); err != nil {
+			if _, err := client.RequestChangesPullRequest(workspace, repoSlug, prID); err != nil {
 				return err
 			}
 			return outputResult(cmd, "changes_requested", fmt.Sprintf("%d", prID), fmt.Sprintf("Requested changes on PR #%d", prID), nil)

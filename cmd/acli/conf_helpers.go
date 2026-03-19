@@ -233,7 +233,7 @@ func parseJSONFlag(s string, v interface{}) error {
 func addTreeSubResources(parentCmd *cobra.Command, pathPrefix, resourceName string) {
 	// ancestors
 	ancestorsCmd := &cobra.Command{
-		Use:   "ancestors [id]",
+		Use:   "ancestors <id>",
 		Short: fmt.Sprintf("Get all ancestors of %s", resourceName),
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -254,7 +254,7 @@ func addTreeSubResources(parentCmd *cobra.Command, pathPrefix, resourceName stri
 
 	// descendants
 	descendantsCmd := &cobra.Command{
-		Use:   "descendants [id]",
+		Use:   "descendants <id>",
 		Short: fmt.Sprintf("Get descendants of a %s", resourceName),
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -284,7 +284,7 @@ func addTreeSubResources(parentCmd *cobra.Command, pathPrefix, resourceName stri
 
 	// direct-children
 	directChildrenCmd := &cobra.Command{
-		Use:   "direct-children [id]",
+		Use:   "direct-children <id>",
 		Short: fmt.Sprintf("Get direct children of a %s", resourceName),
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -312,7 +312,7 @@ func addTreeSubResources(parentCmd *cobra.Command, pathPrefix, resourceName stri
 
 	// operations
 	operationsCmd := &cobra.Command{
-		Use:   "operations [id]",
+		Use:   "operations <id>",
 		Short: fmt.Sprintf("Get permitted operations for %s", resourceName),
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -328,7 +328,7 @@ func addTreeSubResources(parentCmd *cobra.Command, pathPrefix, resourceName stri
 
 	// properties (list only - CRUD is in conf_properties.go)
 	propertiesCmd := &cobra.Command{
-		Use:   "properties [id]",
+		Use:   "properties <id>",
 		Short: fmt.Sprintf("Get content properties for %s", resourceName),
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

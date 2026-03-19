@@ -54,9 +54,9 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "NAME\tSLUG\tLANGUAGE\tPRIVATE\tUPDATED")
+			_, _ = fmt.Fprintln(w, "NAME\tSLUG\tLANGUAGE\tPRIVATE\tUPDATED")
 			for _, r := range repos {
-				fmt.Fprintf(w, "%s\t%s\t%s\t%v\t%s\n",
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%v\t%s\n",
 					r.FullName, r.Slug, r.Language, r.IsPrivate, r.UpdatedOn)
 			}
 			return w.Flush()
@@ -138,9 +138,11 @@ func init() {
 				return err
 			}
 
+			slug, _ := cmd.Flags().GetString("slug")
 			req := &bitbucket.CreateRepoRequest{
 				SCM:         "git",
 				Name:        name,
+				Slug:        slug,
 				IsPrivate:   isPrivate,
 				Description: desc,
 				Language:    language,
@@ -160,6 +162,7 @@ func init() {
 		},
 	}
 	repoCreateCmd.Flags().String("name", "", "Repository name (required)")
+	repoCreateCmd.Flags().String("slug", "", "Repository slug for the URL (defaults to name)")
 	repoCreateCmd.Flags().String("description", "", "Repository description")
 	repoCreateCmd.Flags().String("language", "", "Programming language")
 	repoCreateCmd.Flags().Bool("private", true, "Make repository private")
@@ -251,9 +254,9 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "NAME\tSLUG\tOWNER\tPRIVATE")
+			_, _ = fmt.Fprintln(w, "NAME\tSLUG\tOWNER\tPRIVATE")
 			for _, r := range forks {
-				fmt.Fprintf(w, "%s\t%s\t%s\t%v\n",
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%v\n",
 					r.FullName, r.Slug, r.Owner.DisplayName, r.IsPrivate)
 			}
 			return w.Flush()

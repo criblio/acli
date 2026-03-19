@@ -34,9 +34,9 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "SLUG\tNAME\tUUID")
+			_, _ = fmt.Fprintln(w, "SLUG\tNAME\tUUID")
 			for _, ws := range workspaces {
-				fmt.Fprintf(w, "%s\t%s\t%s\n", ws.Slug, ws.Name, ws.UUID)
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\n", ws.Slug, ws.Name, ws.UUID)
 			}
 			return w.Flush()
 		},
@@ -95,9 +95,9 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "DISPLAY NAME\tNICKNAME\tUUID")
+			_, _ = fmt.Fprintln(w, "DISPLAY NAME\tNICKNAME\tUUID")
 			for _, m := range members {
-				fmt.Fprintf(w, "%s\t%s\t%s\n",
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\n",
 					m.User.DisplayName, m.User.Nickname, m.User.UUID)
 			}
 			return w.Flush()
@@ -127,9 +127,9 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "USER\tPERMISSION")
+			_, _ = fmt.Fprintln(w, "USER\tPERMISSION")
 			for _, p := range perms {
-				fmt.Fprintf(w, "%s\t%s\n", p.User.DisplayName, p.Permission)
+				_, _ = fmt.Fprintf(w, "%s\t%s\n", p.User.DisplayName, p.Permission)
 			}
 			return w.Flush()
 		},

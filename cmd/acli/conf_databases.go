@@ -43,7 +43,7 @@ func init() {
 
 	// database get
 	getDatabaseCmd := &cobra.Command{
-		Use:   "get [database-id]",
+		Use:   "get <database-id>",
 		Short: "Get database by ID",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -69,7 +69,7 @@ func init() {
 
 	// database delete
 	deleteDatabaseCmd := &cobra.Command{
-		Use:   "delete [database-id]",
+		Use:   "delete <database-id>",
 		Short: "Delete a database",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

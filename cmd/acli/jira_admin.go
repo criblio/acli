@@ -33,9 +33,9 @@ var jiraRoleListCmd = &cobra.Command{
 			return err
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tNAME\tDESCRIPTION")
+		_, _ = fmt.Fprintln(w, "ID\tNAME\tDESCRIPTION")
 		for _, r := range roles {
-			fmt.Fprintf(w, "%d\t%s\t%s\n", r.ID, r.Name, r.Description)
+			_, _ = fmt.Fprintf(w, "%d\t%s\t%s\n", r.ID, r.Name, r.Description)
 		}
 		return w.Flush()
 	},
@@ -201,9 +201,9 @@ var jiraIssueLinkTypeListCmd = &cobra.Command{
 			return err
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tNAME\tINWARD\tOUTWARD")
+		_, _ = fmt.Fprintln(w, "ID\tNAME\tINWARD\tOUTWARD")
 		for _, t := range types {
-			fmt.Fprintf(w, "%s\t%s\t%s\t%s\n", t.ID, t.Name, t.Inward, t.Outward)
+			_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%s\n", t.ID, t.Name, t.Inward, t.Outward)
 		}
 		return w.Flush()
 	},
@@ -331,9 +331,9 @@ var jiraScreenListCmd = &cobra.Command{
 			}
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tNAME\tDESCRIPTION")
+		_, _ = fmt.Fprintln(w, "ID\tNAME\tDESCRIPTION")
 		for _, s := range allValues {
-			fmt.Fprintf(w, "%d\t%s\t%s\n", s.ID, s.Name, s.Description)
+			_, _ = fmt.Fprintf(w, "%d\t%s\t%s\n", s.ID, s.Name, s.Description)
 		}
 		return w.Flush()
 	},
@@ -402,9 +402,9 @@ var jiraScreenTabsCmd = &cobra.Command{
 			return err
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tNAME")
+		_, _ = fmt.Fprintln(w, "ID\tNAME")
 		for _, t := range tabs {
-			fmt.Fprintf(w, "%d\t%s\n", t.ID, t.Name)
+			_, _ = fmt.Fprintf(w, "%d\t%s\n", t.ID, t.Name)
 		}
 		return w.Flush()
 	},
@@ -432,9 +432,9 @@ var jiraScreenTabFieldsCmd = &cobra.Command{
 			return err
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tNAME")
+		_, _ = fmt.Fprintln(w, "ID\tNAME")
 		for _, f := range fields {
-			fmt.Fprintf(w, "%s\t%s\n", f.ID, f.Name)
+			_, _ = fmt.Fprintf(w, "%s\t%s\n", f.ID, f.Name)
 		}
 		return w.Flush()
 	},
@@ -465,9 +465,9 @@ var jiraWorkflowListCmd = &cobra.Command{
 			return err
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "NAME\tDESCRIPTION\tDEFAULT")
+		_, _ = fmt.Fprintln(w, "NAME\tDESCRIPTION\tDEFAULT")
 		for _, wf := range workflows {
-			fmt.Fprintf(w, "%s\t%s\t%v\n", wf.Name, wf.Description, wf.IsDefault)
+			_, _ = fmt.Fprintf(w, "%s\t%s\t%v\n", wf.Name, wf.Description, wf.IsDefault)
 		}
 		return w.Flush()
 	},
@@ -512,9 +512,9 @@ var jiraWorkflowSchemeListCmd = &cobra.Command{
 			}
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tNAME\tDESCRIPTION")
+		_, _ = fmt.Fprintln(w, "ID\tNAME\tDESCRIPTION")
 		for _, s := range allValues {
-			fmt.Fprintf(w, "%d\t%s\t%s\n", s.ID, s.Name, s.Description)
+			_, _ = fmt.Fprintf(w, "%d\t%s\t%s\n", s.ID, s.Name, s.Description)
 		}
 		return w.Flush()
 	},
@@ -639,9 +639,9 @@ var jiraPermissionSchemeListCmd = &cobra.Command{
 			return err
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tNAME")
+		_, _ = fmt.Fprintln(w, "ID\tNAME")
 		for _, s := range schemes {
-			fmt.Fprintf(w, "%d\t%s\n", s.ID, s.Name)
+			_, _ = fmt.Fprintf(w, "%d\t%s\n", s.ID, s.Name)
 		}
 		return w.Flush()
 	},
@@ -752,9 +752,9 @@ var jiraNotificationSchemeListCmd = &cobra.Command{
 			}
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tNAME")
+		_, _ = fmt.Fprintln(w, "ID\tNAME")
 		for _, s := range allValues {
-			fmt.Fprintf(w, "%d\t%s\n", s.ID, s.Name)
+			_, _ = fmt.Fprintf(w, "%d\t%s\n", s.ID, s.Name)
 		}
 		return w.Flush()
 	},
@@ -851,9 +851,9 @@ var jiraIssueSecuritySchemeListCmd = &cobra.Command{
 			return err
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tNAME")
+		_, _ = fmt.Fprintln(w, "ID\tNAME")
 		for _, s := range schemes {
-			fmt.Fprintf(w, "%d\t%s\n", s.ID, s.Name)
+			_, _ = fmt.Fprintf(w, "%d\t%s\n", s.ID, s.Name)
 		}
 		return w.Flush()
 	},
@@ -964,9 +964,9 @@ var jiraFieldConfigListCmd = &cobra.Command{
 			}
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tNAME\tDEFAULT")
+		_, _ = fmt.Fprintln(w, "ID\tNAME\tDEFAULT")
 		for _, fc := range allValues {
-			fmt.Fprintf(w, "%d\t%s\t%v\n", fc.ID, fc.Name, fc.IsDefault)
+			_, _ = fmt.Fprintf(w, "%d\t%s\t%v\n", fc.ID, fc.Name, fc.IsDefault)
 		}
 		return w.Flush()
 	},
@@ -1056,9 +1056,9 @@ var jiraIssueTypeSchemeListCmd = &cobra.Command{
 			}
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tNAME")
+		_, _ = fmt.Fprintln(w, "ID\tNAME")
 		for _, s := range allValues {
-			fmt.Fprintf(w, "%s\t%s\n", s.ID, s.Name)
+			_, _ = fmt.Fprintf(w, "%s\t%s\n", s.ID, s.Name)
 		}
 		return w.Flush()
 	},
@@ -1165,10 +1165,10 @@ var jiraWebhookListCmd = &cobra.Command{
 			}
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tJQL\tEVENTS")
+		_, _ = fmt.Fprintln(w, "ID\tJQL\tEVENTS")
 		for _, wh := range allValues {
 			events := strings.Join(wh.Events, ", ")
-			fmt.Fprintf(w, "%d\t%s\t%s\n", wh.ID, wh.JqlFilter, events)
+			_, _ = fmt.Fprintf(w, "%d\t%s\t%s\n", wh.ID, wh.JqlFilter, events)
 		}
 		return w.Flush()
 	},
@@ -1203,8 +1203,8 @@ var jiraAttachmentGetCmd = &cobra.Command{
 			return outputJSON(att)
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tFILENAME\tSIZE\tMIME TYPE\tCREATED")
-		fmt.Fprintf(w, "%s\t%s\t%d\t%s\t%s\n", att.ID, att.Filename, att.Size, att.MimeType, att.Created)
+		_, _ = fmt.Fprintln(w, "ID\tFILENAME\tSIZE\tMIME TYPE\tCREATED")
+		_, _ = fmt.Fprintf(w, "%s\t%s\t%d\t%s\t%s\n", att.ID, att.Filename, att.Size, att.MimeType, att.Created)
 		return w.Flush()
 	},
 }
@@ -1272,9 +1272,9 @@ var jiraAuditCmd = &cobra.Command{
 			}
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tSUMMARY\tCREATED\tCATEGORY")
+		_, _ = fmt.Fprintln(w, "ID\tSUMMARY\tCREATED\tCATEGORY")
 		for _, r := range allRecords {
-			fmt.Fprintf(w, "%d\t%s\t%s\t%s\n", r.ID, r.Summary, r.Created, r.Category)
+			_, _ = fmt.Fprintf(w, "%d\t%s\t%s\t%s\n", r.ID, r.Summary, r.Created, r.Category)
 		}
 		return w.Flush()
 	},
@@ -1379,9 +1379,9 @@ var jiraPermissionMineCmd = &cobra.Command{
 			return err
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "KEY\tNAME\tHAVE_PERMISSION")
+		_, _ = fmt.Fprintln(w, "KEY\tNAME\tHAVE_PERMISSION")
 		for _, p := range perms {
-			fmt.Fprintf(w, "%s\t%s\t%v\n", p.Key, p.Name, p.HavePermission)
+			_, _ = fmt.Fprintf(w, "%s\t%s\t%v\n", p.Key, p.Name, p.HavePermission)
 		}
 		return w.Flush()
 	},
@@ -1400,9 +1400,9 @@ var jiraPermissionAllCmd = &cobra.Command{
 			return err
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "KEY\tNAME\tHAVE_PERMISSION")
+		_, _ = fmt.Fprintln(w, "KEY\tNAME\tHAVE_PERMISSION")
 		for _, p := range perms {
-			fmt.Fprintf(w, "%s\t%s\t%v\n", p.Key, p.Name, p.HavePermission)
+			_, _ = fmt.Fprintf(w, "%s\t%s\t%v\n", p.Key, p.Name, p.HavePermission)
 		}
 		return w.Flush()
 	},
@@ -1477,9 +1477,9 @@ var jiraProjectCategoryListCmd = &cobra.Command{
 			return err
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tNAME\tDESCRIPTION")
+		_, _ = fmt.Fprintln(w, "ID\tNAME\tDESCRIPTION")
 		for _, c := range cats {
-			fmt.Fprintf(w, "%s\t%s\t%s\n", c.ID, c.Name, c.Description)
+			_, _ = fmt.Fprintf(w, "%s\t%s\t%s\n", c.ID, c.Name, c.Description)
 		}
 		return w.Flush()
 	},

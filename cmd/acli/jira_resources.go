@@ -36,15 +36,15 @@ var jiraComponentGetCmd = &cobra.Command{
 			return outputJSON(comp)
 		}
 		w := newTabWriter()
-		fmt.Fprintf(w, "ID\t%s\n", comp.ID)
-		fmt.Fprintf(w, "Name\t%s\n", comp.Name)
-		fmt.Fprintf(w, "Description\t%s\n", comp.Description)
-		fmt.Fprintf(w, "Project\t%s\n", comp.Project)
-		fmt.Fprintf(w, "Assignee Type\t%s\n", comp.AssigneeType)
+		_, _ = fmt.Fprintf(w, "ID\t%s\n", comp.ID)
+		_, _ = fmt.Fprintf(w, "Name\t%s\n", comp.Name)
+		_, _ = fmt.Fprintf(w, "Description\t%s\n", comp.Description)
+		_, _ = fmt.Fprintf(w, "Project\t%s\n", comp.Project)
+		_, _ = fmt.Fprintf(w, "Assignee Type\t%s\n", comp.AssigneeType)
 		if comp.Lead != nil {
-			fmt.Fprintf(w, "Lead\t%s\n", comp.Lead.DisplayName)
+			_, _ = fmt.Fprintf(w, "Lead\t%s\n", comp.Lead.DisplayName)
 		}
-		w.Flush()
+		_ = w.Flush()
 		return nil
 	},
 }
@@ -155,14 +155,14 @@ var jiraVersionGetCmd = &cobra.Command{
 			return outputJSON(ver)
 		}
 		w := newTabWriter()
-		fmt.Fprintf(w, "ID\t%s\n", ver.ID)
-		fmt.Fprintf(w, "Name\t%s\n", ver.Name)
-		fmt.Fprintf(w, "Description\t%s\n", ver.Description)
-		fmt.Fprintf(w, "Released\t%v\n", ver.Released)
-		fmt.Fprintf(w, "Archived\t%v\n", ver.Archived)
-		fmt.Fprintf(w, "Start Date\t%s\n", ver.StartDate)
-		fmt.Fprintf(w, "Release Date\t%s\n", ver.ReleaseDate)
-		w.Flush()
+		_, _ = fmt.Fprintf(w, "ID\t%s\n", ver.ID)
+		_, _ = fmt.Fprintf(w, "Name\t%s\n", ver.Name)
+		_, _ = fmt.Fprintf(w, "Description\t%s\n", ver.Description)
+		_, _ = fmt.Fprintf(w, "Released\t%v\n", ver.Released)
+		_, _ = fmt.Fprintf(w, "Archived\t%v\n", ver.Archived)
+		_, _ = fmt.Fprintf(w, "Start Date\t%s\n", ver.StartDate)
+		_, _ = fmt.Fprintf(w, "Release Date\t%s\n", ver.ReleaseDate)
+		_ = w.Flush()
 		return nil
 	},
 }
@@ -305,7 +305,7 @@ var jiraFieldListCmd = &cobra.Command{
 			return outputJSON(fields)
 		}
 		w := newTabWriter()
-		fmt.Fprintf(w, "ID\tNAME\tTYPE\tCUSTOM\n")
+		_, _ = fmt.Fprintf(w, "ID\tNAME\tTYPE\tCUSTOM\n")
 		for _, f := range fields {
 			if customOnly && !f.Custom {
 				continue
@@ -314,9 +314,9 @@ var jiraFieldListCmd = &cobra.Command{
 			if f.Schema != nil {
 				fieldType = f.Schema.Type
 			}
-			fmt.Fprintf(w, "%s\t%s\t%s\t%v\n", f.ID, f.Name, fieldType, f.Custom)
+			_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%v\n", f.ID, f.Name, fieldType, f.Custom)
 		}
-		w.Flush()
+		_ = w.Flush()
 		return nil
 	},
 }
@@ -436,11 +436,11 @@ var jiraLabelCmd = &cobra.Command{
 			return outputJSON(allLabels)
 		}
 		w := newTabWriter()
-		fmt.Fprintf(w, "LABEL\n")
+		_, _ = fmt.Fprintf(w, "LABEL\n")
 		for _, label := range allLabels {
-			fmt.Fprintf(w, "%s\n", label)
+			_, _ = fmt.Fprintf(w, "%s\n", label)
 		}
-		w.Flush()
+		_ = w.Flush()
 		return nil
 	},
 }
@@ -470,11 +470,11 @@ var jiraIssuetypeListCmd = &cobra.Command{
 			return err
 		}
 		w := newTabWriter()
-		fmt.Fprintf(w, "ID\tNAME\tSUBTASK\tDESCRIPTION\n")
+		_, _ = fmt.Fprintf(w, "ID\tNAME\tSUBTASK\tDESCRIPTION\n")
 		for _, t := range types {
-			fmt.Fprintf(w, "%s\t%s\t%v\t%s\n", t.ID, t.Name, t.Subtask, t.Description)
+			_, _ = fmt.Fprintf(w, "%s\t%s\t%v\t%s\n", t.ID, t.Name, t.Subtask, t.Description)
 		}
-		w.Flush()
+		_ = w.Flush()
 		return nil
 	},
 }
@@ -497,11 +497,11 @@ var jiraIssuetypeGetCmd = &cobra.Command{
 			return outputJSON(it)
 		}
 		w := newTabWriter()
-		fmt.Fprintf(w, "ID\t%s\n", it.ID)
-		fmt.Fprintf(w, "Name\t%s\n", it.Name)
-		fmt.Fprintf(w, "Subtask\t%v\n", it.Subtask)
-		fmt.Fprintf(w, "Description\t%s\n", it.Description)
-		w.Flush()
+		_, _ = fmt.Fprintf(w, "ID\t%s\n", it.ID)
+		_, _ = fmt.Fprintf(w, "Name\t%s\n", it.Name)
+		_, _ = fmt.Fprintf(w, "Subtask\t%v\n", it.Subtask)
+		_, _ = fmt.Fprintf(w, "Description\t%s\n", it.Description)
+		_ = w.Flush()
 		return nil
 	},
 }
@@ -599,11 +599,11 @@ var jiraPriorityListCmd = &cobra.Command{
 			return err
 		}
 		w := newTabWriter()
-		fmt.Fprintf(w, "ID\tNAME\tDESCRIPTION\n")
+		_, _ = fmt.Fprintf(w, "ID\tNAME\tDESCRIPTION\n")
 		for _, p := range priorities {
-			fmt.Fprintf(w, "%s\t%s\t%s\n", p.ID, p.Name, p.Description)
+			_, _ = fmt.Fprintf(w, "%s\t%s\t%s\n", p.ID, p.Name, p.Description)
 		}
-		w.Flush()
+		_ = w.Flush()
 		return nil
 	},
 }
@@ -626,11 +626,11 @@ var jiraPriorityGetCmd = &cobra.Command{
 			return outputJSON(p)
 		}
 		w := newTabWriter()
-		fmt.Fprintf(w, "ID\t%s\n", p.ID)
-		fmt.Fprintf(w, "Name\t%s\n", p.Name)
-		fmt.Fprintf(w, "Description\t%s\n", p.Description)
-		fmt.Fprintf(w, "Status Color\t%s\n", p.StatusColor)
-		w.Flush()
+		_, _ = fmt.Fprintf(w, "ID\t%s\n", p.ID)
+		_, _ = fmt.Fprintf(w, "Name\t%s\n", p.Name)
+		_, _ = fmt.Fprintf(w, "Description\t%s\n", p.Description)
+		_, _ = fmt.Fprintf(w, "Status Color\t%s\n", p.StatusColor)
+		_ = w.Flush()
 		return nil
 	},
 }
@@ -728,11 +728,11 @@ var jiraResolutionListCmd = &cobra.Command{
 			return err
 		}
 		w := newTabWriter()
-		fmt.Fprintf(w, "ID\tNAME\tDESCRIPTION\n")
+		_, _ = fmt.Fprintf(w, "ID\tNAME\tDESCRIPTION\n")
 		for _, r := range resolutions {
-			fmt.Fprintf(w, "%s\t%s\t%s\n", r.ID, r.Name, r.Description)
+			_, _ = fmt.Fprintf(w, "%s\t%s\t%s\n", r.ID, r.Name, r.Description)
 		}
-		w.Flush()
+		_ = w.Flush()
 		return nil
 	},
 }
@@ -755,10 +755,10 @@ var jiraResolutionGetCmd = &cobra.Command{
 			return outputJSON(r)
 		}
 		w := newTabWriter()
-		fmt.Fprintf(w, "ID\t%s\n", r.ID)
-		fmt.Fprintf(w, "Name\t%s\n", r.Name)
-		fmt.Fprintf(w, "Description\t%s\n", r.Description)
-		w.Flush()
+		_, _ = fmt.Fprintf(w, "ID\t%s\n", r.ID)
+		_, _ = fmt.Fprintf(w, "Name\t%s\n", r.Name)
+		_, _ = fmt.Fprintf(w, "Description\t%s\n", r.Description)
+		_ = w.Flush()
 		return nil
 	},
 }
@@ -854,11 +854,11 @@ var jiraStatusListCmd = &cobra.Command{
 			return err
 		}
 		w := newTabWriter()
-		fmt.Fprintf(w, "ID\tNAME\tCATEGORY\n")
+		_, _ = fmt.Fprintf(w, "ID\tNAME\tCATEGORY\n")
 		for _, s := range statuses {
-			fmt.Fprintf(w, "%s\t%s\t%s\n", s.ID, s.Name, s.StatusCategory.Name)
+			_, _ = fmt.Fprintf(w, "%s\t%s\t%s\n", s.ID, s.Name, s.StatusCategory.Name)
 		}
-		w.Flush()
+		_ = w.Flush()
 		return nil
 	},
 }
@@ -881,11 +881,11 @@ var jiraStatusGetCmd = &cobra.Command{
 			return outputJSON(s)
 		}
 		w := newTabWriter()
-		fmt.Fprintf(w, "ID\t%s\n", s.ID)
-		fmt.Fprintf(w, "Name\t%s\n", s.Name)
-		fmt.Fprintf(w, "Description\t%s\n", s.Description)
-		fmt.Fprintf(w, "Category\t%s\n", s.StatusCategory.Name)
-		w.Flush()
+		_, _ = fmt.Fprintf(w, "ID\t%s\n", s.ID)
+		_, _ = fmt.Fprintf(w, "Name\t%s\n", s.Name)
+		_, _ = fmt.Fprintf(w, "Description\t%s\n", s.Description)
+		_, _ = fmt.Fprintf(w, "Category\t%s\n", s.StatusCategory.Name)
+		_ = w.Flush()
 		return nil
 	},
 }
@@ -903,11 +903,11 @@ var jiraStatusCategoriesCmd = &cobra.Command{
 			return err
 		}
 		w := newTabWriter()
-		fmt.Fprintf(w, "ID\tKEY\tNAME\tCOLOR\n")
+		_, _ = fmt.Fprintf(w, "ID\tKEY\tNAME\tCOLOR\n")
 		for _, c := range categories {
-			fmt.Fprintf(w, "%d\t%s\t%s\t%s\n", c.ID, c.Key, c.Name, c.ColorName)
+			_, _ = fmt.Fprintf(w, "%d\t%s\t%s\t%s\n", c.ID, c.Key, c.Name, c.ColorName)
 		}
-		w.Flush()
+		_ = w.Flush()
 		return nil
 	},
 }

@@ -51,7 +51,7 @@ func init() {
 
 	// page get
 	getPageCmd := &cobra.Command{
-		Use:   "get [page-id]",
+		Use:   "get <page-id>",
 		Short: "Get page by ID",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -156,7 +156,7 @@ func init() {
 
 	// page update
 	updatePageCmd := &cobra.Command{
-		Use:   "update [page-id]",
+		Use:   "update <page-id>",
 		Short: "Update a page",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -203,7 +203,7 @@ func init() {
 
 	// page update-title
 	updatePageTitleCmd := &cobra.Command{
-		Use:   "update-title [page-id]",
+		Use:   "update-title <page-id>",
 		Short: "Update page title only",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -226,7 +226,7 @@ func init() {
 
 	// page delete
 	deletePageCmd := &cobra.Command{
-		Use:   "delete [page-id]",
+		Use:   "delete <page-id>",
 		Short: "Delete a page",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -251,7 +251,7 @@ func init() {
 
 	// page children
 	childPagesCmd := &cobra.Command{
-		Use:   "children [page-id]",
+		Use:   "children <page-id>",
 		Short: "Get child pages",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -270,7 +270,7 @@ func init() {
 
 	// page direct-children
 	directChildrenCmd := &cobra.Command{
-		Use:   "direct-children [page-id]",
+		Use:   "direct-children <page-id>",
 		Short: "Get direct children of a page",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -289,7 +289,7 @@ func init() {
 
 	// page ancestors
 	ancestorsCmd := &cobra.Command{
-		Use:   "ancestors [page-id]",
+		Use:   "ancestors <page-id>",
 		Short: "Get all ancestors of page",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -310,7 +310,7 @@ func init() {
 
 	// page descendants
 	descendantsCmd := &cobra.Command{
-		Use:   "descendants [page-id]",
+		Use:   "descendants <page-id>",
 		Short: "Get descendants of page",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -332,7 +332,7 @@ func init() {
 
 	// page versions
 	pageVersionsCmd := &cobra.Command{
-		Use:   "versions [page-id]",
+		Use:   "versions <page-id>",
 		Short: "Get page versions",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -352,7 +352,7 @@ func init() {
 
 	// page version-details
 	pageVersionDetailCmd := &cobra.Command{
-		Use:   "version-details [page-id] [version-number]",
+		Use:   "version-details <page-id> <version-number>",
 		Short: "Get version details for page version",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -368,7 +368,7 @@ func init() {
 
 	// page labels
 	pageLabelsCmd := &cobra.Command{
-		Use:   "labels [page-id]",
+		Use:   "labels <page-id>",
 		Short: "Get labels for page",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -391,7 +391,7 @@ func init() {
 
 	// page attachments
 	pageAttachmentsCmd := &cobra.Command{
-		Use:   "attachments [page-id]",
+		Use:   "attachments <page-id>",
 		Short: "Get attachments for page",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -419,7 +419,7 @@ func init() {
 
 	// page footer-comments
 	pageFooterCommentsCmd := &cobra.Command{
-		Use:   "footer-comments [page-id]",
+		Use:   "footer-comments <page-id>",
 		Short: "Get footer comments for page",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -440,7 +440,7 @@ func init() {
 
 	// page inline-comments
 	pageInlineCommentsCmd := &cobra.Command{
-		Use:   "inline-comments [page-id]",
+		Use:   "inline-comments <page-id>",
 		Short: "Get inline comments for page",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -467,7 +467,7 @@ func init() {
 
 	// page custom-content
 	pageCustomContentCmd := &cobra.Command{
-		Use:   "custom-content [page-id]",
+		Use:   "custom-content <page-id>",
 		Short: "Get custom content by type in page",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -491,7 +491,7 @@ func init() {
 
 	// page operations
 	pageOpsCmd := &cobra.Command{
-		Use:   "operations [page-id]",
+		Use:   "operations <page-id>",
 		Short: "Get permitted operations for page",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -507,7 +507,7 @@ func init() {
 
 	// page likes count
 	pageLikesCountCmd := &cobra.Command{
-		Use:   "likes-count [page-id]",
+		Use:   "likes-count <page-id>",
 		Short: "Get like count for page",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -523,7 +523,7 @@ func init() {
 
 	// page likes users
 	pageLikesUsersCmd := &cobra.Command{
-		Use:   "likes-users [page-id]",
+		Use:   "likes-users <page-id>",
 		Short: "Get account IDs of likes for page",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -541,7 +541,7 @@ func init() {
 
 	// page redact
 	pageRedactCmd := &cobra.Command{
-		Use:   "redact [page-id]",
+		Use:   "redact <page-id>",
 		Short: "Redact content in a Confluence page",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

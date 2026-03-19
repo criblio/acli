@@ -52,15 +52,15 @@ var jiraBoardListCmd = &cobra.Command{
 			return outputJSON(result)
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tNAME\tTYPE\tPROJECT")
+		_, _ = fmt.Fprintln(w, "ID\tNAME\tTYPE\tPROJECT")
 		for _, b := range result.Values {
 			project := ""
 			if b.Location != nil {
 				project = b.Location.ProjectKey
 			}
-			fmt.Fprintf(w, "%d\t%s\t%s\t%s\n", b.ID, b.Name, b.Type, project)
+			_, _ = fmt.Fprintf(w, "%d\t%s\t%s\t%s\n", b.ID, b.Name, b.Type, project)
 		}
-		w.Flush()
+		_ = w.Flush()
 		printPaginationHint(cmd, len(result.Values), result.Total)
 		return nil
 	},
@@ -159,11 +159,11 @@ var jiraBoardIssuesCmd = &cobra.Command{
 			return outputJSON(result)
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "KEY\tTYPE\tSTATUS\tPRIORITY\tASSIGNEE\tSUMMARY")
+		_, _ = fmt.Fprintln(w, "KEY\tTYPE\tSTATUS\tPRIORITY\tASSIGNEE\tSUMMARY")
 		for _, issue := range result.Issues {
 			printIssueRow(w, issue)
 		}
-		w.Flush()
+		_ = w.Flush()
 		printPaginationHint(cmd, len(result.Issues), result.Total)
 		return nil
 	},
@@ -208,11 +208,11 @@ var jiraBoardBacklogCmd = &cobra.Command{
 			return outputJSON(result)
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "KEY\tTYPE\tSTATUS\tPRIORITY\tASSIGNEE\tSUMMARY")
+		_, _ = fmt.Fprintln(w, "KEY\tTYPE\tSTATUS\tPRIORITY\tASSIGNEE\tSUMMARY")
 		for _, issue := range result.Issues {
 			printIssueRow(w, issue)
 		}
-		w.Flush()
+		_ = w.Flush()
 		printPaginationHint(cmd, len(result.Issues), result.Total)
 		return nil
 	},
@@ -258,11 +258,11 @@ var jiraBoardSprintsCmd = &cobra.Command{
 			return outputJSON(result)
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tNAME\tSTATE\tSTART DATE\tEND DATE")
+		_, _ = fmt.Fprintln(w, "ID\tNAME\tSTATE\tSTART DATE\tEND DATE")
 		for _, s := range result.Values {
-			fmt.Fprintf(w, "%d\t%s\t%s\t%s\t%s\n", s.ID, s.Name, s.State, s.StartDate, s.EndDate)
+			_, _ = fmt.Fprintf(w, "%d\t%s\t%s\t%s\t%s\n", s.ID, s.Name, s.State, s.StartDate, s.EndDate)
 		}
-		w.Flush()
+		_ = w.Flush()
 		printPaginationHint(cmd, len(result.Values), result.Total)
 		return nil
 	},
@@ -307,11 +307,11 @@ var jiraBoardEpicsCmd = &cobra.Command{
 			return outputJSON(result)
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "ID\tKEY\tNAME\tDONE\tSUMMARY")
+		_, _ = fmt.Fprintln(w, "ID\tKEY\tNAME\tDONE\tSUMMARY")
 		for _, e := range result.Values {
-			fmt.Fprintf(w, "%d\t%s\t%s\t%v\t%s\n", e.ID, e.Key, e.Name, e.Done, e.Summary)
+			_, _ = fmt.Fprintf(w, "%d\t%s\t%s\t%v\t%s\n", e.ID, e.Key, e.Name, e.Done, e.Summary)
 		}
-		w.Flush()
+		_ = w.Flush()
 		printPaginationHint(cmd, len(result.Values), result.Total)
 		return nil
 	},

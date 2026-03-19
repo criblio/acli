@@ -38,7 +38,7 @@ func init() {
 
 	// folder get
 	getFolderCmd := &cobra.Command{
-		Use:   "get [folder-id]",
+		Use:   "get <folder-id>",
 		Short: "Get folder by ID",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -64,7 +64,7 @@ func init() {
 
 	// folder delete
 	deleteFolderCmd := &cobra.Command{
-		Use:   "delete [folder-id]",
+		Use:   "delete <folder-id>",
 		Short: "Delete a folder",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

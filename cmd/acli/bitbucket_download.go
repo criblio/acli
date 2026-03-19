@@ -38,9 +38,9 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "NAME\tSIZE\tDOWNLOADS\tCREATED")
+			_, _ = fmt.Fprintln(w, "NAME\tSIZE\tDOWNLOADS\tCREATED")
 			for _, d := range downloads {
-				fmt.Fprintf(w, "%s\t%d\t%d\t%s\n",
+				_, _ = fmt.Fprintf(w, "%s\t%d\t%d\t%s\n",
 					d.Name, d.Size, d.Downloads, d.CreatedOn)
 			}
 			return w.Flush()

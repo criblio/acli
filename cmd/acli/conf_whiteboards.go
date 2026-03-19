@@ -51,7 +51,7 @@ func init() {
 
 	// whiteboard get
 	getWhiteboardCmd := &cobra.Command{
-		Use:   "get [whiteboard-id]",
+		Use:   "get <whiteboard-id>",
 		Short: "Get whiteboard by ID",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -77,7 +77,7 @@ func init() {
 
 	// whiteboard delete
 	deleteWhiteboardCmd := &cobra.Command{
-		Use:   "delete [whiteboard-id]",
+		Use:   "delete <whiteboard-id>",
 		Short: "Delete a whiteboard",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

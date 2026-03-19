@@ -39,9 +39,9 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "UUID\tNAME\tTYPE\tRANK")
+			_, _ = fmt.Fprintln(w, "UUID\tNAME\tTYPE\tRANK")
 			for _, e := range envs {
-				fmt.Fprintf(w, "%s\t%s\t%s\t%d\n",
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%d\n",
 					e.UUID, e.Name, e.EnvironmentType.Name, e.Rank)
 			}
 			return w.Flush()

@@ -124,6 +124,7 @@ func (c *Client) GetRepository(workspace, repoSlug string) (*Repository, error) 
 type CreateRepoRequest struct {
 	SCM         string `json:"scm"`
 	Name        string `json:"name"`
+	Slug        string `json:"-"` // URL slug for the repository; defaults to Name if empty
 	IsPrivate   bool   `json:"is_private"`
 	Description string `json:"description,omitempty"`
 	Language    string `json:"language,omitempty"`
@@ -140,7 +141,11 @@ func (c *Client) CreateRepository(workspace string, req *CreateRepoRequest) (*Re
 	if err != nil {
 		return nil, err
 	}
-	path := fmt.Sprintf("/repositories/%s/%s", url.PathEscape(workspace), url.PathEscape(req.Name))
+	slug := req.Slug
+	if slug == "" {
+		slug = req.Name
+	}
+	path := fmt.Sprintf("/repositories/%s/%s", url.PathEscape(workspace), url.PathEscape(slug))
 	data, err := c.post(path, bytes.NewReader(jsonBody))
 	if err != nil {
 		return nil, err

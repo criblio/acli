@@ -33,7 +33,7 @@ func init() {
 
 		// list properties
 		listCmd := &cobra.Command{
-			Use:     "list [" + res.idParam + "]",
+			Use:     "list <" + res.idParam + ">",
 			Short:   fmt.Sprintf("List content properties for %s", res.name),
 			Aliases: []string{"ls"},
 			Args:    cobra.ExactArgs(1),
@@ -57,7 +57,7 @@ func init() {
 
 		// get property
 		getCmd := &cobra.Command{
-			Use:   "get [" + res.idParam + "] [property-id]",
+			Use:   "get <" + res.idParam + "> <property-id>",
 			Short: fmt.Sprintf("Get content property for %s by ID", res.name),
 			Args:  cobra.ExactArgs(2),
 			RunE: func(cmd *cobra.Command, args []string) error {
@@ -73,7 +73,7 @@ func init() {
 
 		// create property
 		createCmd := &cobra.Command{
-			Use:   "create [" + res.idParam + "]",
+			Use:   "create <" + res.idParam + ">",
 			Short: fmt.Sprintf("Create content property for %s", res.name),
 			Args:  cobra.ExactArgs(1),
 			RunE: func(cmd *cobra.Command, args []string) error {
@@ -105,7 +105,7 @@ func init() {
 
 		// update property
 		updateCmd := &cobra.Command{
-			Use:   "update [" + res.idParam + "] [property-id]",
+			Use:   "update <" + res.idParam + "> <property-id>",
 			Short: fmt.Sprintf("Update content property for %s", res.name),
 			Args:  cobra.ExactArgs(2),
 			RunE: func(cmd *cobra.Command, args []string) error {
@@ -143,7 +143,7 @@ func init() {
 
 		// delete property
 		deleteCmd := &cobra.Command{
-			Use:   "delete [" + res.idParam + "] [property-id]",
+			Use:   "delete <" + res.idParam + "> <property-id>",
 			Short: fmt.Sprintf("Delete content property for %s", res.name),
 			Args:  cobra.ExactArgs(2),
 			RunE: func(cmd *cobra.Command, args []string) error {
@@ -168,7 +168,7 @@ func init() {
 	}
 
 	spListCmd := &cobra.Command{
-		Use:     "list [space-id]",
+		Use:     "list <space-id>",
 		Short:   "List space properties",
 		Aliases: []string{"ls"},
 		Args:    cobra.ExactArgs(1),
@@ -191,7 +191,7 @@ func init() {
 	spacePropsCmd.AddCommand(spListCmd)
 
 	spGetCmd := &cobra.Command{
-		Use:   "get [space-id] [property-id]",
+		Use:   "get <space-id> <property-id>",
 		Short: "Get space property by ID",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -206,7 +206,7 @@ func init() {
 	spacePropsCmd.AddCommand(spGetCmd)
 
 	spCreateCmd := &cobra.Command{
-		Use:   "create [space-id]",
+		Use:   "create <space-id>",
 		Short: "Create space property",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -236,7 +236,7 @@ func init() {
 	spacePropsCmd.AddCommand(spCreateCmd)
 
 	spUpdateCmd := &cobra.Command{
-		Use:   "update [space-id] [property-id]",
+		Use:   "update <space-id> <property-id>",
 		Short: "Update space property",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -273,7 +273,7 @@ func init() {
 	spacePropsCmd.AddCommand(spUpdateCmd)
 
 	spDeleteCmd := &cobra.Command{
-		Use:   "delete [space-id] [property-id]",
+		Use:   "delete <space-id> <property-id>",
 		Short: "Delete space property",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {

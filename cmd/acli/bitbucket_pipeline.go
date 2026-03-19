@@ -44,7 +44,7 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "BUILD#\tSTATUS\tTRIGGER\tTARGET\tCREATED")
+			_, _ = fmt.Fprintln(w, "BUILD#\tSTATUS\tTRIGGER\tTARGET\tCREATED")
 			for _, p := range pipelines {
 				status := p.State.Name
 				if p.State.Result != nil {
@@ -54,7 +54,7 @@ func init() {
 				if p.Target.RefName != "" {
 					target = p.Target.RefName
 				}
-				fmt.Fprintf(w, "%d\t%s\t%s\t%s\t%s\n",
+				_, _ = fmt.Fprintf(w, "%d\t%s\t%s\t%s\t%s\n",
 					p.BuildNumber, status, p.Trigger.Name, target, p.CreatedOn)
 			}
 			return w.Flush()
@@ -193,13 +193,13 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "UUID\tNAME\tSTATUS\tDURATION\tIMAGE")
+			_, _ = fmt.Fprintln(w, "UUID\tNAME\tSTATUS\tDURATION\tIMAGE")
 			for _, s := range steps {
 				status := s.State.Name
 				if s.State.Result != nil {
 					status = s.State.Result.Name
 				}
-				fmt.Fprintf(w, "%s\t%s\t%s\t%ds\t%s\n",
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%ds\t%s\n",
 					s.UUID, s.Name, status, s.DurationInSeconds, s.Image.Name)
 			}
 			return w.Flush()
@@ -250,13 +250,13 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "UUID\tKEY\tVALUE\tSECURED")
+			_, _ = fmt.Fprintln(w, "UUID\tKEY\tVALUE\tSECURED")
 			for _, v := range vars {
 				value := v.Value
 				if v.Secured {
 					value = "***"
 				}
-				fmt.Fprintf(w, "%s\t%s\t%s\t%v\n", v.UUID, v.Key, value, v.Secured)
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%v\n", v.UUID, v.Key, value, v.Secured)
 			}
 			return w.Flush()
 		},

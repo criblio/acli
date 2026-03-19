@@ -40,9 +40,9 @@ func init() {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "ID\tLABEL\tCOMMENT\tCREATED")
+			_, _ = fmt.Fprintln(w, "ID\tLABEL\tCOMMENT\tCREATED")
 			for _, k := range keys {
-				fmt.Fprintf(w, "%d\t%s\t%s\t%s\n",
+				_, _ = fmt.Fprintf(w, "%d\t%s\t%s\t%s\n",
 					k.ID, k.Label, k.Comment, k.CreatedOn)
 			}
 			return w.Flush()

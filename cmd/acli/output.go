@@ -55,6 +55,6 @@ func outputResult(cmd *cobra.Command, action, key, message string, data interfac
 			Data:    data,
 		})
 	}
-	fmt.Fprintln(cmd.OutOrStdout(), message)
+	_, _ = fmt.Fprintln(cmd.OutOrStdout(), message)
 	return nil
 }

@@ -192,11 +192,11 @@ var jiraSprintIssuesCmd = &cobra.Command{
 			return outputJSON(result)
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "KEY\tTYPE\tSTATUS\tPRIORITY\tASSIGNEE\tSUMMARY")
+		_, _ = fmt.Fprintln(w, "KEY\tTYPE\tSTATUS\tPRIORITY\tASSIGNEE\tSUMMARY")
 		for _, issue := range result.Issues {
 			printIssueRow(w, issue)
 		}
-		w.Flush()
+		_ = w.Flush()
 		printPaginationHint(cmd, len(result.Issues), result.Total)
 		return nil
 	},
@@ -294,11 +294,11 @@ var jiraEpicIssuesCmd = &cobra.Command{
 			return outputJSON(result)
 		}
 		w := newTabWriter()
-		fmt.Fprintln(w, "KEY\tTYPE\tSTATUS\tPRIORITY\tASSIGNEE\tSUMMARY")
+		_, _ = fmt.Fprintln(w, "KEY\tTYPE\tSTATUS\tPRIORITY\tASSIGNEE\tSUMMARY")
 		for _, issue := range result.Issues {
 			printIssueRow(w, issue)
 		}
-		w.Flush()
+		_ = w.Flush()
 		printPaginationHint(cmd, len(result.Issues), result.Total)
 		return nil
 	},

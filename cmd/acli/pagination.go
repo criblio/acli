@@ -34,8 +34,8 @@ func getBBPaginationOpts(cmd *cobra.Command) *bitbucket.PaginationOptions {
 // printPaginationHint prints a hint about fetching more results if there are more pages.
 func printPaginationHint(cmd *cobra.Command, shown, total int) {
 	if total <= 0 || shown >= total {
-		fmt.Fprintf(cmd.OutOrStdout(), "\nShowing %d results\n", shown)
+		_, _ = fmt.Fprintf(cmd.OutOrStdout(), "\nShowing %d results\n", shown)
 		return
 	}
-	fmt.Fprintf(cmd.OutOrStdout(), "\nShowing %d of %d results (use --all to fetch all)\n", shown, total)
+	_, _ = fmt.Fprintf(cmd.OutOrStdout(), "\nShowing %d of %d results (use --all to fetch all)\n", shown, total)
 }

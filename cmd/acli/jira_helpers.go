@@ -139,6 +139,6 @@ func printIssueRow(w *tabwriter.Writer, issue jira.IssueDetailed) {
 	if issue.Fields.Assignee != nil {
 		assignee = issue.Fields.Assignee.DisplayName
 	}
-	fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\n",
+	_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\n",
 		issue.Key, issueType, status, priority, assignee, issue.Fields.Summary)
 }

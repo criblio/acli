@@ -46,7 +46,7 @@ func init() {
 
 	// custom-content get
 	getCustomContentCmd := &cobra.Command{
-		Use:   "get [custom-content-id]",
+		Use:   "get <custom-content-id>",
 		Short: "Get custom content by ID",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -134,7 +134,7 @@ func init() {
 
 	// custom-content update
 	updateCustomContentCmd := &cobra.Command{
-		Use:   "update [custom-content-id]",
+		Use:   "update <custom-content-id>",
 		Short: "Update custom content",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -192,7 +192,7 @@ func init() {
 
 	// custom-content delete
 	deleteCustomContentCmd := &cobra.Command{
-		Use:   "delete [custom-content-id]",
+		Use:   "delete <custom-content-id>",
 		Short: "Delete custom content",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -213,7 +213,7 @@ func init() {
 
 	// custom-content attachments
 	ccAttachmentsCmd := &cobra.Command{
-		Use:   "attachments [id]",
+		Use:   "attachments <id>",
 		Short: "Get attachments for custom content",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -241,7 +241,7 @@ func init() {
 
 	// custom-content children
 	ccChildrenCmd := &cobra.Command{
-		Use:   "children [id]",
+		Use:   "children <id>",
 		Short: "Get child custom content",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -260,7 +260,7 @@ func init() {
 
 	// custom-content labels
 	ccLabelsCmd := &cobra.Command{
-		Use:   "labels [id]",
+		Use:   "labels <id>",
 		Short: "Get labels for custom content",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -283,7 +283,7 @@ func init() {
 
 	// custom-content comments
 	ccCommentsCmd := &cobra.Command{
-		Use:   "comments [id]",
+		Use:   "comments <id>",
 		Short: "Get footer comments for custom content",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -303,7 +303,7 @@ func init() {
 
 	// custom-content operations
 	ccOpsCmd := &cobra.Command{
-		Use:   "operations [id]",
+		Use:   "operations <id>",
 		Short: "Get permitted operations",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -319,7 +319,7 @@ func init() {
 
 	// custom-content versions
 	ccVersionsCmd := &cobra.Command{
-		Use:   "versions [id]",
+		Use:   "versions <id>",
 		Short: "Get custom content versions",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -339,7 +339,7 @@ func init() {
 
 	// custom-content version-details
 	ccVersionDetailCmd := &cobra.Command{
-		Use:   "version-details [custom-content-id] [version-number]",
+		Use:   "version-details <custom-content-id> <version-number>",
 		Short: "Get version details for custom content version",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {

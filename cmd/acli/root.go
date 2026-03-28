@@ -1,7 +1,11 @@
 package acli
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
+	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -42,5 +46,38 @@ var versionCmd = &cobra.Command{
 }
 
 func Execute() error {
+	args, err := resolveCLIArgs(os.Args[1:], os.Stdin)
+	if err != nil {
+		return err
+	}
+
+	rootCmd.SetArgs(args)
 	return rootCmd.Execute()
+}
+
+func resolveCLIArgs(args []string, in io.Reader) ([]string, error) {
+	if len(args) == 1 && args[0] == "-" {
+		return readArgsFromStdin(in)
+	}
+
+	return args, nil
+}
+
+func readArgsFromStdin(in io.Reader) ([]string, error) {
+	raw, err := io.ReadAll(in)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read stdin arguments: %w", err)
+	}
+
+	trimmed := strings.TrimSpace(string(raw))
+	if trimmed == "" {
+		return nil, fmt.Errorf("stdin argument mode expects a JSON array, got empty input")
+	}
+
+	var args []string
+	if err := json.Unmarshal([]byte(trimmed), &args); err != nil {
+		return nil, fmt.Errorf("invalid stdin argument JSON array: %w", err)
+	}
+
+	return args, nil
 }
